@@ -1,4 +1,4 @@
-## SETUP
+## INITIAL ENVIRONMENT SETUP
     install UV: https://docs.astral.sh/uv/getting-started/installation/
     install Python 3.13 using uv: https://docs.astral.sh/uv/guides/install-python/
     initialize a new uv environment: 
@@ -13,3 +13,9 @@
     verify django installation:
     ```django-admin --version
     ```
+
+## Validate django server runs
+    run the development server:
+    ```python manage.py runserver
+    ```
+    open browser and navigate to http://localhost:8000 to see the django welcome page.
