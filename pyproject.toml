@@ -1,10 +1,14 @@
 [project]
 name = "se2-calculator-project"
-version = "0.1.0"
+version = "0.2.1-alpha"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "django>=6.0.1",
+    "psycopg2-binary>=2.9.11",
     "pytest-django>=4.11.1",
+    "python-dotenv>=1.2.1",
+    "uuid-utils>=0.13.0",
+    "uuid7>=0.1.0",
 ]
