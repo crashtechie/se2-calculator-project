@@ -69,7 +69,7 @@ uv run python manage.py shell -c "from ores.models import Ore; print('✓ Ores a
 
 ## Pre-Deployment Checklist
 
-- [ ] Verify ENH-0000001 (Ores) is completed
+- [x] Verify ENH-0000001 (Ores) is completed
   ```bash
   uv run python manage.py shell
   from ores.models import Ore
@@ -77,32 +77,34 @@ uv run python manage.py shell -c "from ores.models import Ore; print('✓ Ores a
   exit()
   ```
 
-- [ ] Backup current database
+- [x] Backup current database
   ```bash
   # SQLite backup
   cp db.sqlite3 db.sqlite3.backup.$(date +%Y%m%d_%H%M%S)
   
   # PostgreSQL backup
-  pg_dump -U se2_user se2_calculator > backup_$(date +%Y%m%d_%H%M%S).sql
+  pg_dump -U se2_user se2_calculator_db > backup_$(date +%Y%m%d_%H%M%S).sql
   ```
 
-- [ ] Verify current git branch and commit changes
+- [x] Verify current git branch and commit changes
   ```bash
   git status
   git checkout -b feat/enh0000002-create-components-app-model
   ```
 
-- [ ] Confirm components app exists
+- [x] Confirm components app exists
   ```bash
   ls -la components/
+    # if components directory does not exist, create it:
+        uv run python manage.py startapp components
   ```
 
-- [ ] Verify dependencies installed
+- [x] Verify dependencies installed
   ```bash
   uv pip list | grep -E "django|uuid"
   ```
 
-- [ ] Test database connectivity
+- [x] Test database connectivity
   ```bash
   uv run python manage.py check --database default
   ```
@@ -483,6 +485,66 @@ Migrations for 'components':
   components/migrations/0001_initial.py
     - Create model Component
 ```
+
+**Actual Output:**
+```
+Migrations for 'components':
+  components/migrations/0001_initial.py
+    + Create model Component
+Traceback (most recent call last):
+  File "/home/dsmi001/app/se2-calculator-project/manage.py", line 22, in <module>
+    main()
+    ~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/__init__.py", line 443, in execute_from_command_line
+    utility.execute()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/__init__.py", line 437, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/base.py", line 420, in run_from_argv
+    self.execute(*args, **cmd_options)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/base.py", line 464, in execute
+    output = self.handle(*args, **options)
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/base.py", line 111, in wrapper
+    res = handle_func(*args, **kwargs)
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/commands/makemigrations.py", line 262, in handle
+    self.write_migration_files(changes)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/core/management/commands/makemigrations.py", line 367, in write_migration_files
+    migration_string = writer.as_string()
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/writer.py", line 143, in as_string
+    operation_string, operation_imports = OperationWriter(operation).serialize()
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/writer.py", line 99, in serialize
+    _write(arg_name, arg_value)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/writer.py", line 51, in _write
+    arg_string, arg_imports = MigrationWriter.serialize(item)
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/writer.py", line 294, in serialize
+    return serializer_factory(value).serialize()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/serializer.py", line 52, in serialize
+    item_string, item_imports = serializer_factory(item).serialize()
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/serializer.py", line 235, in serialize
+    return self.serialize_deconstructed(path, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/serializer.py", line 108, in serialize_deconstructed
+    arg_string, arg_imports = serializer_factory(arg).serialize()
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/dsmi001/app/se2-calculator-project/.venv/lib/python3.13/site-packages/django/db/migrations/serializer.py", line 192, in serialize
+    raise ValueError("Cannot serialize function: lambda")
+ValueError: Cannot serialize function: lambda
+```
+
+**Solution:**
+Replaced 'default=lambda: str(uuid7())' with a named function `generate_uuid()` in `components/models.py`.
+to prevent future migration issues also replaced lambda function with named function `generate_uuid()` in `ores/models.py`.
 
 **Generated Migration File:** `components/migrations/0001_initial.py`
 
@@ -1353,7 +1415,7 @@ Total components: 1
    Name: Motor
    Description: Complex component for machinery
    Fabricator Type: Assembler
-   Materials: {"ore_id_1": 10, "ore_id_2": 5}
+   Materials: {"019bd7a0-071d-7a03-9580-7d0979c70ac5": 10, "019bd7a0-0c66-7e23-86dc-9a8be2299ec4": 5}
    Crafting Time: 3.0
    Mass: 5.0
    ```
@@ -1510,6 +1572,7 @@ uv run python manage.py shell
 ```python
 from components.models import Component
 import time
+from datetime import timedelta
 
 # Create component
 comp = Component.objects.create(
@@ -1522,7 +1585,10 @@ updated = comp.updated_at
 
 print(f"Created: {created}")
 print(f"Updated: {updated}")
-print(f"Timestamps match: {created == updated}")
+# Note: There may be a microsecond difference between created_at and updated_at
+time_diff = abs((updated - created).total_seconds())
+print(f"Time difference: {time_diff} seconds")
+print(f"Timestamps within 1 second: {time_diff < 1.0}")
 
 # Wait and update
 time.sleep(2)
@@ -1545,8 +1611,9 @@ exit()
 **Expected Output:**
 ```
 Created: 2026-01-20 12:00:00.123456+00:00
-Updated: 2026-01-20 12:00:00.123456+00:00
-Timestamps match: True
+Updated: 2026-01-20 12:00:00.123457+00:00
+Time difference: 0.000001 seconds
+Timestamps within 1 second: True
 
 After update:
 Created: 2026-01-20 12:00:00.123456+00:00
@@ -1554,6 +1621,8 @@ Updated: 2026-01-20 12:00:02.654321+00:00
 Updated timestamp changed: True
 Created timestamp unchanged: True
 ```
+
+**Note:** On creation, `created_at` and `updated_at` may differ by a few microseconds due to the timing of Django's auto_now_add and auto_now field population. This is expected behavior and both timestamps should be within 1 second of each other.
 
 ---
 
@@ -2068,32 +2137,32 @@ Send notification with:
 ## Deployment Checklist Summary
 
 ### Pre-Deployment
-- [ ] ENH-0000001 (Ores) verified complete
-- [ ] Database backed up
-- [ ] Git branch created
-- [ ] Dependencies verified
-- [ ] Database connectivity tested
+- [x] ENH-0000001 (Ores) verified complete
+- [x] Database backed up
+- [x] Git branch created
+- [x] Dependencies verified
+- [x] Database connectivity tested
 
 ### Implementation
-- [ ] App registered in settings
-- [ ] Component model implemented
-- [ ] Admin interface configured
-- [ ] Validation helpers implemented
-- [ ] Migrations created
-- [ ] Migrations applied
-- [ ] Automated test suite created (44 tests)
-- [ ] All automated tests passing
+- [x] App registered in settings
+- [x] Component model implemented
+- [x] Admin interface configured
+- [x] Validation helpers implemented
+- [x] Migrations created
+- [x] Migrations applied
+- [x] Automated test suite created (44 tests)
+- [x] All automated tests passing
 
 ### Verification
-- [ ] Automated test suite passes (44 tests, 100% pass rate)
-- [ ] Django shell manual tests passed
-- [ ] Admin interface manual tests passed
-- [ ] UUIDv7 validation verified
-- [ ] Timestamp behavior verified
-- [ ] Unique constraint verified
-- [ ] JSONField validation verified
-- [ ] Material ores relationship verified
-- [ ] Empty materials handling verified
+- [x] Automated test suite passes (44 tests, 100% pass rate)
+- [x] Django shell manual tests passed
+- [x] Admin interface manual tests passed
+- [x] UUIDv7 validation verified
+- [x] Timestamp behavior verified
+- [x] Unique constraint verified
+- [x] JSONField validation verified
+- [x] Material ores relationship verified
+- [x] Empty materials handling verified
 
 ### Post-Deployment
 - [ ] Documentation updated

@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.2.1-alpha  
+**Version:** 0.2.2-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,14 +10,14 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.2.1-alpha). The project is under active development with core features being implemented. The foundation is in place, but functional features are still being developed.
+This is an early alpha release (0.2.2-alpha). The project is under active development with core features being implemented. The foundation is in place, but functional features are still being developed.
 
 ### Current Development Status
 
 - ✅ **Phase 0**: Django project foundation and infrastructure
 - 🔄 **Phase 1**: Models & Database (In Progress)
   - ✅ Ores app created with complete Ore model and 35 tests
-  - 📋 Components app (ready for implementation)
+  - ✅ Components app created with complete Component model and 44 tests
   - 📋 Blocks app (ready for implementation)
 - 📋 **Phase 2**: Views & Templates (Planned)
 - 📋 **Phase 3**: Build Order Calculator (Planned)
@@ -95,7 +95,8 @@ For detailed development environment setup instructions, see [docs/devEnvSetup/u
 ```
 se2-calculator-project/
 ├── se2CalcProject/          # Main Django project configuration
-├── ores/                    # Ores app (in development)
+├── ores/                    # Ores app (completed)
+├── components/              # Components app (completed)
 ├── scripts/                 # Utility scripts for secret generation
 ├── docs/                    # Project documentation
 │   ├── projectPlan/        # Development phases and timeline

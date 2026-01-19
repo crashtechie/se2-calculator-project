@@ -8,7 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### In Development
-- Components app (planned)
 - Blocks app (planned)
 - Build Order Calculator feature (planned)
 
@@ -22,6 +21,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhancement request templates and workflow
 - Enhancement requests for Phase 1 models (ENH-0000001 through ENH-0000004)
 - Application design documentation
+
+## [0.2.2-alpha] - 2026-01-20
+
+### Added
+- ENH-0000002: Components app with complete Component model implementation
+  - UUIDv7 primary keys using named function (not lambda) for migration compatibility
+  - Comprehensive field structure (name, description, materials, fabricator_type, crafting_time, mass, timestamps)
+  - JSONField for materials with ore_id to quantity mapping
+  - Material validation helper methods (validate_materials, get_material_ores)
+  - Django admin interface with custom JSON displays and validation status
+  - Automatic timestamp tracking (created_at, updated_at)
+  - Unique constraint on component names
+  - Integration with Ores app for material references
+- Comprehensive automated test suite for Component model (44 tests)
+  - Model creation and field validation tests (13 tests)
+  - Timestamp auto-population and immutability tests (5 tests)
+  - JSONField storage and persistence tests (5 tests)
+  - Material validation logic tests (8 tests)
+  - Ore relationship query tests (4 tests)
+  - Meta configuration tests (4 tests)
+  - Integration and workflow tests (5 tests)
+  - 100% test pass rate with full feature coverage
+  - Test execution time: ~0.17 seconds
+  - Exceeds 35+ test minimum requirement by 25%
+
+### Fixed
+- Migration serialization error with lambda functions
+  - Replaced `default=lambda: str(uuid7())` with named `generate_uuid()` function
+  - Applied fix to both components/models.py and ores/models.py for consistency
+  - Prevents "ValueError: Cannot serialize function: lambda" during makemigrations
+- Admin interface HTML escaping inconsistency
+  - Standardized on mark_safe() throughout ComponentAdmin
+  - Improved code consistency and maintainability
+
+### Documentation
+- ENH-0000002 complete documentation package:
+  - Deployment Guide with step-by-step implementation and troubleshooting
+  - Post-Deployment Review documenting actual issues encountered, resolutions, and lessons learned
+  - Enhanced best practices for future development (ENH-0000003)
+  - Migration serialization issue documentation and prevention strategies
 
 ## [0.2.1-alpha] - 2026-01-20
 
@@ -43,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - UUID compatibility issue between uuid_utils.UUID and Django's UUIDField
-  - Implemented lambda wrapper to convert uuid7() output to string format
+  - Implemented named function wrapper to convert uuid7() output to string format
   - Ensures proper Django field validation and database storage
 - Removed duplicate uuid package dependency from pyproject.toml
 
@@ -93,7 +132,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.1-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.2-alpha...HEAD
+[0.2.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.1-alpha...v0.2.2-alpha
 [0.2.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.0-alpha...v0.2.1-alpha
 [0.2.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.1.0...v0.2.0-alpha
 [0.1.0]: https://github.com/crashtechie/se2-calculator-project/releases/tag/v0.1.0
