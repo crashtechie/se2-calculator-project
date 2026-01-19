@@ -9,4 +9,7 @@ dependencies = [
     "psycopg2-binary>=2.9.11",
     "pytest-django>=4.11.1",
     "python-dotenv>=1.2.1",
+    "uuid>=1.30",
+    "uuid-utils>=0.13.0",
+    "uuid7>=0.1.0",
 ]
