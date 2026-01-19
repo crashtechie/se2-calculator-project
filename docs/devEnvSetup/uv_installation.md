@@ -14,8 +14,22 @@
     ```django-admin --version
     ```
 
+## Setup environment variables
+    copy the .env.example to .env file:
+    ```cp .env.example .env
+    ```
+    run the following command to set the secret key and the postgres password in the .env file:
+    ```uv run python scripts.secrets_gen
+    ```
+
+## start postgres docker container
+    run the following command to start the postgres docker container:
+    ```docker compose up -d
+    ```
+
 ## Validate django server runs
     run the development server:
-    ```python manage.py runserver
+    ```uv run python manage.py runserver
     ```
-    open browser and navigate to http://localhost:8000 to see the django welcome page.
+    open browser and navigate to http://localhost:8000 to see initial homepage.
+
