@@ -5,7 +5,7 @@ Quick reference for tracking project progress.
 ## Phase 1: Models & Database ⬜
 
 ### Setup
-- [ ] Create ores app
+- [x] Create ores app
 - [ ] Create components app  
 - [ ] Create blocks app
 - [ ] Register apps in settings.py

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ores', # ENH-0000001: Ores app
 ]
 
 MIDDLEWARE = [

@@ -40,7 +40,7 @@ Ensure `.env` file exists with required variables:
 DEBUG=true
 SECRET_KEY=<your-secret-key>
 # Optional PostgreSQL settings
-DB_NAME=se2_calculator
+DB_NAME=se2_calculator_db
 DB_USER=se2_user
 DB_PASSWORD=<your-db-password>
 DB_HOST=localhost
@@ -56,7 +56,7 @@ DB_PORT=5432
 
 ## Pre-Deployment Checklist
 
-- [ ] Backup current database
+- [x] Backup current database
   ```bash
   # SQLite backup
   cp db.sqlite3 db.sqlite3.backup.$(date +%Y%m%d_%H%M%S)
@@ -65,23 +65,23 @@ DB_PORT=5432
   pg_dump -U se2_user se2_calculator > backup_$(date +%Y%m%d_%H%M%S).sql
   ```
 
-- [ ] Verify current git branch and commit changes
+- [x] Verify current git branch and commit changes
   ```bash
   git status
   git checkout -b feature/enh-0000001-ores-model
   ```
 
-- [ ] Confirm ores app exists
+- [x] Confirm ores app exists
   ```bash
   ls -la ores/
   ```
 
-- [ ] Verify dependencies installed
+- [x] Verify dependencies installed
   ```bash
   uv pip list | grep -E "django|uuid"
   ```
 
-- [ ] Test database connectivity
+- [x] Test database connectivity
   ```bash
   uv run python manage.py check --database default
   ```
@@ -146,7 +146,7 @@ class Ore(models.Model):
     
     Ores are the base materials that are refined and used to craft components.
     """
-    object_id = models.UUIDField(
+    ore_id = models.UUIDField(
         primary_key=True,
         default=uuid7,
         editable=False,
@@ -235,14 +235,14 @@ class OreAdmin(admin.ModelAdmin):
     list_display = ('name', 'mass', 'created_at', 'updated_at')
     search_fields = ('name', 'description')
     list_filter = ('created_at', 'updated_at')
-    readonly_fields = ('object_id', 'created_at', 'updated_at')
+    readonly_fields = ('ore_id', 'created_at', 'updated_at')
     
     fieldsets = (
         ('Basic Information', {
             'fields': ('name', 'description', 'mass')
         }),
         ('System Information', {
-            'fields': ('object_id', 'created_at', 'updated_at'),
+            'fields': ('ore_id', 'created_at', 'updated_at'),
             'classes': ('collapse',)
         }),
     )
@@ -304,7 +304,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Ore',
             fields=[
-                ('object_id', models.UUIDField(default=uuid_utils.uuid7, editable=False, help_text='UUIDv7 primary key', primary_key=True, serialize=False)),
+                ('ore_id', models.UUIDField(default=uuid_utils.uuid7, editable=False, help_text='UUIDv7 primary key', primary_key=True, serialize=False)),
                 ('name', models.CharField(help_text="Unique name of the ore (e.g., 'Iron Ore', 'Silicon')", max_length=100, unique=True)),
                 ('description', models.TextField(blank=True, help_text='Detailed description of the ore and its uses')),
                 ('mass', models.FloatField(help_text='Mass per unit in kilograms')),
@@ -432,7 +432,7 @@ iron = Ore.objects.create(
 )
 
 print(f"Created: {iron}")
-print(f"UUID: {iron.object_id}")
+print(f"UUID: {iron.ore_id}")
 print(f"Created at: {iron.created_at}")
 
 # Verify it exists
@@ -478,7 +478,7 @@ String representation: Iron Ore
 5. **Click "Add Ore":**
    - Form shows: name, description, mass fields
    - System Information section collapsed
-   - object_id, created_at, updated_at are readonly
+   - ore_id, created_at, updated_at are readonly
 
 6. **Create test ore:**
    ```
@@ -512,10 +512,10 @@ for i in range(5):
         mass=1.0
     )
     ores.append(ore)
-    print(f"Created: {ore.name} - UUID: {ore.object_id}")
+    print(f"Created: {ore.name} - UUID: {ore.ore_id}")
 
 # Verify UUIDs are time-ordered (UUIDv7 property)
-uuids = [ore.object_id for ore in ores]
+uuids = [ore.ore_id for ore in ores]
 print(f"\nUUIDs are sequential: {uuids == sorted(uuids)}")
 
 # Cleanup
