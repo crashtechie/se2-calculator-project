@@ -2,10 +2,13 @@ from django.db import models
 from uuid_utils import uuid7
 
 # Create your models here.
+def generate_uuid():
+    return str(uuid7())
+
 class Ore(models.Model):
     ore_id = models.UUIDField(
         primary_key=True,
-        default=lambda: str(uuid7()),
+        default=generate_uuid,
         editable=False,
         unique=True,
         help_text="A unique identifier for each ore instance."

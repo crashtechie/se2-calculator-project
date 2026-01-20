@@ -13,6 +13,7 @@
 **Updated Date:** 2026-01-20  
 **Assigned To:**  
 **Estimated Effort:** 8 hours  
+**Revision:** 1.2 (Updated with technical specs alignment and consistency improvements)  
 
 ---
 
@@ -52,11 +53,14 @@ The blocks app does not exist in the project.
 - [ ] Blocks app created via `python manage.py startapp blocks`
 - [ ] App registered in `se2CalcProject/settings.py` INSTALLED_APPS
 - [ ] Block model defined with all required fields
-- [ ] Consumer/producer validation implemented
-- [ ] JSONField validation for components implemented
-- [ ] Admin interface displays blocks with formatted JSON
+- [ ] UUIDv7 primary key using named function (not lambda)
+- [ ] Consumer/producer validation implemented (validate_consumer, validate_producer)
+- [ ] JSONField validation for components implemented (validate_components)
+- [ ] Component relationship helper implemented (get_component_objects)
+- [ ] Admin interface displays blocks with formatted JSON (custom display methods)
 - [ ] Migrations created and applied
-- [ ] All tests pass
+- [ ] Comprehensive test suite created (45+ tests minimum)
+- [ ] All tests pass (100% pass rate)
 - [ ] Documentation updated
 
 ---
@@ -93,16 +97,51 @@ The blocks app does not exist in the project.
 Run `uv run python manage.py startapp blocks` and register in INSTALLED_APPS
 
 ### Step 2: Define Block Model
-Create model with base fields plus components, health, pcu, snap_size, mass fields, consumer/producer fields, storage_capacity
+Create model with:
+- `block_id` UUIDv7 primary key using `generate_uuid()` named function
+- Base fields: name, description, mass, health, pcu, snap_size, input_mass, output_mass (all with help_text)
+- Components JSONField with `default=list` (array format per technical specs)
+- Consumer fields: consumer_type (blank=True), consumer_rate (default=0.0)
+- Producer fields: producer_type (blank=True), producer_rate (default=0.0)
+- Storage: storage_capacity (default=0.0)
+- Timestamps: created_at, updated_at
+- Meta: ordering=['name'], verbose_name='Block', verbose_name_plural='Blocks', db_table='blocks_block'
 
-### Step 3: Add Validation Logic
-Implement validation for consumer/producer type/rate relationships
+### Step 3: Add Validation Helper Methods
+Implement:
+- `validate_components()` - validates component_id references and quantities
+- `validate_consumer()` - validates consumer_type requires consumer_rate > 0
+- `validate_producer()` - validates producer_type requires producer_rate > 0
+- `get_component_objects()` - returns Component queryset for this block
+- `clean()` - calls all validation methods
+- Override `save()` - calls clean() before saving
 
-### Step 4: Add Component Validation
-Implement methods to validate component_id references in components JSONField
+### Step 4: Configure Admin
+Register Block model with:
+- list_display: name, health, pcu, mass, components_preview, consumer_info, producer_info, created_at
+- search_fields: name, description, consumer_type, producer_type
+- list_filter: consumer_type, producer_type, created_at, updated_at
+- readonly_fields: block_id, created_at, updated_at, components_formatted, component_objects, validation_status
+- Custom display methods: components_preview, components_formatted, component_objects, validation_status, consumer_info, producer_info
+- Fieldsets:
+  - Basic Information: name, description, mass
+  - Block Properties: health, pcu, snap_size, input_mass, output_mass
+  - Components & Production: components, components_formatted, component_objects
+  - Power & Resources: consumer_type, consumer_rate, producer_type, producer_rate, storage_capacity
+  - Validation: validation_status (collapsed)
+  - System Information: block_id, created_at, updated_at (collapsed)
 
-### Step 5: Configure Admin
-Register Block model with custom JSONField display and field grouping
+### Step 5: Create Comprehensive Test Suite
+Create 45+ tests organized into:
+- BlockModelCreationTests
+- BlockFieldValidationTests
+- BlockTimestampTests
+- BlockComponentsJSONFieldTests
+- BlockConsumerValidationTests
+- BlockProducerValidationTests
+- BlockComponentRelationshipTests
+- BlockMetaTests
+- BlockIntegrationTests
 
 ### Step 6: Create and Apply Migrations
 Generate and apply migrations to database
@@ -111,24 +150,85 @@ Generate and apply migrations to database
 
 ## Testing Requirements
 
-### Unit Tests
-- [ ] Test Block model creation
-- [ ] Test JSONField components format validation
-- [ ] Test consumer validation (type requires rate)
-- [ ] Test producer validation (type requires rate)
-- [ ] Test __str__ method
-- [ ] Test optional fields (consumer, producer, storage)
+### Automated Test Suite (45+ tests minimum)
 
-### Integration Tests
-- [ ] Test admin interface CRUD operations
-- [ ] Test components JSONField with valid component references
+**BlockModelCreationTests (7 tests)**
+- [ ] Test block creation with all fields
+- [ ] Test block creation with minimal fields
+- [ ] Test __str__ method
+- [ ] Test UUID generation
+- [ ] Test UUID uniqueness
+- [ ] Test UUID time-ordering
+- [ ] Test block with complex field combinations
+
+**BlockFieldValidationTests (8 tests)**
+- [ ] Test unique name constraint
+- [ ] Test name max_length
+- [ ] Test description can be blank
+- [ ] Test consumer_type can be blank
+- [ ] Test producer_type can be blank
+- [ ] Test numeric field values (mass, health, pcu, etc.)
+- [ ] Test storage_capacity default
+- [ ] Test consumer/producer rate defaults
+
+**BlockTimestampTests (5 tests)**
+- [ ] Test created_at auto-populated
+- [ ] Test updated_at auto-populated
+- [ ] Test timestamps match on creation
+- [ ] Test updated_at changes on save
+- [ ] Test created_at immutable
+
+**BlockComponentsJSONFieldTests (5 tests)**
+- [ ] Test components default empty dict
+- [ ] Test components stores single component
+- [ ] Test components stores multiple components
+- [ ] Test components persist after save
+- [ ] Test components can be updated
+
+**BlockConsumerValidationTests (5 tests)**
+- [ ] Test consumer_type without rate fails validation
+- [ ] Test consumer_type with rate passes validation
+- [ ] Test consumer_rate without type is valid
+- [ ] Test consumer_rate zero with type fails
+- [ ] Test consumer_rate negative fails
+
+**BlockProducerValidationTests (5 tests)**
+- [ ] Test producer_type without rate fails validation
+- [ ] Test producer_type with rate passes validation
+- [ ] Test producer_rate without type is valid
+- [ ] Test producer_rate zero with type fails
+- [ ] Test producer_rate negative fails
+
+**BlockComponentRelationshipTests (4 tests)**
+- [ ] Test get_component_objects single component
+- [ ] Test get_component_objects multiple components
+- [ ] Test get_component_objects empty components
+- [ ] Test get_component_objects preserves quantities
+
+**BlockMetaTests (4 tests)**
+- [ ] Test blocks ordered by name
+- [ ] Test verbose_name singular
+- [ ] Test verbose_name plural
+- [ ] Test db_table name
+
+**BlockIntegrationTests (6 tests)**
+- [ ] Test complete block creation workflow
+- [ ] Test bulk block creation
+- [ ] Test block update preserves relationships
+- [ ] Test block with consumer and producer
+- [ ] Test block with storage capacity
+- [ ] Test block deletion does not affect components
+
+**Total: 49 tests minimum**
 
 ### Manual Testing
 - [ ] Create block via Django shell with all field types
 - [ ] Create power consumer block
 - [ ] Create power producer block
 - [ ] Create storage block
+- [ ] Create block with both consumer and producer
 - [ ] Verify all fields display correctly in admin
+- [ ] Verify validation status shows in admin
 
 ---
 
@@ -136,6 +236,9 @@ Generate and apply migrations to database
 
 - [ ] CHANGELOG.md
 - [ ] Phase 1 checklist
+- [ ] ENH-0000003-deployment-guide.md (following ENH-0000002 template)
+- [ ] ENH-0000003-post-deployment-review.md
+- [ ] ENH-0000003-test-documentation.md
 - [ ] JSONField format documentation for frontend
 - [ ] Consumer/producer validation rules documentation
 
@@ -168,28 +271,87 @@ Not chosen because many blocks have both capabilities
 
 ## Notes
 
-Model fields:
-- object_id: UUIDv7, primary key
-- name: CharField(max_length=100), unique, required
-- description: TextField, blank=True
-- mass: FloatField, required
-- components: JSONField - Format: [{"component_id": "uuid", "quantity": int}]
-- health: FloatField
-- pcu: IntegerField (Performance Cost Units)
-- snap_size: FloatField
-- input_mass: IntegerField
-- output_mass: IntegerField
-- consumer_type: CharField(max_length=50), optional (e.g., "Power", "Hydrogen")
-- consumer_rate: FloatField, default=0
-- producer_type: CharField(max_length=50), optional
-- producer_rate: FloatField, default=0
-- storage_capacity: FloatField, optional
-- created_at: DateTimeField, auto_now_add=True
-- updated_at: DateTimeField, auto_now=True
+### Model Fields (Following ENH-0000001/0000002 Patterns)
 
-Validation rules:
-- If consumer_type is set, consumer_rate must be > 0
-- If producer_type is set, producer_rate must be > 0
+**Primary Key:**
+- block_id: UUIDv7, primary key, default=generate_uuid (named function, not lambda)
+
+**Basic Information:**
+- name: CharField(max_length=100), unique=True, required
+  - help_text: "Unique name of the block (e.g., 'Large Reactor', 'Small Thruster')"
+- description: TextField, blank=True
+  - help_text: "Detailed description of the block and its uses"
+- mass: FloatField, required
+  - help_text: "Total mass of the block in kilograms"
+
+**Components:**
+- components: JSONField, default=list, blank=True
+  - Format: `[{"component_id": "uuid", "component_name": "name", "quantity": int}, ...]`
+  - Note: Using array format per technical specs (includes component names for frontend)
+  - help_text: "JSON array of component requirements with IDs, names, and quantities"
+
+**Block Properties:**
+- health: FloatField, required
+  - help_text: "Block health/integrity points"
+- pcu: IntegerField, required
+  - help_text: "Performance Cost Units (PCU) for this block"
+- snap_size: FloatField, required
+  - help_text: "Grid snap size for placement"
+- input_mass: IntegerField, required
+  - help_text: "Input mass capacity in kg"
+- output_mass: IntegerField, required
+  - help_text: "Output mass capacity in kg"
+
+**Consumer Fields:**
+- consumer_type: CharField(max_length=50), blank=True
+  - help_text: "Type of resource consumed (e.g., 'Power', 'Hydrogen', 'Oxygen')"
+- consumer_rate: FloatField, default=0.0
+  - help_text: "Consumption rate per second"
+
+**Producer Fields:**
+- producer_type: CharField(max_length=50), blank=True
+  - help_text: "Type of resource produced (e.g., 'Power', 'Hydrogen', 'Oxygen')"
+- producer_rate: FloatField, default=0.0
+  - help_text: "Production rate per second"
+
+**Storage:**
+- storage_capacity: FloatField, default=0.0
+  - help_text: "Storage capacity in liters or units"
+
+**Timestamps:**
+- created_at: DateTimeField, auto_now_add=True
+  - help_text: "Timestamp when the block was created"
+- updated_at: DateTimeField, auto_now=True
+  - help_text: "Timestamp when the block was last updated"
+
+**Meta Configuration:**
+- ordering: ['name']
+- verbose_name: 'Block'
+- verbose_name_plural: 'Blocks'
+- db_table: 'blocks_block'
+
+### Validation Rules
+- If consumer_type is set (not empty), consumer_rate must be > 0
+- If producer_type is set (not empty), producer_rate must be > 0
+- All component_ids in components array must reference valid Component objects
+- All quantities in components array must be positive integers
+- Each component entry must have: component_id, component_name, quantity keys
+
+### Validation Helper Methods
+- `validate_components()` - Returns (is_valid, errors) tuple
+- `validate_consumer()` - Returns (is_valid, errors) tuple
+- `validate_producer()` - Returns (is_valid, errors) tuple
+- `get_component_objects()` - Returns Component queryset
+- `clean()` - Calls all validation methods, raises ValidationError if invalid
+- `save()` - Overridden to call clean() before saving
+
+### Admin Display Methods
+- `components_preview(obj)` - Shows component count in list view
+- `components_formatted(obj)` - Shows formatted JSON in detail view
+- `component_objects(obj)` - Shows component names with quantities
+- `validation_status(obj)` - Shows validation results with errors
+- `consumer_info(obj)` - Shows consumer type and rate
+- `producer_info(obj)` - Shows producer type and rate
 
 ---
 
@@ -198,6 +360,8 @@ Validation rules:
 | Date | Status | Notes |
 |------|--------|-------|
 | 2026-01-20 | inReview | Initial creation |
+| 2026-01-20 | inReview | Updated based on ENH-0000001/0000002 lessons learned |
+| 2026-01-20 | inReview | Updated with technical specs alignment (array format) and consistency improvements |
 
 ---
 
