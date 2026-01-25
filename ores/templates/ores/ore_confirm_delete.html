@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete {{ ore.name }} - Ores{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'ores:ore_list' %}">Ores</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'ores:ore_detail' ore.ore_id %}">{{ ore.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Delete</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h2 class="mb-0">
+                    <i class="bi bi-exclamation-triangle"></i> Confirm Deletion
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Warning:</strong> This action cannot be undone!
+                </div>
+                
+                <p class="lead">
+                    Are you sure you want to delete the ore: <strong>{{ ore.name }}</strong>?
+                </p>
+                
+                <!-- Ore Details -->
+                <div class="card bg-light mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Ore Information</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Name:</strong> {{ ore.name }}</li>
+                            <li><strong>Mass:</strong> {{ ore.mass|floatformat:2 }} kg</li>
+                            <li><strong>Created:</strong> {{ ore.created_at|date:"M d, Y H:i" }}</li>
+                            {% if ore.description %}
+                                <li><strong>Description:</strong> {{ ore.description|truncatewords:20 }}</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'ores:ore_detail' ore.ore_id %}" 
+                           class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Ore
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
