@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load component_filters %}
+
+{% block title %}Delete {{ component.name }} - Components{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'components:component_list' %}">Components</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'components:component_detail' component.pk %}">{{ component.name }}</a></li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+
+    <!-- Warning Card -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Confirm Deletion
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <strong>Warning!</strong> This action cannot be undone.
+                    </div>
+
+                    <p class="lead">
+                        Are you sure you want to delete the following component?
+                    </p>
+
+                    <!-- Component Details -->
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ component.name }}</h5>
+                            
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">Description:</dt>
+                                <dd class="col-sm-8">{{ component.description|default:"<em>No description</em>"|safe }}</dd>
+
+                                <dt class="col-sm-4">Mass:</dt>
+                                <dd class="col-sm-8">{{ component.mass|format_mass }}</dd>
+
+                                <dt class="col-sm-4">Build Time:</dt>
+                                <dd class="col-sm-8">{{ component.build_time|format_time }}</dd>
+
+                                <dt class="col-sm-4">Materials:</dt>
+                                <dd class="col-sm-8">
+                                    {% if formatted_materials %}
+                                        <ul class="list-unstyled mb-0">
+                                            {% for material in formatted_materials %}
+                                            <li>
+                                                <i class="bi bi-dot"></i>
+                                                {{ material.ore_name }}: 
+                                                <strong>{{ material.quantity|floatformat:2 }} kg</strong>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <em>No materials defined</em>
+                                    {% endif %}
+                                </dd>
+
+                                <dt class="col-sm-4">Created:</dt>
+                                <dd class="col-sm-8">
+                                    <small>{{ component.created_at|date:"Y-m-d H:i" }}</small>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <!-- Deletion Form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'components:component_detail' component.pk %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash"></i> Yes, Delete Component
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Additional Warning -->
+            <div class="alert alert-info mt-3" role="alert">
+                <i class="bi bi-info-circle"></i>
+                <strong>Note:</strong> Deleting this component will permanently remove all associated data including material definitions.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
