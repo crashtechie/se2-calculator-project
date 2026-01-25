@@ -1,17 +1,17 @@
 # Enhancement Request: Create Sample Data Fixtures
 
-**Filename:** `inReview-enh0000004-create-sample-fixtures.md`
+**Filename:** `ENH0000004-create-sample-fixtures.md`
 
 ---
 
 ## Enhancement Information
 
 **Enhancement ID:** ENH-0000004  
-**Status:** inReview  
+**Status:** Approved  
 **Priority:** Medium  
 **Created Date:** 2026-01-20  
 **Updated Date:** 2026-01-20  
-**Assigned To:**  
+**Assigned To:**  Dan Smith  
 **Estimated Effort:** 4 hours  
 
 ---
@@ -126,9 +126,9 @@ No sample data exists. Database must be manually populated for testing.
 - `CHANGELOG.md` (add ENH-0000004 entry)
 
 ### Database Changes
-- [ ] Migrations required
-- [ ] New models
-- [ ] Schema changes
+- [ ] Migrations required: **No** (fixtures only, no schema changes)
+- [ ] New models: **No**
+- [ ] Schema changes: **No**
 
 ---
 
@@ -145,9 +145,49 @@ Gather realistic ore, component, and block data from Space Engineers 2:
 - Crafting times and fabricator types
 
 ### Step 3: Generate UUIDv7 Strings
-Pre-generate UUIDv7 strings for all fixture objects:
-- Use Python script with `uuid_utils.uuid7()` to generate strings
-- Create a mapping document (UUIDs to entity names) for reference
+Pre-generate UUIDv7 strings for all fixture objects using this script:
+
+**Script:** `scripts/generate_fixture_uuids.py`
+```python
+from uuid_utils import uuid7
+
+# Generate UUIDs for ores (minimum 5)
+print("=== ORES ===")
+ores = ["Iron Ore", "Silicon Ore", "Nickel Ore", "Cobalt Ore", "Silver Ore", "Gold Ore", "Platinum Ore", "Uranium Ore"]
+for ore_name in ores:
+    print(f"{ore_name}: {str(uuid7())}")
+
+print("\n=== COMPONENTS ===")
+# Generate UUIDs for components (minimum 10)
+components = [
+    "Steel Plate", "Construction Component", "Motor", "Computer",
+    "Large Steel Tube", "Metal Grid", "Interior Plate", "Small Steel Tube",
+    "Display", "Bulletproof Glass", "Girder", "Power Cell"
+]
+for comp_name in components:
+    print(f"{comp_name}: {str(uuid7())}")
+
+print("\n=== BLOCKS ===")
+# Generate UUIDs for blocks (minimum 15)
+blocks = [
+    "Light Armor Block", "Heavy Armor Block", "Small Reactor", "Large Reactor",
+    "Battery", "Assembler", "Refinery", "O2/H2 Generator",
+    "Cockpit", "Gyroscope", "Thruster", "Container",
+    "Connector", "Merge Block", "Landing Gear", "Spotlight",
+    "Antenna", "Beacon"
+]
+for block_name in blocks:
+    print(f"{block_name}: {str(uuid7())}")
+```
+
+**Run the script:**
+```bash
+uv run python scripts/generate_fixture_uuids.py > docs/enhancementRequests/phase1_models/ENH0000004/uuid-mapping.txt
+```
+
+**Create mapping document:** `docs/enhancementRequests/phase1_models/ENH0000004/uuid-mapping.md`
+- Document each UUID with its corresponding entity name
+- Use this as reference when creating fixture files
 - Ensure all UUIDs are unique across all fixtures
 
 ### Step 4: Create Ore Fixtures
@@ -171,17 +211,114 @@ Create `blocks/fixtures/sample_blocks.json` with sample blocks:
 - Include all block-specific fields (health, pcu, consumer/producer rates, etc.)
 
 ### Step 7: Create Comprehensive Test Suite
-Create automated tests covering:
+
+**Add fixture tests to existing test files:**
+- `ores/tests.py` - Add fixture test classes
+- `components/tests.py` - Add fixture test classes
+- `blocks/tests.py` - Add fixture test classes
+
+**Or create dedicated fixture test files (recommended for organization):**
+- `ores/tests_fixtures.py`
+- `components/tests_fixtures.py`
+- `blocks/tests_fixtures.py`
+
+**Test requirements:**
 - JSON schema validation (35+ tests minimum)
 - UUID format validation
 - Relationship integrity
 - Fixture loading
 - Data validation
-- Organize into 8+ test classes
+- Organize into 8+ test classes (see Testing Requirements section)
 - Target: 100% pass rate, < 0.5s execution
 
 ### Step 8: Test Fixture Loading
-Load fixtures and verify data integrity and relationships
+
+**Create verification script:** `scripts/verify_fixtures.py`
+```python
+#!/usr/bin/env python
+"""Verify fixture integrity and relationships."""
+import json
+import re
+from pathlib import Path
+
+# UUIDv7 regex pattern
+UUID_PATTERN = re.compile(
+    r'^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+    re.IGNORECASE
+)
+
+def verify_fixtures():
+    """Verify all fixture files for integrity and relationships."""
+    print("🔍 Verifying fixture files...\n")
+    
+    # Load fixture files
+    ores = json.load(open('ores/fixtures/sample_ores.json'))
+    components = json.load(open('components/fixtures/sample_components.json'))
+    blocks = json.load(open('blocks/fixtures/sample_blocks.json'))
+    
+    print(f"Loaded {len(ores)} ores, {len(components)} components, {len(blocks)} blocks")
+    
+    # Collect all UUIDs
+    ore_uuids = {ore['pk'] for ore in ores}
+    component_uuids = {comp['pk'] for comp in components}
+    block_uuids = {block['pk'] for block in blocks}
+    
+    # Verify counts
+    assert len(ores) >= 5, f"Need at least 5 ores, got {len(ores)}"
+    assert len(components) >= 10, f"Need at least 10 components, got {len(components)}"
+    assert len(blocks) >= 15, f"Need at least 15 blocks, got {len(blocks)}"
+    print("✅ Minimum counts met")
+    
+    # Verify UUID uniqueness
+    all_uuids = ore_uuids | component_uuids | block_uuids
+    assert len(all_uuids) == len(ores) + len(components) + len(blocks), "Duplicate UUIDs found!"
+    print("✅ All UUIDs are unique")
+    
+    # Verify UUIDv7 format
+    for uuid in all_uuids:
+        assert UUID_PATTERN.match(uuid), f"Invalid UUIDv7 format: {uuid}"
+    print("✅ All UUIDs are valid UUIDv7 format")
+    
+    # Verify component material references
+    for comp in components:
+        for ore_id in comp['fields']['materials'].keys():
+            assert ore_id in ore_uuids, f"Component '{comp['fields']['name']}' references invalid ore UUID: {ore_id}"
+    print("✅ All component material references are valid")
+    
+    # Verify block component references
+    for block in blocks:
+        for comp_ref in block['fields']['components']:
+            comp_id = comp_ref['component_id']
+            assert comp_id in component_uuids, f"Block '{block['fields']['name']}' references invalid component UUID: {comp_id}"
+            assert 'component_name' in comp_ref, f"Missing component_name in block '{block['fields']['name']}'"
+            assert 'quantity' in comp_ref, f"Missing quantity in block '{block['fields']['name']}'"
+    print("✅ All block component references are valid")
+    
+    print("\n🎉 All fixtures verified successfully!")
+
+if __name__ == '__main__':
+    verify_fixtures()
+```
+
+**Run verification:**
+```bash
+uv run python scripts/verify_fixtures.py
+```
+
+**Load fixtures and verify data:**
+```bash
+# Load in correct order
+uv run python manage.py loaddata sample_ores sample_components sample_blocks
+
+# Verify in Django shell
+uv run python manage.py shell
+>>> from ores.models import Ore
+>>> from components.models import Component
+>>> from blocks.models import Block
+>>> print(f"Ores: {Ore.objects.count()}")
+>>> print(f"Components: {Component.objects.count()}")
+>>> print(f"Blocks: {Block.objects.count()}")
+```
 
 ---
 
@@ -189,9 +326,9 @@ Load fixtures and verify data integrity and relationships
 
 **Target:** Minimum 35+ automated tests, 100% pass rate, < 0.5s execution time
 
-### Unit Tests (20+ tests)
+### Unit Tests (23+ tests)
 
-**Fixture File Validation Tests (FixtureFileValidationTests):**
+**Fixture File Validation Tests (FixtureFileValidationTests):** (6 tests)
 - [ ] Test ore fixture file is valid JSON
 - [ ] Test component fixture file is valid JSON
 - [ ] Test block fixture file is valid JSON
@@ -199,14 +336,14 @@ Load fixtures and verify data integrity and relationships
 - [ ] Test component fixture has required fields
 - [ ] Test block fixture has required fields
 
-**UUID Format Tests (UUIDFormatValidationTests):**
+**UUID Format Tests (UUIDFormatValidationTests):** (5 tests)
 - [ ] Test all ore UUIDs are valid UUIDv7 format
 - [ ] Test all component UUIDs are valid UUIDv7 format
 - [ ] Test all block UUIDs are valid UUIDv7 format
 - [ ] Test all UUIDs are unique across fixtures
 - [ ] Test no duplicate UUIDs within each fixture
 
-**Data Validation Tests (FixtureDataValidationTests):**
+**Data Validation Tests (FixtureDataValidationTests):** (6 tests)
 - [ ] Test ore names are unique
 - [ ] Test component names are unique
 - [ ] Test block names are unique
@@ -214,21 +351,40 @@ Load fixtures and verify data integrity and relationships
 - [ ] Test component mass values are positive
 - [ ] Test block mass values are positive
 
-### Integration Tests (10+ tests)
+**JSONField Format Tests (JSONFieldFormatTests):** (6 tests)
+- [ ] Test component materials field is valid JSON object
+- [ ] Test block components field is valid JSON array
+- [ ] Test materials keys are valid UUIDs
+- [ ] Test component objects have required fields (component_id, component_name, quantity)
+- [ ] Test materials quantities are positive numbers
+- [ ] Test component quantities are positive integers
 
-**Fixture Loading Tests (FixtureLoadingTests):**
+### Integration Tests (15+ tests)
+
+**Fixture Loading Tests (FixtureLoadingTests):** (5 tests)
 - [ ] Test loading ores fixture alone
 - [ ] Test loading components fixture (with ore dependencies)
 - [ ] Test loading blocks fixture (with component dependencies)
 - [ ] Test loading all fixtures in correct sequence
 - [ ] Test fixture loading is idempotent
 
-**Relationship Integrity Tests (RelationshipIntegrityTests):**
+**Relationship Integrity Tests (RelationshipIntegrityTests):** (5 tests)
 - [ ] Test component materials reference valid ore UUIDs
 - [ ] Test block components reference valid component UUIDs
 - [ ] Test ore relationships can be queried from components
 - [ ] Test component relationships can be queried from blocks
 - [ ] Test cascading queries work (block → component → ore)
+
+**Fixture Content Tests (FixtureContentTests):** (3 tests)
+- [ ] Test minimum ore count (5+)
+- [ ] Test minimum component count (10+)
+- [ ] Test minimum block count (15+)
+
+**Admin Integration Tests (AdminIntegrationTests):** (2 tests)
+- [ ] Test fixtures display correctly in admin list view
+- [ ] Test fixture data can be viewed via admin detail view
+
+**Total: 38 tests across 8 test classes** (exceeds 35+ minimum requirement)
 
 ### Manual Testing
 - [ ] Load fixtures into fresh database
@@ -312,6 +468,12 @@ All ENH-0000004 documentation in:
 - **Impact:** Reduced adoption, support burden
 - **Mitigation:** Follow ENH-0000001/002/003 documentation template; include examples
 
+**Risk 7: Timestamp Timezone Issues**
+- **Risk:** Auto-generated timestamps may not match expected timezone in tests
+- **Impact:** Test assertions that compare timestamps may fail
+- **Mitigation:** Document that `created_at`/`updated_at` are auto-set on fixture load; exclude from fixture files
+- **Testing:** Verify timestamps are timezone-aware (USE_TZ=True) in tests
+
 ---
 
 ## Alternatives Considered
@@ -334,6 +496,15 @@ Not chosen because manual JSON creation provides better control
 
 ## Fixture Format Specification
 
+⚠️ **CRITICAL: Loading Order**
+
+Fixtures **must** be loaded in this exact order due to foreign key dependencies:
+1. `sample_ores.json` (no dependencies)
+2. `sample_components.json` (depends on ores)
+3. `sample_blocks.json` (depends on components)
+
+Loading in wrong order will cause `IntegrityError` validation failures!
+
 ### Ore Fixture Format
 
 **File:** `ores/fixtures/sample_ores.json`
@@ -343,7 +514,7 @@ Not chosen because manual JSON creation provides better control
 [
   {
     "model": "ores.ore",
-    "pk": "019d1234-5678-7abc-def0-123456789abc",
+    "pk": "019e5c8a-3d7f-7b2e-9a1c-4f6d8e0b2a3c",
     "fields": {
       "name": "Iron Ore",
       "description": "Common metallic ore used in basic construction",
@@ -352,11 +523,11 @@ Not chosen because manual JSON creation provides better control
   },
   {
     "model": "ores.ore",
-    "pk": "019d1234-5678-7abc-def0-123456789abd",
+    "pk": "019e5c8a-4e8f-7c3d-8b2a-5g7e9f1c3b4d",
     "fields": {
       "name": "Silicon Ore",
-      "description": "Essential for electronic components",
-      "mass": 0.27
+      "description": "Essential ore for computer and display components",
+      "mass": 0.42
     }
   }
 ]
@@ -376,30 +547,30 @@ Not chosen because manual JSON creation provides better control
 [
   {
     "model": "components.component",
-    "pk": "019d5678-1234-7def-0123-456789abcdef",
+    "pk": "019e5c8a-5f9g-7d4e-9c3b-6h8f0g2d4c5e",
     "fields": {
       "name": "Steel Plate",
-      "description": "Basic construction material made from iron",
+      "description": "Basic building material",
       "materials": {
-        "019d1234-5678-7abc-def0-123456789abc": 3
+        "019e5c8a-3d7f-7b2e-9a1c-4f6d8e0b2a3c": 21.0
       },
-      "mass": 20.0,
       "crafting_time": 2.5,
-      "fabricator_type": "Assembler"
+      "mass": 20.0,
+      "fabricator_type": "assembler"
     }
   },
   {
     "model": "components.component",
-    "pk": "019d5678-1234-7def-0123-456789abcdf0",
+    "pk": "019e5c8a-6g0h-7e5f-0d4c-7i9g1h3e5d6f",
     "fields": {
-      "name": "Computer",
-      "description": "Advanced component for control systems",
+      "name": "Construction Component",
+      "description": "Used in constructing blocks",
       "materials": {
-        "019d1234-5678-7abc-def0-123456789abd": 2
+        "019e5c8a-3d7f-7b2e-9a1c-4f6d8e0b2a3c": 8.0
       },
-      "mass": 0.5,
-      "crafting_time": 5.0,
-      "fabricator_type": "Assembler"
+      "crafting_time": 1.5,
+      "mass": 8.0,
+      "fabricator_type": "assembler"
     }
   }
 ]
@@ -419,59 +590,55 @@ Not chosen because manual JSON creation provides better control
 [
   {
     "model": "blocks.block",
-    "pk": "019d9abc-def0-7123-4567-89abcdef0123",
+    "pk": "019e5c8a-7h1i-7f6g-1e5d-8j0h2i4f6e7g",
     "fields": {
       "name": "Light Armor Block",
-      "description": "Basic armor block for ship construction",
+      "description": "Basic armor protection",
       "components": [
         {
-          "component_id": "019d5678-1234-7def-0123-456789abcdef",
+          "component_id": "019e5c8a-5f9g-7d4e-9c3b-6h8f0g2d4c5e",
           "component_name": "Steel Plate",
-          "quantity": 5
+          "quantity": 25
         }
       ],
-      "mass": 100.0,
-      "health": 400.0,
-      "pcu": 1,
-      "snap_size": 1.25,
-      "input_mass": 0,
-      "output_mass": 0,
-      "consumer_type": "",
-      "consumer_rate": 0.0,
-      "producer_type": "",
-      "producer_rate": 0.0,
-      "storage_capacity": 0.0
+      "mass": 500.0,
+      "max_health": 15000,
+      "pcu_cost": 1,
+      "power_consumer": "",
+      "power_consumer_rate": 0.0,
+      "power_producer": "",
+      "power_producer_rate": 0.0,
+      "max_storage": "",
+      "max_storage_amount": 0.0
     }
   },
   {
     "model": "blocks.block",
-    "pk": "019d9abc-def0-7123-4567-89abcdef0124",
+    "pk": "019e5c8a-8i2j-7g7h-2f6e-9k1i3j5g7f8h",
     "fields": {
       "name": "Small Reactor",
-      "description": "Compact nuclear reactor for power generation",
+      "description": "Generates power from uranium",
       "components": [
         {
-          "component_id": "019d5678-1234-7def-0123-456789abcdef",
+          "component_id": "019e5c8a-5f9g-7d4e-9c3b-6h8f0g2d4c5e",
           "component_name": "Steel Plate",
-          "quantity": 10
+          "quantity": 50
         },
         {
-          "component_id": "019d5678-1234-7def-0123-456789abcdf0",
-          "component_name": "Computer",
-          "quantity": 5
+          "component_id": "019e5c8a-6g0h-7e5f-0d4c-7i9g1h3e5d6f",
+          "component_name": "Construction Component",
+          "quantity": 20
         }
       ],
-      "mass": 625.0,
-      "health": 1000.0,
-      "pcu": 15,
-      "snap_size": 1.25,
-      "input_mass": 0,
-      "output_mass": 0,
-      "consumer_type": "Uranium",
-      "consumer_rate": 0.002,
-      "producer_type": "Power",
-      "producer_rate": 15000.0,
-      "storage_capacity": 0.0
+      "mass": 2500.0,
+      "max_health": 25000,
+      "pcu_cost": 75,
+      "power_consumer": "",
+      "power_consumer_rate": 0.0,
+      "power_producer": "MW",
+      "power_producer_rate": 15.0,
+      "max_storage": "",
+      "max_storage_amount": 0.0
     }
   }
 ]
@@ -487,10 +654,32 @@ Not chosen because manual JSON creation provides better control
 
 ## Notes
 
+### Expected Directory Structure After Implementation:
+```
+ores/
+  fixtures/
+    sample_ores.json (5+ ores)
+components/
+  fixtures/
+    sample_components.json (10+ components)
+blocks/
+  fixtures/
+    sample_blocks.json (15+ blocks)
+docs/enhancementRequests/phase1_models/ENH0000004/
+  ENH-0000004-deployment-guide.md
+  ENH-0000004-post-deployment-review.md
+  ENH-0000004-testing-validation.md
+  uuid-mapping.md (UUID → entity name reference)
+scripts/
+  generate_fixture_uuids.py (UUID generation script)
+  verify_fixtures.py (fixture validation script)
+```
+
+### Sample Data Content:
 Sample data should include:
 - Common ores: Iron, Silicon, Nickel, Cobalt, Silver, Gold, Platinum, Uranium
-- Common components: Steel Plate, Construction Component, Motor, Computer, etc.
-- Common blocks: Light Armor, Heavy Armor, Reactor, Battery, Assembler, etc.
+- Common components: Steel Plate, Construction Component, Motor, Computer, Large Steel Tube, Metal Grid, Interior Plate, Small Steel Tube, Display, Bulletproof Glass, Girder, Power Cell
+- Common blocks: Light Armor, Heavy Armor, Small Reactor, Large Reactor, Battery, Assembler, Refinery, O2/H2 Generator, Cockpit, Gyroscope, Thruster, Container, Connector, Merge Block, Landing Gear, Spotlight, Antenna, Beacon
 
 ### Fixture Loading Commands:
 
@@ -532,6 +721,7 @@ uv run python manage.py shell
 | Date | Status | Notes |
 |------|--------|-------|
 | 2026-01-20 | inReview | Initial creation |
+| 2026-01-20 | Approved | Enhancement request reviewed and approved |
 
 ---
 
