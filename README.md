@@ -14,16 +14,17 @@ This is an early alpha release (0.3.0-alpha). The project is under active develo
 
 ### Current Development Status
 
-- ✅ **Phase 0**: Django project foundation and infrastructure
-- ✅ **Phase 1**: Models & Database (Complete - 100%)
-  - ✅ Ores app created with complete Ore model and 35 tests
-  - ✅ Components app created with complete Component model and 44 tests
-  - ✅ Blocks app created with complete Block model and 49 tests
-  - ✅ Sample data fixtures (ores, components, blocks)
-  - ✅ 128 automated tests, 100% pass rate
-- 📋 **Phase 2**: Views & Templates (Planned - 4 enhancements ready)
-- 📋 **Phase 3**: Build Order Calculator (Planned)
-- 📋 **Phase 4**: Testing & Documentation (Planned)
+- ✅ **Phase 1: Models** (Completed)
+  - Ores, Components, Blocks models implemented
+  - Fixtures created and validated
+  
+- 🔄 **Phase 2: Views & Templates** (In Progress)
+  - ✅ ENH-0000005: Ores views and templates (Completed)
+  - ⏳ ENH-0000006: Components views (Pending)
+  - ⏳ ENH-0000007: Blocks views (Pending)
+  
+- ⏳ **Phase 3: Build Order Calculator** (Planned)
+- ⏳ **Phase 4: Documentation & Deployment** (Planned)
 
 ### Planned Features
 

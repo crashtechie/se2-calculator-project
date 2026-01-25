@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ form_action }} Ore - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'ores:ore_list' %}">Ores</a></li>
+                {% if form_action == 'Update' %}
+                    <li class="breadcrumb-item"><a href="{% url 'ores:ore_detail' object.ore_id %}">{{ object.name }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">{{ form_action }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="bi bi-{% if form_action == 'Create' %}plus-circle{% else %}pencil{% endif %}"></i>
+                    {{ form_action }} Ore
+                </h2>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Form Errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <strong>Error:</strong>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Name Field -->
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            {{ form.name.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.help_text %}
+                            <div class="form-text">{{ form.name.help_text }}</div>
+                        {% endif %}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.name.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Mass Field -->
+                    <div class="mb-3">
+                        <label for="{{ form.mass.id_for_label }}" class="form-label">
+                            {{ form.mass.label }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        {{ form.mass }}
+                        {% if form.mass.help_text %}
+                            <div class="form-text">{{ form.mass.help_text }}</div>
+                        {% endif %}
+                        {% if form.mass.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.mass.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description Field -->
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">
+                            {{ form.description.label }}
+                        </label>
+                        {{ form.description }}
+                        {% if form.description.help_text %}
+                            <div class="form-text">{{ form.description.help_text }}</div>
+                        {% endif %}
+                        {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Required Fields Notice -->
+                    <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle"></i>
+                        Fields marked with <span class="text-danger">*</span> are required.
+                    </div>
+                    
+                    <!-- Form Actions -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% if form_action == 'Update' %}{% url 'ores:ore_detail' object.ore_id %}{% else %}{% url 'ores:ore_list' %}{% endif %}" 
+                           class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Save Ore
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

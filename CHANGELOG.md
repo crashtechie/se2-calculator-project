@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- ENH-0000005: Complete CRUD interface for Ores
+  - List view with filtering by name and sorting by mass
+  - Detail view with full ore information
+  - Create and Update forms with validation
+  - Delete confirmation view
+  - Responsive Bootstrap 5 templates
+  - Custom CSS styling
+  - 28 comprehensive unit tests
+  - Fixture data integration
+
 ### In Development
 - Phase 2: Views & Templates (ENH-0000005 through ENH-0000008)
 - Build Order Calculator feature (Phase 3 - planned)
