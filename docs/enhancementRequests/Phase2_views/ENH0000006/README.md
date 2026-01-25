@@ -1,0 +1,22 @@
+# ENH-0000006: Components Views & Templates
+
+**Status:** In Review  
+**Priority:** High  
+**Estimated Effort:** 1.5-2 days
+
+## Overview
+Implement complete CRUD views and templates for the Components app with JSONField material handling and dynamic form inputs.
+
+## Files in This Directory
+- `ENH0000006-components-views-templates.md` - Main enhancement request
+
+## Dependencies
+- Phase 1 Complete (ENH-0000002)
+- ENH-0000005 (Ores Views) - For base template patterns
+- ENH-0000008 (Core Infrastructure) - For validation mixins
+
+## Next Steps
+1. Review enhancement request
+2. Approve for implementation
+3. Create deployment guide
+4. Begin implementation after ENH-0000005
