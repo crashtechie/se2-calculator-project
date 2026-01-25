@@ -10,7 +10,7 @@
 **Status:** inReview  
 **Priority:** High  
 **Created Date:** 2026-01-24  
-**Updated Date:** 2026-01-24  
+**Updated Date:** 2026-01-25  
 **Completion Date:** (pending)  
 **Assigned To:** (pending)  
 **Estimated Effort:** 1.5-2 days  
@@ -80,7 +80,13 @@ Create web interface for managing component data including list, detail, create,
 - [ ] Success messages display after create/update/delete
 - [ ] Error messages display for validation failures (invalid UUIDs, negative quantities)
 - [ ] All templates are mobile responsive
-- [ ] Minimum 20 automated tests (view + form + JavaScript validation)
+- [ ] URL namespaces use `components:` prefix (e.g., `components:component_list`)
+- [ ] Query parameter preservation works across pagination
+- [ ] Search functionality searches both name and description fields
+- [ ] Bootstrap 5 styling applied consistently
+- [ ] Empty state messages display when no components exist
+- [ ] Navigation integration in base template works
+- [ ] Minimum 25 automated tests (view + form + JavaScript validation)
 - [ ] All tests pass with 100% pass rate
 - [ ] Test execution time <1.5 seconds
 - [ ] Documentation updated
@@ -91,7 +97,10 @@ Create web interface for managing component data including list, detail, create,
 ## Technical Details
 
 ### Dependencies
-- No new packages required (JavaScript vanilla or jQuery)
+- No new packages required
+- **JavaScript:** Use vanilla JavaScript (ES6+) to match ENH0000005 patterns
+- **Optional:** jQuery if already included in base template from ENH0000005
+- Confirm JavaScript framework choice with team before Step 4
 - Optional: django-widget-tweaks for form customization
 - Uses Django 6.0.1 JSONField and generic views
 
@@ -122,9 +131,23 @@ Create web interface for managing component data including list, detail, create,
 - [ ] No new models
 - [ ] No schema changes
 
+### Performance Considerations
+- Use `select_related()` when fetching components with ore lookups
+- Cache ore queryset in form context to avoid N+1 queries
+- Monitor with Django Debug Toolbar (already in pyproject.toml)
+- Consider caching material display formatting for detail view
+- Target: < 50ms per request for list view with 25 items
+
 ---
 
 ## Implementation Plan
+
+### Step 0: Pre-Implementation Verification
+- Run fixture verification: `uv run python scripts/utils/verify_fixtures.py`
+- Confirm sample_components.json has valid ore UUIDs
+- Verify ENH0000005 base templates exist
+- Check ENH0000005 Bootstrap version (should be 5.x)
+- Review ENH0000005 test patterns in `ores/test_views.py`
 
 ### Step 1: Forms with JSONField Handling
 - Create `components/forms.py` with ComponentForm
@@ -171,7 +194,27 @@ Create web interface for managing component data including list, detail, create,
   ```
 - Create `component_form.html` with dynamic material selector
 - Create `component_confirm_delete.html`
-- Add template filter for ore name lookup
+
+### Step 5.5: Template Filters and Context Processors
+- Create `components/templatetags/` directory with `__init__.py`
+- Create `components/templatetags/component_filters.py`
+- Implement `get_ore_name` filter:
+  ```python
+  from django import template
+  from ores.models import Ore
+  
+  register = template.Library()
+  
+  @register.filter
+  def get_ore_name(ore_id):
+      try:
+          return Ore.objects.get(ore_id=ore_id).name
+      except Ore.DoesNotExist:
+          return f"Unknown Ore ({ore_id})"
+  ```
+- Load in templates: `{% load component_filters %}`
+- Test filter with invalid UUIDs
+- Consider caching ore lookups for performance
 
 ### Step 6: Testing
 - Create `components/tests_views.py` (15+ tests)
@@ -191,7 +234,13 @@ Create web interface for managing component data including list, detail, create,
 
 ## Testing Requirements
 
-### Unit Tests (Minimum 20)
+### Testing Success Metrics
+**Target:** 25+ tests minimum (based on ENH0000005's 63 tests for simpler model)  
+**Performance:** <1.5 seconds execution time  
+**Coverage:** Aim for 95%+ code coverage on new view code  
+**Pass Rate:** 100% (all tests must pass)
+
+### Unit Tests (Minimum 25)
 
 **ComponentListView (5 tests):**
 - [ ] View renders successfully with fixture data
@@ -256,12 +305,31 @@ Create web interface for managing component data including list, detail, create,
 - [ ] Working CRUD interface for components at `/components/` URLs
 - [ ] Dynamic material selector with JavaScript
 - [ ] JSONField form handling pattern documented
-- [ ] Automated test suite (20+ tests, all passing)
+- [ ] Automated test suite (25+ tests, all passing)
 - [ ] Test execution time <1.5 seconds
-- [ ] Deployment guide completed
-- [ ] Post-deployment review completed
+- [ ] **Deployment guide completed** (follow ENH-0000005-deployment-guide.md template)
+- [ ] **Post-deployment report completed** (follow ENH-0000005-POST-DEPLOYMENT-REPORT.md template)
 - [ ] CHANGELOG.md updated
 - [ ] README.md updated with Phase 2 progress
+
+---
+
+## Success Metrics
+
+### Quantitative Metrics
+- **Test Count:** 25+ tests (minimum), aim for 30+
+- **Test Pass Rate:** 100%
+- **Test Execution Time:** <1.5 seconds
+- **Code Coverage:** >90% for new view code
+- **Page Load Time:** <500ms for list view
+- **Form Submission Time:** <300ms for create/update
+
+### Qualitative Metrics
+- Material selector is intuitive (no user training needed)
+- Error messages are actionable
+- Mobile responsive on iOS/Android
+- Consistent with ENH0000005 UI patterns
+- Code review approval with no major issues
 
 ---
 
@@ -311,6 +379,33 @@ Create web interface for managing component data including list, detail, create,
 
 ---
 
+## Security Considerations
+
+**Input Sanitization:**
+- Validate all ore UUID inputs against database
+- Sanitize quantity inputs (reject negative, NaN, infinite values)
+- Use Django's built-in CSRF protection for all forms
+- Validate materials JSON structure server-side (never trust client)
+
+**JavaScript Security:**
+- Avoid using `eval()` or `innerHTML` for dynamic content
+- Use `textContent` or jQuery `.text()` instead of `.html()`
+- Validate JSON structure before submission
+- Sanitize all user inputs in JavaScript before DOM manipulation
+
+**Error Handling:**
+- Don't expose stack traces to users in production
+- Log security-relevant errors (invalid UUIDs, suspicious quantities)
+- Return generic error messages for authentication failures
+- Use Django's `Http404` for not-found errors (no UUID exposure)
+
+**Performance Security:**
+- Rate-limit form submissions if needed
+- Prevent DDOS via excessive material rows (limit to 20-50 rows)
+- Monitor for unusual patterns in logs
+
+---
+
 ## Alternatives Considered
 
 ### Alternative 1: Raw JSON Textarea
@@ -329,9 +424,9 @@ Create web interface for managing component data including list, detail, create,
 
 ## Related Issues/Enhancements
 
-- **Depends On:** ENH-0000001 (Ores Model) - Completed
-- **Depends On:** ENH-0000002 (Components Model) - Completed
-- **Depends On:** ENH-0000005 (Ores Views) - In Review
+- **Depends On:** ENH-0000001 (Ores Model) - ✅ Completed
+- **Depends On:** ENH-0000002 (Components Model) - ✅ Completed
+- **Depends On:** ENH-0000005 (Ores Views) - ✅ Completed (2026-01-25)
 - **Blocks:** ENH-0000007 (Blocks Views) - Waiting for JSONField patterns
 - **Enables:** Phase 3 Build Order Calculator
 

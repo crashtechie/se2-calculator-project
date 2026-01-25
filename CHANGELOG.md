@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- TBD
+
+### In Development
+- Phase 2: Views & Templates (ENH-0000005 through ENH-0000008)
+- Build Order Calculator feature (Phase 3 - planned)
+
+## [0.3.1-alpha] - 2026-01-25
+
+### Added
 - ENH-0000005: Complete CRUD interface for Ores
   - List view with filtering by name and sorting by mass
   - Detail view with full ore information
@@ -17,10 +26,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Custom CSS styling
   - 28 comprehensive unit tests
   - Fixture data integration
-
-### In Development
-- Phase 2: Views & Templates (ENH-0000005 through ENH-0000008)
-- Build Order Calculator feature (Phase 3 - planned)
+- ENH-0000006: Components views, templates, and material selector
+  - List view with search, sorting (name, mass, build time), and pagination
+  - Detail view with ore-aware material formatting and total material mass
+  - Create/Update with JSON-backed material selector and server-side validation
+  - Delete confirmation view with material summary
+  - Bootstrap 5 templates plus navigation link in shared base/home pages
+  - Dynamic JavaScript material selector for add/remove rows and validation
+  - 30 comprehensive view/form tests; 91% package coverage (coverage report)
 
 ## [0.3.0-alpha] - 2026-01-24
 
@@ -202,7 +215,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.0-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.1-alpha...HEAD
+[0.3.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.0-alpha...v0.3.1-alpha
 [0.3.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.3-alpha...v0.3.0-alpha
 [0.2.3-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.2-alpha...v0.2.3-alpha
 [0.2.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.1-alpha...v0.2.2-alpha

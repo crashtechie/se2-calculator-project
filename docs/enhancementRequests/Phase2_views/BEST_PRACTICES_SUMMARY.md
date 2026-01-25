@@ -340,7 +340,7 @@ core/
 2. Generate coverage report
 3. Create Phase 2 completion report
 4. Update README and CHANGELOG
-5. Tag release: v0.3.0-alpha
+5. Tag release: v0.3.1-alpha
 
 ---
 

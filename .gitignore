@@ -182,6 +182,7 @@ config.local.*
 *.bak
 *.swp
 *~.nib
+*.backup
 
 # Node modules (if using any JS tools)
 node_modules/
@@ -192,6 +193,7 @@ yarn-error.log*
 # user defined ignores
 #docs/
 scripts/tests/testResults/
+
 
 # Placeholder to ensure directory is tracked
 !scripts/tests/testResults/.placeholder
