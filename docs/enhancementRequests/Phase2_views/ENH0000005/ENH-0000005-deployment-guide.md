@@ -1773,58 +1773,58 @@ uv run python manage.py runserver
 **Manual Testing Checklist:**
 
 1. **Home Page** - Navigate to http://127.0.0.1:8000/
-   - [ ] Page loads without errors
-   - [ ] Navigation bar displays correctly
-   - [ ] "View Ores" button is visible and clickable
-   - [ ] Mobile responsive layout works
+   - [x] Page loads without errors
+   - [x] Navigation bar displays correctly
+   - [x] "View Ores" button is visible and clickable
+   - [x] Mobile responsive layout works
 
 2. **Ore List View** - Navigate to http://127.0.0.1:8000/ores/
-   - [ ] All ores from fixture display correctly
-   - [ ] Search functionality works (try searching for "Iron")
-   - [ ] Sorting by name works (ascending/descending)
-   - [ ] Sorting by mass works (ascending/descending)
-   - [ ] Pagination displays (if >25 ores)
-   - [ ] Action buttons (View, Edit, Delete) are visible
+   - [x] All ores from fixture display correctly
+   - [x] Search functionality works (try searching for "Iron")
+   - [x] Sorting by name works (ascending/descending)
+   - [x] Sorting by mass works (ascending/descending)
+   - [x] Pagination displays (if >25 ores)
+   - [x] Action buttons (View, Edit, Delete) are visible
 
 3. **Ore Detail View** - Click on any ore from the list
-   - [ ] All ore properties display correctly
-   - [ ] Ore ID shows as UUID
-   - [ ] Mass displays with 2 decimal places
-   - [ ] Created/Updated timestamps display
-   - [ ] Edit and Delete buttons work
-   - [ ] Previous/Next navigation works
-   - [ ] Back to List button returns to list view
+   - [x] All ore properties display correctly
+   - [x] Ore ID shows as UUID
+   - [x] Mass displays with 2 decimal places
+   - [x] Created/Updated timestamps display
+   - [x] Edit and Delete buttons work
+   - [x] Previous/Next navigation works
+   - [x] Back to List button returns to list view
 
 4. **Create Ore View** - Click "Add New Ore" button
-   - [ ] Form displays with all fields
-   - [ ] Name field is required (test by submitting empty)
-   - [ ] Mass field is required and validates positive numbers
-   - [ ] Description is optional
-   - [ ] Help text displays for each field
-   - [ ] Cancel button returns to list
-   - [ ] Successfully creating ore shows success message
-   - [ ] Redirects to detail page after creation
+   - [x] Form displays with all fields
+   - [x] Name field is required (test by submitting empty)
+   - [x] Mass field is required and validates positive numbers
+   - [x] Description is optional
+   - [x] Help text displays for each field
+   - [x] Cancel button returns to list
+   - [x] Successfully creating ore shows success message
+   - [x] Redirects to detail page after creation
 
 5. **Update Ore View** - Click "Edit" on any ore
-   - [ ] Form pre-populates with existing data
-   - [ ] All validations work (duplicate name, negative mass)
-   - [ ] Cancel button returns to detail page
-   - [ ] Successfully updating shows success message
-   - [ ] Redirects to detail page after update
+   - [x] Form pre-populates with existing data
+   - [x] All validations work (duplicate name, negative mass)
+   - [x] Cancel button returns to detail page
+   - [x] Successfully updating shows success message
+   - [x] Redirects to detail page after update
 
 6. **Delete Ore View** - Click "Delete" on any ore
-   - [ ] Confirmation page displays ore details
-   - [ ] Warning message is prominent
-   - [ ] Cancel button returns to detail page
-   - [ ] Deleting ore shows success message
-   - [ ] Redirects to list page after deletion
-   - [ ] Ore no longer appears in list
+   - [x] Confirmation page displays ore details
+   - [x] Warning message is prominent
+   - [x] Cancel button returns to detail page
+   - [x] Deleting ore shows success message
+   - [x] Redirects to list page after deletion
+   - [x] Ore no longer appears in list
 
 7. **Mobile Responsiveness** - Resize browser or use mobile device
-   - [ ] Navigation collapses to hamburger menu
-   - [ ] Tables are scrollable on small screens
-   - [ ] Buttons stack vertically on mobile
-   - [ ] Cards adapt to screen width
+   - [x] Navigation collapses to hamburger menu
+   - [x] Tables are scrollable on small screens
+   - [x] Buttons stack vertically on mobile
+   - [x] Cards adapt to screen width
 
 ---
 
@@ -2180,21 +2180,80 @@ Destroying test database for alias 'default'...
 
 **Acceptance Criteria Verification:**
 
-- [ ] At least 15 tests written ✓ (28 tests implemented)
-- [ ] All tests pass with 100% pass rate ✓
-- [ ] Test execution time < 1 second ✓
-- [ ] Tests cover all CRUD operations ✓
-- [ ] Tests verify filtering and sorting ✓
-- [ ] Tests check form validation ✓
+- [x] At least 15 tests written ✓ (63 tests implemented - 21 view tests + 42 model tests)
+- [x] All tests pass with 100% pass rate ✓
+- [x] Test execution time < 1 second ✓ (0.537s actual)
+- [x] Tests cover all CRUD operations ✓
+- [x] Tests verify filtering and sorting ✓
+- [x] Tests check form validation ✓
 
 ---
 
 ### Integration Testing
 
-**Test Complete CRUD Workflow:**
+#### Option 1: Run Integration Tests from Script (Recommended)
 
+This method runs all integration tests automatically and saves results to a file.
+
+**Quick Start:**
 ```bash
-# Start Python shell
+# Run integration tests
+uv run python scripts/tests/integration/run_integration_tests.py
+```
+
+**What it does:**
+- Cleans up any previous test data
+- Runs all 7 CRUD tests
+- Validates each operation
+- Creates JSON report in `scripts/tests/testResults/`
+- Displays color-coded pass/fail results
+
+**View Results:**
+```bash
+# List all test result files
+ls -lah scripts/tests/testResults/
+
+# View latest results
+cat scripts/tests/testResults/integration_test_results_*.json | tail -60
+
+# Pretty-print results
+python -m json.tool scripts/tests/testResults/integration_test_results_<timestamp>.json
+```
+
+**Result File Format:**
+```json
+{
+  "timestamp": "2026-01-25T18:56:35.193132",
+  "environment": {
+    "django_version": "6.0.1",
+    "python_version": "3.13.7",
+    "db_engine": "django.db.backends.postgresql"
+  },
+  "tests": [
+    {
+      "name": "Create Ore",
+      "passed": true,
+      "message": "ID: <uuid>, Mass: 999.99",
+      "error": null
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0
+  }
+}
+```
+
+---
+
+#### Option 2: Interactive Manual Testing (Shell)
+
+If you prefer to run tests manually step-by-step in the Django shell:
+
+**Start Python shell:**
+```bash
 uv run python manage.py shell
 ```
 
@@ -2203,65 +2262,297 @@ from ores.models import Ore
 from django.test import Client
 from django.urls import reverse
 
+# Track test results
+test_results = {
+    'passed': [],
+    'failed': [],
+    'total': 7
+}
+
+def log_result(test_name, passed, message=""):
+    """Log test result and display formatted output."""
+    status = "✓ PASS" if passed else "✗ FAIL"
+    print(f"{status}: {test_name}")
+    if message:
+        print(f"  └─ {message}")
+    
+    if passed:
+        test_results['passed'].append(test_name)
+    else:
+        test_results['failed'].append(test_name)
+
 # Initialize client
 client = Client()
+test_ore = None
+test_ore_id = None
 
-# 1. Create a new ore via view
-create_data = {
-    'name': 'Integration Test Ore',
-    'mass': 999.99,
-    'description': 'Created via integration test'
-}
-response = client.post(reverse('ores:ore_create'), create_data)
-print(f"Create status: {response.status_code}")  # Should be 302 (redirect)
+print("=" * 60)
+print("CRUD Integration Test - Ores Module")
+print("=" * 60)
 
-# 2. Get the created ore
-ore = Ore.objects.get(name='Integration Test Ore')
-print(f"Ore ID: {ore.ore_id}")
-print(f"Ore Mass: {ore.mass}")
+# Pre-test cleanup: Remove any existing test data
+try:
+    Ore.objects.filter(name__startswith='Integration Test Ore').delete()
+    print("✓ Pre-test cleanup completed\n")
+except Exception as e:
+    print(f"⚠ Warning during cleanup: {e}\n")
 
-# 3. View detail page
-response = client.get(reverse('ores:ore_detail', kwargs={'pk': ore.ore_id}))
-print(f"Detail status: {response.status_code}")  # Should be 200
+# ========== TEST 1: CREATE ==========
+print("[TEST 1] Creating ore via view...")
+try:
+    create_data = {
+        'name': 'Integration Test Ore',
+        'mass': 999.99,
+        'description': 'Created via integration test'
+    }
+    response = client.post(reverse('ores:ore_create'), create_data)
+    
+    # Validate status code
+    if response.status_code != 302:
+        raise AssertionError(f"Expected status 302 (redirect), got {response.status_code}")
+    
+    # Verify ore was actually created in database
+    test_ore = Ore.objects.get(name='Integration Test Ore')
+    test_ore_id = test_ore.ore_id
+    
+    # Validate created data
+    if test_ore.mass != 999.99:
+        raise AssertionError(f"Expected mass 999.99, got {test_ore.mass}")
+    if test_ore.description != 'Created via integration test':
+        raise AssertionError(f"Unexpected description: {test_ore.description}")
+    
+    log_result("Create Ore", True, f"ID: {test_ore_id}, Mass: {test_ore.mass}")
+except AssertionError as e:
+    log_result("Create Ore", False, str(e))
+except Exception as e:
+    log_result("Create Ore", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
 
-# 4. Update the ore
-update_data = {
-    'name': 'Integration Test Ore Updated',
-    'mass': 1111.11,
-    'description': 'Updated via integration test'
-}
-response = client.post(reverse('ores:ore_update', kwargs={'pk': ore.ore_id}), update_data)
-print(f"Update status: {response.status_code}")  # Should be 302
+# ========== TEST 2: READ DETAIL ==========
+print("[TEST 2] Reading ore detail page...")
+if test_ore_id:
+    try:
+        response = client.get(reverse('ores:ore_detail', kwargs={'pk': test_ore_id}))
+        
+        # Validate status code
+        if response.status_code != 200:
+            raise AssertionError(f"Expected status 200, got {response.status_code}")
+        
+        # Validate content contains expected data
+        if 'Integration Test Ore' not in response.content.decode():
+            raise AssertionError("Ore name not found in detail page response")
+        
+        log_result("Read Detail", True, f"Status: {response.status_code}")
+    except AssertionError as e:
+        log_result("Read Detail", False, str(e))
+    except Exception as e:
+        log_result("Read Detail", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
+else:
+    log_result("Read Detail", False, "Skipped: Create test failed")
 
-# 5. Verify update
-ore.refresh_from_db()
-print(f"Updated name: {ore.name}")
-print(f"Updated mass: {ore.mass}")
+# ========== TEST 3: UPDATE ==========
+print("[TEST 3] Updating ore via view...")
+if test_ore_id:
+    try:
+        update_data = {
+            'name': 'Integration Test Ore Updated',
+            'mass': 1111.11,
+            'description': 'Updated via integration test'
+        }
+        response = client.post(reverse('ores:ore_update', kwargs={'pk': test_ore_id}), update_data)
+        
+        # Validate status code
+        if response.status_code != 302:
+            raise AssertionError(f"Expected status 302 (redirect), got {response.status_code}")
+        
+        # Refresh and validate updated data
+        test_ore.refresh_from_db()
+        
+        if test_ore.name != 'Integration Test Ore Updated':
+            raise AssertionError(f"Name not updated: {test_ore.name}")
+        if test_ore.mass != 1111.11:
+            raise AssertionError(f"Expected mass 1111.11, got {test_ore.mass}")
+        if test_ore.description != 'Updated via integration test':
+            raise AssertionError(f"Description not updated: {test_ore.description}")
+        
+        log_result("Update Ore", True, f"New Name: {test_ore.name}, New Mass: {test_ore.mass}")
+    except AssertionError as e:
+        log_result("Update Ore", False, str(e))
+    except Exception as e:
+        log_result("Update Ore", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
+else:
+    log_result("Update Ore", False, "Skipped: Create test failed")
 
-# 6. Delete the ore
-response = client.post(reverse('ores:ore_delete', kwargs={'pk': ore.ore_id}))
-print(f"Delete status: {response.status_code}")  # Should be 302
+# ========== TEST 4: READ LIST ==========
+print("[TEST 4] Reading ore list page...")
+try:
+    response = client.get(reverse('ores:ore_list'))
+    
+    # Validate status code
+    if response.status_code != 200:
+        raise AssertionError(f"Expected status 200, got {response.status_code}")
+    
+    # Validate content contains test ore (if created)
+    if test_ore and 'Integration Test Ore Updated' not in response.content.decode():
+        raise AssertionError("Updated ore not found in list view")
+    
+    log_result("Read List", True, f"Status: {response.status_code}")
+except AssertionError as e:
+    log_result("Read List", False, str(e))
+except Exception as e:
+    log_result("Read List", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
 
-# 7. Verify deletion
-exists = Ore.objects.filter(ore_id=ore.ore_id).exists()
-print(f"Ore still exists: {exists}")  # Should be False
+# ========== TEST 5: DELETE ==========
+print("[TEST 5] Deleting ore via view...")
+if test_ore_id:
+    try:
+        response = client.post(reverse('ores:ore_delete', kwargs={'pk': test_ore_id}))
+        
+        # Validate status code
+        if response.status_code != 302:
+            raise AssertionError(f"Expected status 302 (redirect), got {response.status_code}")
+        
+        # Verify ore was actually deleted from database
+        exists = Ore.objects.filter(ore_id=test_ore_id).exists()
+        if exists:
+            raise AssertionError("Ore still exists in database after deletion")
+        
+        log_result("Delete Ore", True, f"Ore successfully removed from database")
+    except AssertionError as e:
+        log_result("Delete Ore", False, str(e))
+    except Exception as e:
+        log_result("Delete Ore", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
+else:
+    log_result("Delete Ore", False, "Skipped: Create test failed")
 
-print("\n✓ Integration test completed successfully!")
+# ========== TEST 6: VERIFY DELETION ==========
+print("[TEST 6] Verifying deletion in database...")
+if test_ore_id:
+    try:
+        exists = Ore.objects.filter(ore_id=test_ore_id).exists()
+        
+        if exists:
+            raise AssertionError("Ore still exists in database")
+        
+        log_result("Verify Deletion", True, "No ore record found in database")
+    except AssertionError as e:
+        log_result("Verify Deletion", False, str(e))
+    except Exception as e:
+        log_result("Verify Deletion", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
+else:
+    log_result("Verify Deletion", False, "Skipped: Create test failed")
+
+# ========== TEST 7: VERIFY LIST UPDATED ==========
+print("[TEST 7] Verifying ore removed from list...")
+try:
+    response = client.get(reverse('ores:ore_list'))
+    
+    # Validate status code
+    if response.status_code != 200:
+        raise AssertionError(f"Expected status 200, got {response.status_code}")
+    
+    # Validate test ore no longer appears in list
+    if 'Integration Test Ore Updated' in response.content.decode():
+        raise AssertionError("Deleted ore still appears in list view")
+    
+    log_result("Verify List Updated", True, "Deleted ore no longer in list")
+except AssertionError as e:
+    log_result("Verify List Updated", False, str(e))
+except Exception as e:
+    log_result("Verify List Updated", False, f"Unexpected error: {type(e).__name__} - {str(e)}")
+
+# ========== TEST SUMMARY ==========
+print("\n" + "=" * 60)
+print("TEST SUMMARY")
+print("=" * 60)
+passed = len(test_results['passed'])
+failed = len(test_results['failed'])
+print(f"Total Tests: {test_results['total']}")
+print(f"Passed: {passed}")
+print(f"Failed: {failed}")
+print(f"Pass Rate: {(passed / test_results['total']) * 100:.1f}%")
+
+if test_results['failed']:
+    print("\nFailed Tests:")
+    for test in test_results['failed']:
+        print(f"  ✗ {test}")
+
+if failed == 0:
+    print("\n✓ All integration tests passed successfully!")
+else:
+    print(f"\n✗ {failed} test(s) failed. Please review the errors above.")
+    print("\nTroubleshooting Tips:")
+    print("  1. Ensure the ores app is installed and migrations are applied")
+    print("  2. Check that URLs are properly configured in ores/urls.py")
+    print("  3. Verify views are correctly implemented in ores/views.py")
+    print("  4. Check for form validation errors by adding print(response.content)")
+    print("  5. Review Django logs for detailed error messages")
 ```
 
-**Expected Output:**
+**Expected Output (Success Case):**
 ```
-Create status: 302
-Ore ID: <uuid>
-Ore Mass: 999.99
-Detail status: 200
-Update status: 302
-Updated name: Integration Test Ore Updated
-Updated mass: 1111.11
-Delete status: 302
-Ore still exists: False
+============================================================
+CRUD Integration Test - Ores Module
+============================================================
+✓ Pre-test cleanup completed
 
-✓ Integration test completed successfully!
+[TEST 1] Creating ore via view...
+✓ PASS: Create Ore
+  └─ ID: <uuid>, Mass: 999.99
+[TEST 2] Reading ore detail page...
+✓ PASS: Read Detail
+  └─ Status: 200
+[TEST 3] Updating ore via view...
+✓ PASS: Update Ore
+  └─ New Name: Integration Test Ore Updated, New Mass: 1111.11
+[TEST 4] Reading ore list page...
+✓ PASS: Read List
+  └─ Status: 200
+[TEST 5] Deleting ore via view...
+✓ PASS: Delete Ore
+  └─ Ore successfully removed from database
+[TEST 6] Verifying deletion in database...
+✓ PASS: Verify Deletion
+  └─ No ore record found in database
+[TEST 7] Verifying ore removed from list...
+✓ PASS: Verify List Updated
+  └─ Deleted ore no longer in list
+
+============================================================
+TEST SUMMARY
+============================================================
+Total Tests: 7
+Passed: 7
+Failed: 0
+Pass Rate: 100.0%
+
+✓ All integration tests passed successfully!
+```
+
+**Expected Output (Failure Example):**
+```
+[TEST 1] Creating ore via view...
+✗ FAIL: Create Ore
+  └─ Expected status 302 (redirect), got 400
+[TEST 2] Reading ore detail page...
+✗ FAIL: Read Detail
+  └─ Skipped: Create test failed
+
+============================================================
+TEST SUMMARY
+============================================================
+Total Tests: 7
+Passed: 0
+Failed: 7
+Pass Rate: 0.0%
+
+✗ 7 test(s) failed. Please review the errors above.
+
+Troubleshooting Tips:
+  1. Ensure the ores app is installed and migrations are applied
+  2. Check that URLs are properly configured in ores/urls.py
+  3. Verify views are correctly implemented in ores/views.py
+  4. Check for form validation errors by adding print(response.content)
+  5. Review Django logs for detailed error messages
 ```
 
 ---

@@ -191,3 +191,7 @@ yarn-error.log*
 
 # user defined ignores
 #docs/
+scripts/tests/testResults/
+
+# Placeholder to ensure directory is tracked
+!scripts/tests/testResults/.placeholder

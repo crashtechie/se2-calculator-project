@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ ore.name }} - Ores{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'ores:ore_list' %}">Ores</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ ore.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <h1>
+                <i class="bi bi-gem"></i> {{ ore.name }}
+            </h1>
+            <div class="list-actions">
+                <a href="{% url 'ores:ore_update' ore.ore_id %}" 
+                   class="btn btn-warning">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a href="{% url 'ores:ore_delete' ore.ore_id %}" 
+                   class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <!-- Main Details Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Ore Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="detail-row row">
+                    <div class="col-md-4 detail-label">Ore ID:</div>
+                    <div class="col-md-8 detail-value">
+                        <code>{{ ore.ore_id }}</code>
+                    </div>
+                </div>
+                
+                <div class="detail-row row">
+                    <div class="col-md-4 detail-label">Name:</div>
+                    <div class="col-md-8 detail-value">
+                        <strong>{{ ore.name }}</strong>
+                    </div>
+                </div>
+                
+                <div class="detail-row row">
+                    <div class="col-md-4 detail-label">Mass:</div>
+                    <div class="col-md-8 detail-value">
+                        <span class="badge bg-info">{{ ore.mass|floatformat:2 }} kg</span>
+                    </div>
+                </div>
+                
+                <div class="detail-row row">
+                    <div class="col-md-4 detail-label">Description:</div>
+                    <div class="col-md-8 detail-value">
+                        {% if ore.description %}
+                            <p class="mb-0">{{ ore.description }}</p>
+                        {% else %}
+                            <em class="text-muted">No description provided</em>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <!-- Metadata Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-clock-history"></i> Metadata
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <div class="detail-label">Created:</div>
+                    <div class="detail-value">
+                        {{ ore.created_at|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="detail-label">Last Updated:</div>
+                    <div class="detail-value">
+                        {{ ore.updated_at|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Card -->
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-arrow-left-right"></i> Navigation
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if previous_ore %}
+                        <a href="{% url 'ores:ore_detail' previous_ore.ore_id %}" 
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Previous: {{ previous_ore.name }}
+                        </a>
+                    {% else %}
+                        <button class="btn btn-outline-secondary" disabled>
+                            <i class="bi bi-arrow-left"></i> No Previous Ore
+                        </button>
+                    {% endif %}
+                    
+                    <a href="{% url 'ores:ore_list' %}" 
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-list"></i> Back to List
+                    </a>
+                    
+                    {% if next_ore %}
+                        <a href="{% url 'ores:ore_detail' next_ore.ore_id %}" 
+                           class="btn btn-outline-primary">
+                            Next: {{ next_ore.name }} <i class="bi bi-arrow-right"></i>
+                        </a>
+                    {% else %}
+                        <button class="btn btn-outline-secondary" disabled>
+                            No Next Ore <i class="bi bi-arrow-right"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

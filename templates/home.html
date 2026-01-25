@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">
+                <i class="bi bi-calculator-fill"></i> 
+                Welcome to SE2 Calculator
+            </h1>
+            <p class="lead">
+                Manage your Space Engineers 2 resources, components, and blocks efficiently.
+            </p>
+            <hr class="my-4">
+            <p>
+                Track ores, calculate component requirements, and optimize your build orders.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Ores Card -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-gem text-primary" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Ores</h5>
+                <p class="card-text">
+                    View and manage raw ore resources. Track mass, descriptions, and availability.
+                </p>
+                <a href="{% url 'ores:ore_list' %}" class="btn btn-primary">
+                    <i class="bi bi-list"></i> View Ores
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Components Card -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-box text-secondary" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Components</h5>
+                <p class="card-text">
+                    Browse refined components. View recipes and material requirements.
+                </p>
+                <button class="btn btn-secondary" disabled>
+                    <i class="bi bi-hourglass-split"></i> Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blocks Card -->
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-bricks text-success" style="font-size: 3rem;"></i>
+                <h5 class="card-title mt-3">Blocks</h5>
+                <p class="card-text">
+                    Explore buildable blocks. Calculate total resource costs.
+                </p>
+                <button class="btn btn-secondary" disabled>
+                    <i class="bi bi-hourglass-split"></i> Coming Soon
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Project Status
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <i class="bi bi-check-circle-fill text-success"></i> 
+                        <strong>Phase 1:</strong> Models (Completed)
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi bi-hourglass text-warning"></i> 
+                        <strong>Phase 2:</strong> Views & Templates (In Progress)
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi bi-circle text-muted"></i> 
+                        <strong>Phase 3:</strong> Build Order Calculator (Planned)
+                    </li>
+                    <li class="list-group-item">
+                        <i class="bi bi-circle text-muted"></i> 
+                        <strong>Phase 4:</strong> Documentation & Deployment (Planned)
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

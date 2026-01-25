@@ -60,21 +60,21 @@ Create web interface for managing ore data including list, detail, create, updat
 
 ## Acceptance Criteria
 
-- [ ] OreListView displays all ores with fixture data
-- [ ] Filtering by name works correctly
-- [ ] Sorting by mass (ascending/descending) works
-- [ ] Pagination displays 25 items per page
-- [ ] OreDetailView shows all ore properties
-- [ ] OreCreateView creates new ores with validation
-- [ ] OreUpdateView modifies existing ores
-- [ ] OreDeleteView requires confirmation before deletion
-- [ ] Success messages display after create/update/delete
-- [ ] Error messages display for validation failures
-- [ ] All templates are mobile responsive
-- [ ] Minimum 15 automated tests (5 per view type)
-- [ ] All tests pass with 100% pass rate
-- [ ] Test execution time <1 second
-- [ ] Documentation updated
+- [x] OreListView displays all ores with fixture data
+- [x] Filtering by name works correctly
+- [x] Sorting by mass (ascending/descending) works
+- [x] Pagination displays 25 items per page
+- [x] OreDetailView shows all ore properties
+- [x] OreCreateView creates new ores with validation
+- [x] OreUpdateView modifies existing ores
+- [x] OreDeleteView requires confirmation before deletion
+- [x] Success messages display after create/update/delete
+- [x] Error messages display for validation failures
+- [x] All templates are mobile responsive
+- [x] Minimum 15 automated tests (5 per view type) - **63 tests total**
+- [x] All tests pass with 100% pass rate
+- [x] Test execution time <1 second - **0.537s actual**
+- [ ] Documentation updated - **Partial: README needs Phase 2 status update, CHANGELOG needs specific entry**
 - [ ] Code reviewed
 
 ---
