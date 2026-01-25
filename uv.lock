@@ -139,7 +139,7 @@ wheels = [
 
 [[package]]
 name = "se2-calculator-project"
-version = "0.2.3a0"
+version = "0.3.0a0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
