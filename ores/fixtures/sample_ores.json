@@ -1,0 +1,167 @@
+[
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99a061607f73",
+    "fields": {
+      "name": "Iron Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99b2580e88b8",
+    "fields": {
+      "name": "Silicon Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99cec9e94e32",
+    "fields": {
+      "name": "Nickel Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99ddf4d82863",
+    "fields": {
+      "name": "Cobalt Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99ef876e78d0",
+    "fields": {
+      "name": "Silver Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-99f7055c3c9f",
+    "fields": {
+      "name": "Gold Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a02493c6d6e",
+    "fields": {
+      "name": "Platinum Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a199ae307b3",
+    "fields": {
+      "name": "Uranium Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a20deb21500",
+    "fields": {
+      "name": "Chromium Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a363efae246",
+    "fields": {
+      "name": "Copper Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a40df252337",
+    "fields": {
+      "name": "Ice Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a5141c06517",
+    "fields": {
+      "name": "Lead Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a66df2d372c",
+    "fields": {
+      "name": "Magnesium Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a752912e630",
+    "fields": {
+      "name": "Titanium Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "ores.ore",
+    "pk": "019bf344-24d5-7ae1-a9bc-9a87115b875e",
+    "fields": {
+      "name": "Stone Ore",
+      "description": "",
+      "mass": 1,
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z"
+    }
+  }
+]

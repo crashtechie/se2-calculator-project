@@ -8,8 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### In Development
-- ENH-0000004: Sample data fixtures (in preparation)
-- Build Order Calculator feature (planned)
+- Phase 2: Views & Templates (ENH-0000005 through ENH-0000008)
+- Build Order Calculator feature (Phase 3 - planned)
+
+## [0.3.0-alpha] - 2026-01-24
+
+### Added - Phase 1 Complete: Models & Database
+- **Phase 1 completion:** All core models implemented with 128 automated tests
+- ENH-0000004: Sample data fixtures for ores, components, and blocks (15/15/15)
+- ENH-0000004: Fixture verification script (`scripts/verify_fixtures.py`)
+- ENH-0000004: UUID generation helper (`scripts/generate_fixture_uuids.py`)
+- ENH-0000004: Fixture-focused test suites across ores, components, and blocks
+
+### Documentation
+- Phase 1 Post-Deployment Report with complete metrics and lessons learned
+- Phase 2 enhancement requests (ENH-0000005 through ENH-0000008)
+- Best practices recommendations for Phase 2 implementation
+- Updated enhancement request template to match Phase 1 design
 
 ### Documentation Added
 - Comprehensive project plan with 4 development phases
@@ -176,7 +191,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.3-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.0-alpha...HEAD
+[0.3.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.3-alpha...v0.3.0-alpha
 [0.2.3-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.2-alpha...v0.2.3-alpha
 [0.2.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.1-alpha...v0.2.2-alpha
 [0.2.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.0-alpha...v0.2.1-alpha

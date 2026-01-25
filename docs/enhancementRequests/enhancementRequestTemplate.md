@@ -2,14 +2,21 @@
 
 **Filename Format:** `ENH<0000000>-<short-description>.md`
 
-**Note on Status Tracking:**
-- Status is tracked in the document content (Status field), not in the filename
-- This allows status to be updated without renaming files
-- Status values: `inReview`, `inProgress`, `completed`
-- Each enhancement gets its own directory: `/ENH<0000000>/` where all related documentation is stored
+**Directory Structure:**
+- Each enhancement gets its own directory: `ENH<0000000>/`
+- Main enhancement file: `ENH<0000000>-<short-description>.md`
+- Supporting files added during implementation
 
-**Example Filename:** `ENH0000001-add-user-authentication.md`  
-**Example Directory:** `/ENH0000001/` containing all related documents
+**Example:**
+```
+ENH0000001/
+├── ENH0000001-create-ores-app-model.md
+├── ENH-0000001-deployment-guide.md
+├── ENH-0000001-test-documentation.md
+├── ENH-0000001-testing-validation.md
+├── ENH-0000001-postdeploymentreview.md
+└── README.md
+```
 
 ---
 
@@ -17,13 +24,12 @@
 
 **Enhancement ID:** ENH-0000000  
 **Status:** inReview | inProgress | completed  
-**Priority:** Critical | High | Medium | Low  
+**Priority:** High | Medium | Low  
 **Created Date:** YYYY-MM-DD  
 **Updated Date:** YYYY-MM-DD  
 **Completion Date:** YYYY-MM-DD (if completed)  
-**Assigned To:**  
-**Estimated Effort:** X hours/days  
-**Actual Effort:** X hours/days (if completed)
+**Assigned To:** (pending)  
+**Estimated Effort:** X hours/days
 
 ---
 
@@ -40,6 +46,10 @@ Detailed description of the enhancement request. Include:
 - Why this enhancement is needed
 - What problem it solves
 - Who will benefit from this enhancement
+
+**Benefits:**
+- Benefit 1
+- Benefit 2
 
 ---
 
@@ -61,6 +71,7 @@ Describe how the system should work after this enhancement is implemented.
 - [ ] Criterion 2
 - [ ] Criterion 3
 - [ ] All tests pass
+- [ ] Migrations created and applied (if applicable)
 - [ ] Documentation updated
 - [ ] Code reviewed
 
@@ -69,21 +80,22 @@ Describe how the system should work after this enhancement is implemented.
 ## Technical Details
 
 ### Dependencies
-- New packages required (with versions)
-- Version updates needed (specify old -> new versions)
+- Package name >= version (if new packages required)
+- Django version requirement
 - Other enhancements that must be completed first
-
-### Dependency Files
-- `pyproject.toml` - Update dependencies here
-- `requirements.txt` (if applicable)
 
 ### Affected Components
 - Component/App 1
 - Component/App 2
 
 ### Files to Modify/Create
+
+**New Files:**
 - `path/to/file1.py`
 - `path/to/file2.py`
+
+**Modified Files:**
+- `path/to/existing_file.py`
 
 ### Database Changes
 - [ ] Migrations required
@@ -107,13 +119,13 @@ Description of task
 
 ## Testing Requirements
 
-### Unit Tests
+### Unit Tests (Minimum X)
 - [ ] Test case 1
 - [ ] Test case 2
 - [ ] Field validation tests
 - [ ] Model/component creation tests
 
-### Integration Tests
+### Integration Tests (Minimum X)
 - [ ] Test case 1
 - [ ] Test case 2
 - [ ] Cross-component interaction tests
@@ -121,113 +133,31 @@ Description of task
 ### Manual Testing
 - [ ] Test scenario 1
 - [ ] Test scenario 2
-- [Related Documentation Files
+- [ ] Verify via Django shell
+- [ ] Verify via admin interface
 
-Each enhancement should have a directory structure with accompanying documentation:
+---
 
-```
-/ENH0000000/
-  ├── completed-enh0000000-<short-description>.md  (main enhancement request)
-  ├── ENH-0000000-deployment-guide.md              (implementation & deployment steps)
-  ├── ENH-0000000-test-documentation.md            (test suite documentation)
-  ├── ENH-0000000-testing-validation.md            (testing validation & requirements)
-  ├── ENH-0000000-postdeploymentreview.md          (post-deployment analysis)
-  └── README.md                                     (directory overview)
-```
-
-**Deployment Guide** - Contains:
-- Prerequisites and system requirements
-- Pre-deployment checklist
-- Step-by-step implementation process
-- Verification and testing procedures
-- Rollback procedures
-- Troubleshooting guide
-- Post-deployment tasks
-
-**Test Documentation** - Contains:
-- Test suite overview and statistics
-- Test organization and structure
-- Detailed test descriptions
-- Test execution instructions
-- Coverage analysis
-
-**Testing Validation** - Contains:
-- Testing requirements matrix
-- Unit/Integration/Manual test completion status
-- Test execution results
-- Coverage analysis
-- Compliance checklist
-
-**Post-Deployment Review** - Contains:
-- Deployment timeline
-- Issues encountered and resolutions
-- Lessons learned
-- Verification results
-- Metrics and performance data
-- Code quality assessment
-- Recommendations for future enhancements
-Deliverables
-
-List concrete deliverables upon completion:
+## Deliverables
 
 - [ ] Working implementation of [feature name]
-- [ ] Database migrations created and applied
-- [ ] Automated test suite (X tests, all passing)
+- [ ] Database migrations created and applied (if applicable)
+- [ ] Automated test suite (X+ tests, all passing)
 - [ ] Deployment guide completed
+- [ ] Test documentation completed
 - [ ] Post-deployment review completed
 - [ ] CHANGELOG.md updated
-- [ ] All related documentation created
-
----
-
-## Notes
-
-Additional notes, comments, or discussion points.
-
----
-
-## Completion Notes
-
-(To be filled in when enhancement is completed)
-
-### Achievements
-- List key accomplishments
-- Highlight any unexpected successes
-- Note any performance benefits
-
-### Issues Encountered
-- Issue 1: Description and resolution
-- Issue 2: Description and resolution
-
-### Lessons Learned
-- Key learning 1
-- Key learning 2
-- Recommendations for future enhancements
-
-### Test Results
-- Total Tests: X
-- Passing: X ✅
-- Failing: X
-- Coverage: X%
-- [ ] README.md
-- [ ] User guide
-- [ ] API documentation
-- [ ] Code comments
-- [ ] CHANGELOG.md
-- [ ] Deployment guide (new)
-- [ ] Test documentation (new)
-- [ ] Testing validation (new)s:** X
-- **Execution Time:** ~X seconds
 
 ---
 
 ## Documentation Updates
 
 - [ ] README.md
-- [ ] User guide
-- [ ] API documentation
-- [ ] Code comments
 - [ ] CHANGELOG.md
+- [ ] Code comments and docstrings
+- [ ] Deployment guide (create during implementation)
+- [ ] Test documentation (create after testing)
+- [ ] Post-deployment review (create after completion)
 
 ---
 
@@ -240,18 +170,19 @@ Additional notes, comments, or discussion points.
 
 ## Alternatives Considered
 
-### Alternative 1
-Description and why it was not chosen
+### Alternative 1: [Name]
+**Rejected:** Reason why not chosen
 
-### Alternative 2
-Description and why it was not chosen
+### Alternative 2: [Name]
+**Rejected:** Reason why not chosen
 
 ---
 
 ## Related Issues/Enhancements
 
-- ENH-0000000: Description
-- BUG-0000000: Description
+- **Depends On:** ENH-0000000 (Description)
+- **Blocks:** ENH-0000000 (Description)
+- **Enables:** ENH-0000000 (Description)
 
 ---
 
@@ -273,7 +204,39 @@ Additional notes, comments, or discussion points.
 
 ## Sign-off
 
-**Reviewed By:**  
-**Approved By:**  
-**Completed By:**  
-**Completion Date:**
+**Reviewed By:** (pending)  
+**Approved By:** (pending)  
+**Completed By:** (pending)  
+**Completion Date:** (pending)
+
+---
+
+## Completion Notes
+
+(To be filled in when enhancement is completed)
+
+### Achievements
+- List key accomplishments
+- Highlight any unexpected successes
+- Note any performance benefits
+
+### Deliverables
+1. Working implementation
+2. Database migrations (if applicable)
+3. X automated tests, all passing
+4. Complete documentation
+
+### Test Coverage
+- ✅ Unit tests: X
+- ✅ Integration tests: X
+- ✅ Total: X tests
+- ✅ Pass rate: 100%
+- ✅ Execution time: <X seconds
+
+### Documentation
+- ENH-0000000-deployment-guide.md
+- ENH-0000000-test-documentation.md
+- ENH-0000000-postdeploymentreview.md
+
+### Next Steps
+- List follow-up enhancements or tasks
