@@ -13,15 +13,18 @@
         }
       ],
       "mass": 33.1,
-      "max_health": 52.96,
-      "pcu_cost": 1,
       "snap_size": 2,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 52.96,
+      "pcu": 1,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -38,15 +41,18 @@
         }
       ],
       "mass": 1048.55,
-      "max_health": 1677.68,
-      "pcu_cost": 1,
       "snap_size": 10,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 1677.68,
+      "pcu": 1,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -73,15 +79,18 @@
         }
       ],
       "mass": 1902.37,
-      "max_health": 1521.89,
-      "pcu_cost": 150,
       "snap_size": 10,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "Electricity",
-      "power_producer_rate": 20000,
-      "max_storage": "Uranium",
-      "max_storage_amount": 12000
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 1521.89,
+      "pcu": 150,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "Electricity",
+      "producer_rate": 20000,
+      "storage_capacity": 12000.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -108,15 +117,18 @@
         }
       ],
       "mass": 523.01,
-      "max_health": 418.41,
-      "pcu_cost": 100,
       "snap_size": 2,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 0,
-      "power_producer": "Hydrogen;Oxygen",
-      "power_producer_rate": 100,
-      "max_storage": "Ice",
-      "max_storage_amount": 4000
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 418.41,
+      "pcu": 100,
+      "consumer_type": "Electricity",
+      "consumer_rate": 0,
+      "producer_type": "Hydrogen;Oxygen",
+      "producer_rate": 100,
+      "storage_capacity": 4000.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -136,7 +148,20 @@
           "component_name": "Motor",
           "quantity": 3
         }
-      ]
+      ],
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "input_mass": 0,
+      "output_mass": 0,
+      "mass": 0.0,
+      "health": 0.0,
+      "pcu": 0,
+      "snap_size": 0.0,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0
     }
   },
   {
@@ -158,15 +183,18 @@
         }
       ],
       "mass": 56.09,
-      "max_health": 44.87,
-      "pcu_cost": 80,
       "snap_size": 2,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 199.9,
-      "power_producer": "Electricity",
-      "power_producer_rate": 200,
-      "max_storage": "Electricity",
-      "max_storage_amount": 5000.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 44.87,
+      "pcu": 80,
+      "consumer_type": "Electricity",
+      "consumer_rate": 199.9,
+      "producer_type": "Electricity",
+      "producer_rate": 200,
+      "storage_capacity": 5000.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -188,15 +216,18 @@
         }
       ],
       "mass": 43.12,
-      "max_health": 34.5,
-      "pcu_cost": 160,
       "snap_size": 1,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 34.5,
+      "pcu": 160,
+      "consumer_type": "Electricity",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -213,15 +244,18 @@
         }
       ],
       "mass": 100.0,
-      "max_health": 100.0,
-      "pcu_cost": 100,
       "snap_size": 10,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 100.0,
+      "pcu": 100,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -238,15 +272,18 @@
         }
       ],
       "mass": 20.0,
-      "max_health": 20.0,
-      "pcu_cost": 20,
       "snap_size": 2,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 20.0,
+      "pcu": 20,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -263,15 +300,18 @@
         }
       ],
       "mass": 100.0,
-      "max_health": 100.0,
-      "pcu_cost": 100,
       "snap_size": 10,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 100.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 100.0,
+      "pcu": 100,
+      "consumer_type": "Electricity",
+      "consumer_rate": 100.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -288,15 +328,18 @@
         }
       ],
       "mass": 20.0,
-      "max_health": 20.0,
-      "pcu_cost": 20,
       "snap_size": 2,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "Electricity",
-      "power_producer_rate": 50.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 20.0,
+      "pcu": 20,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "Electricity",
+      "producer_rate": 50.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -313,15 +356,18 @@
         }
       ],
       "mass": 100.0,
-      "max_health": 100.0,
-      "pcu_cost": 100,
       "snap_size": 10,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "Iron",
-      "max_storage_amount": 1000.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 100.0,
+      "pcu": 100,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 1000.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -338,15 +384,18 @@
         }
       ],
       "mass": 100.0,
-      "max_health": 100.0,
-      "pcu_cost": 100,
       "snap_size": 10,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 100.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "Iron",
-      "max_storage_amount": 1000.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 100.0,
+      "pcu": 100,
+      "consumer_type": "Electricity",
+      "consumer_rate": 100.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 1000.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -363,15 +412,18 @@
         }
       ],
       "mass": 50.0,
-      "max_health": 50.0,
-      "pcu_cost": 50,
       "snap_size": 5,
-      "power_consumer": "",
-      "power_consumer_rate": 0.0,
-      "power_producer": "",
-      "power_producer_rate": 0.0,
-      "max_storage": "",
-      "max_storage_amount": 0.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 50.0,
+      "pcu": 50,
+      "consumer_type": "",
+      "consumer_rate": 0.0,
+      "producer_type": "",
+      "producer_rate": 0.0,
+      "storage_capacity": 0.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   },
   {
@@ -398,15 +450,18 @@
         }
       ],
       "mass": 50.0,
-      "max_health": 50.0,
-      "pcu_cost": 50,
       "snap_size": 5,
-      "power_consumer": "Electricity",
-      "power_consumer_rate": 50.0,
-      "power_producer": "Electricity",
-      "power_producer_rate": 50.0,
-      "max_storage": "Iron",
-      "max_storage_amount": 500.0
+      "created_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "health": 50.0,
+      "pcu": 50,
+      "consumer_type": "Electricity",
+      "consumer_rate": 50.0,
+      "producer_type": "Electricity",
+      "producer_rate": 50.0,
+      "storage_capacity": 500.0,
+      "input_mass": 0,
+      "output_mass": 0
     }
   }
 ]

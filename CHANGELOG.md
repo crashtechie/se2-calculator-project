@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- ENH-0000004: Sample data fixtures for ores, components, and blocks (15/15/15)
+- ENH-0000004: Fixture verification script (`scripts/verify_fixtures.py`)
+- ENH-0000004: UUID generation helper (`scripts/generate_fixture_uuids.py`)
+- ENH-0000004: Fixture-focused test suites across ores, components, and blocks
+
 ### In Development
-- ENH-0000004: Sample data fixtures (in preparation)
 - Build Order Calculator feature (planned)
 
 ### Documentation Added

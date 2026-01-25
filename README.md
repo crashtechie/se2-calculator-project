@@ -19,7 +19,7 @@ This is an early alpha release (0.2.3-alpha). The project is under active develo
   - ✅ Ores app created with complete Ore model and 35 tests
   - ✅ Components app created with complete Component model and 44 tests
   - ✅ Blocks app created with complete Block model and 49 tests
-  - 📋 Sample data fixtures (in preparation)
+   - ✅ Sample data fixtures (ores, components, blocks)
 - 📋 **Phase 2**: Views & Templates (Planned)
 - 📋 **Phase 3**: Build Order Calculator (Planned)
 - 📋 **Phase 4**: Testing & Documentation (Planned)
@@ -202,6 +202,21 @@ Run tests with:
 ```bash
 uv run pytest
 ```
+
+## Loading Sample Data
+
+Sample fixtures are provided for quick setup.
+
+```bash
+# Load all fixtures (order matters)
+uv run python manage.py loaddata sample_ores sample_components sample_blocks
+
+# Reset and reload (destroys existing data)
+uv run python manage.py flush --no-input
+uv run python manage.py loaddata sample_ores sample_components sample_blocks
+```
+
+Fixture contents: 15 ores, 15 components, 15 blocks with validated UUIDv7 relationships.
 
 ## License
 
