@@ -107,7 +107,7 @@
                                     </a>
                                 {% endif %}
                             </th>
-                            <th>Build Time</th>
+                            <th>Crafting Time</th>
                             <th>Materials</th>
                             <th>Actions</th>
                         </tr>
@@ -124,7 +124,7 @@
                                 </small>
                             </td>
                             <td>{{ component.mass|format_mass }}</td>
-                            <td>{{ component.build_time|format_time }}</td>
+                            <td>{{ component.crafting_time|format_time }}</td>
                             <td>
                                 <span class="badge bg-info">
                                     {{ component.materials|length }} material(s)

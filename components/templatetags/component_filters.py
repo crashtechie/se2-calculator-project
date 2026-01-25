@@ -88,22 +88,22 @@ def format_time(seconds):
     Format time in seconds to human-readable format.
     
     Usage:
-        {{ component.build_time|format_time }}
+        {{ component.crafting_time|format_time }}
     
     Args:
         seconds: Time in seconds (float or int)
     
     Returns:
-        Formatted string (e.g., "2m 30s" or "45s")
+        Formatted string (e.g., "2m 30s" or "45.50s")
     """
     if seconds is None:
-        return "0s"
+        return "0.00s"
     
     try:
         seconds = float(seconds)
         
         if seconds < 60:
-            return f"{seconds:.0f}s"
+            return f"{seconds:.2f}s"
         elif seconds < 3600:
             minutes = int(seconds // 60)
             remaining_seconds = int(seconds % 60)

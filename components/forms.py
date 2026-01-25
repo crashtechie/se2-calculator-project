@@ -22,6 +22,9 @@ class ComponentForm(forms.ModelForm):
     Materials are handled as separate form fields (ore_id[], quantity[])
     and converted to JSONField format on save.
     """
+
+    # Hidden field to carry JSON material payload from the client
+    materials_json = forms.CharField(widget=forms.HiddenInput(), required=False)
     
     class Meta:
         model = Component
@@ -204,7 +207,7 @@ class ComponentForm(forms.ModelForm):
             # Run material validation
             self.clean_materials()
         except ValidationError as e:
-            self.add_error('materials', e)
+            self.add_error('materials_json', e)
         
         return cleaned_data
     
