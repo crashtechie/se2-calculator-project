@@ -32,16 +32,18 @@ class BlockFixtureValidationTests(TestCase):
             fields = block["fields"]
             self.assertIn("name", fields)
             self.assertIn("components", fields)
-            self.assertIsInstance(fields.get("components", []), list)
+            self.assertIsInstance(fields.get("components", {}), dict)
 
     def test_block_component_references_valid(self):
         for block in self.blocks:
-            for comp_ref in block["fields"].get("components", []):
-                self.assertIn("component_id", comp_ref)
-                self.assertIn("component_name", comp_ref)
-                self.assertIn("quantity", comp_ref)
-                self.assertIn(comp_ref["component_id"], self.component_ids)
-                self.assertGreater(comp_ref["quantity"], 0)
+            components = block["fields"].get("components", {})
+            # Components are now a dict {component_id: quantity}
+            self.assertIsInstance(components, dict)
+            for comp_id, quantity in components.items():
+                # Validate component_id is in the available components
+                self.assertIn(comp_id, self.component_ids)
+                # Validate quantity is positive
+                self.assertGreater(quantity, 0)
 
 
 class BlockFixtureUUIDTests(TestCase):

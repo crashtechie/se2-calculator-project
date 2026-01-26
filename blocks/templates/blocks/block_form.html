@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ form_title }} - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3><i class="bi bi-box-seam"></i> {{ form_title }}</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" id="block-form">
+                    {% csrf_token %}
+                    
+                    <!-- Basic Fields -->
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">{{ form.name.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">{{ form.name.help_text }}</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger">{{ form.description.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Physical Properties -->
+                    <h5 class="mt-4 mb-3"><i class="bi bi-speedometer2"></i> Physical Properties</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.mass.id_for_label }}" class="form-label">Mass (kg) *</label>
+                            {{ form.mass }}
+                            {% if form.mass.errors %}
+                                <div class="text-danger">{{ form.mass.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.health.id_for_label }}" class="form-label">Health *</label>
+                            {{ form.health }}
+                            {% if form.health.errors %}
+                                <div class="text-danger">{{ form.health.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.pcu.id_for_label }}" class="form-label">PCU *</label>
+                            {{ form.pcu }}
+                            {% if form.pcu.errors %}
+                                <div class="text-danger">{{ form.pcu.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.snap_size.id_for_label }}" class="form-label">Snap Size *</label>
+                            {{ form.snap_size }}
+                            {% if form.snap_size.errors %}
+                                <div class="text-danger">{{ form.snap_size.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Capacity Properties -->
+                    <h5 class="mt-4 mb-3"><i class="bi bi-archive"></i> Capacity Properties</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.input_mass.id_for_label }}" class="form-label">Input Mass Capacity (kg) <span class="text-muted">(optional)</span></label>
+                            {{ form.input_mass }}
+                            {% if form.input_mass.errors %}
+                                <div class="text-danger">{{ form.input_mass.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.output_mass.id_for_label }}" class="form-label">Output Mass Capacity (kg) <span class="text-muted">(optional)</span></label>
+                            {{ form.output_mass }}
+                            {% if form.output_mass.errors %}
+                                <div class="text-danger">{{ form.output_mass.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Resource Properties -->
+                    <h5 class="mt-4 mb-3"><i class="bi bi-fuel-pump"></i> Resource Properties</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.consumer_type.id_for_label }}" class="form-label">Consumer Type</label>
+                            {{ form.consumer_type }}
+                            {% if form.consumer_type.errors %}
+                                <div class="text-danger">{{ form.consumer_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.consumer_rate.id_for_label }}" class="form-label">Consumer Rate (per second)</label>
+                            {{ form.consumer_rate }}
+                            {% if form.consumer_rate.errors %}
+                                <div class="text-danger">{{ form.consumer_rate.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.producer_type.id_for_label }}" class="form-label">Producer Type</label>
+                            {{ form.producer_type }}
+                            {% if form.producer_type.errors %}
+                                <div class="text-danger">{{ form.producer_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.producer_rate.id_for_label }}" class="form-label">Producer Rate (per second)</label>
+                            {{ form.producer_rate }}
+                            {% if form.producer_rate.errors %}
+                                <div class="text-danger">{{ form.producer_rate.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.storage_capacity.id_for_label }}" class="form-label">Storage Capacity</label>
+                        {{ form.storage_capacity }}
+                        {% if form.storage_capacity.errors %}
+                            <div class="text-danger">{{ form.storage_capacity.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Components Section -->
+                    <hr class="my-4">
+                    <h4><i class="bi bi-box"></i> Components *</h4>
+                    <p class="text-muted">Add the components required to build this block.</p>
+                    
+                    <div id="components-container"></div>
+                    
+                    <button type="button" id="add-component-btn" class="btn btn-success mb-3">
+                        <i class="bi bi-plus-circle"></i> Add Component
+                    </button>
+
+                    <!-- Hidden fields -->
+                    {{ form.components_json }}
+                    
+                    <!-- Hidden template for component options -->
+                    <select id="component-template-data" style="display:none;">
+                        <option value="">Select a component...</option>
+                        {% for component in components_list %}
+                        <option value="{{ component.component_id }}">{{ component.name }}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- Existing components data for update forms -->
+                    {% if existing_components %}
+                    <input type="hidden" id="existing-components-data" value="{{ existing_components }}">
+                    {% endif %}
+
+                    {% if form.components_json.errors %}
+                        <div class="alert alert-danger">{{ form.components_json.errors }}</div>
+                    {% endif %}
+
+                    <!-- Form Actions -->
+                    <hr class="my-4">
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'blocks:block_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {{ button_text }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/block-component-selector.js' %}"></script>
+{% endblock %}

@@ -376,7 +376,7 @@ EOF
 ls -la blocks/urls.py
 
 # Validate Python syntax
-python -m py_compile blocks/urls.py && echo "✓ urls.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/urls.py && echo "✓ urls.py syntax valid" || echo "✗ Syntax error"
 ```
 
 #### 1.2 Update Project URLs
@@ -411,7 +411,7 @@ EOF
 uv run python manage.py show_urls 2>/dev/null || uv run python manage.py check urls
 
 # Validate syntax
-python -m py_compile se2CalcProject/urls.py && echo "✓ urls.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile se2CalcProject/urls.py && echo "✓ urls.py syntax valid" || echo "✗ Syntax error"
 ```
 
 ---
@@ -459,7 +459,12 @@ class BlockForm(forms.ModelForm):
     
     class Meta:
         model = Block
-        fields = ['name', 'description', 'mass', 'pcu_cost']
+        fields = [
+            'name', 'description', 'mass', 'health', 'pcu', 
+            'snap_size', 'input_mass', 'output_mass',
+            'consumer_type', 'consumer_rate', 
+            'producer_type', 'producer_rate', 'storage_capacity'
+        ]
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -478,17 +483,76 @@ class BlockForm(forms.ModelForm):
                 'step': '0.01',
                 'min': '0.01',
             }),
-            'pcu_cost': forms.NumberInput(attrs={
+            'health': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Enter PCU cost (e.g., 10)',
+                'placeholder': 'Enter health points (e.g., 100)',
+                'step': '0.01',
+                'min': '0.01',
+            }),
+            'pcu': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter PCU (e.g., 160)',
                 'min': '1',
+            }),
+            'snap_size': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter snap size (e.g., 0.5)',
+                'step': '0.01',
+                'min': '0.01',
+            }),
+            'input_mass': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter input mass capacity in kg (optional - for production blocks)',
+                'min': '0',
+            }),
+            'output_mass': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter output mass capacity in kg (optional - for production blocks)',
+                'min': '0',
+            }),
+            'consumer_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Power, Hydrogen, Oxygen (optional)',
+                'maxlength': 50,
+            }),
+            'consumer_rate': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter consumption rate per second (e.g., 10.5)',
+                'step': '0.01',
+                'min': '0',
+            }),
+            'producer_type': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., Power, Hydrogen, Oxygen (optional)',
+                'maxlength': 50,
+            }),
+            'producer_rate': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter production rate per second (e.g., 10.5)',
+                'step': '0.01',
+                'min': '0',
+            }),
+            'storage_capacity': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter storage capacity in liters/units (e.g., 5000)',
+                'step': '0.01',
+                'min': '0',
             }),
         }
         help_texts = {
             'name': 'Unique name for the block (max 100 characters)',
             'description': 'Detailed description of the block',
             'mass': 'Total mass of the block in kilograms',
-            'pcu_cost': 'Performance Cost Units required',
+            'health': 'Block health/integrity points',
+            'pcu': 'Performance Cost Units for this block',
+            'snap_size': 'Grid snap size for placement',
+            'input_mass': 'Input mass capacity in kg (optional - only for production blocks)',
+            'output_mass': 'Output mass capacity in kg (optional - only for production blocks)',
+            'consumer_type': 'Type of resource consumed (optional)',
+            'consumer_rate': 'Consumption rate per second',
+            'producer_type': 'Type of resource produced (optional)',
+            'producer_rate': 'Production rate per second',
+            'storage_capacity': 'Storage capacity in liters or units',
         }
 
     def __init__(self, *args, **kwargs):
@@ -499,6 +563,11 @@ class BlockForm(forms.ModelForm):
         the components_json field with existing component data.
         """
         super().__init__(*args, **kwargs)
+        
+        # Make input_mass and output_mass not required
+        # These fields are only used by production blocks, not all blocks
+        self.fields['input_mass'].required = False
+        self.fields['output_mass'].required = False
         
         # Pre-populate components for update forms
         if self.instance and self.instance.pk and self.instance.components:
@@ -658,7 +727,7 @@ FORMEOF
 **Verification:**
 ```bash
 # Validate syntax
-python -m py_compile blocks/forms.py && echo "✓ forms.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/forms.py && echo "✓ forms.py syntax valid" || echo "✗ Syntax error"
 
 # Test import
 uv run python manage.py shell -c "from blocks.forms import BlockForm; print('✓ BlockForm imported successfully')"
@@ -810,7 +879,7 @@ FILTEREOF
 **Verification:**
 ```bash
 # Validate syntax
-python -m py_compile blocks/templatetags/block_filters.py && echo "✓ block_filters.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/templatetags/block_filters.py && echo "✓ block_filters.py syntax valid" || echo "✗ Syntax error"
 
 # Test import and filters
 uv run python manage.py shell << EOF
@@ -1176,7 +1245,7 @@ VIEWEOF
 **Verification:**
 ```bash
 # Validate syntax
-python -m py_compile blocks/views.py && echo "✓ views.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/views.py && echo "✓ views.py syntax valid" || echo "✗ Syntax error"
 
 # Test imports
 uv run python manage.py shell -c "from blocks.views import BlockListView, BlockDetailView, BlockCreateView; print('✓ Views imported successfully')"
@@ -2178,8 +2247,8 @@ FORMTESTEOF
 **Verification:**
 ```bash
 # Validate syntax
-python -m py_compile blocks/test_views.py && echo "✓ test_views.py syntax valid" || echo "✗ Syntax error"
-python -m py_compile blocks/test_forms.py && echo "✓ test_forms.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/test_views.py && echo "✓ test_views.py syntax valid" || echo "✗ Syntax error"
+uv run python -m py_compile blocks/test_forms.py && echo "✓ test_forms.py syntax valid" || echo "✗ Syntax error"
 ```
 
 ---
@@ -2208,7 +2277,7 @@ uv run python manage.py runserver
 
 ```bash
 # Run blocks tests only
-uv run python manage.py test blocks --verbose
+uv run python manage.py test blocks --verbosity=2
 
 # Run all tests
 uv run python manage.py test --parallel
@@ -2219,31 +2288,14 @@ uv run coverage report
 ```
 
 ### Performance Testing
-
 ```bash
 # Check query counts
-uv run python manage.py shell << EOF
-from django.test.utils import setup_test_environment
-from django.db import connection
-from django.test import Client
+# Make sure fixtures are loaded first
+uv run python manage.py loaddata sample_ores.json sample_components.json sample_blocks.json
 
-setup_test_environment()
-client = Client()
-
-# Test list view queries
-connection.queries = []
-response = client.get('/blocks/')
-print(f"List view queries: {len(connection.queries)}")
-
-# Test detail view queries
-from blocks.models import Block
-block = Block.objects.first()
-connection.queries = []
-response = client.get(f'/blocks/{block.block_id}/')
-print(f"Detail view queries: {len(connection.queries)}")
-EOF
+# Run the performance test
+uv run python scripts/tests/performance/test_blocks_queries.py
 ```
-
 ---
 
 ## Rollback Procedure

@@ -37,18 +37,13 @@ class Block(models.Model):
     )
     
     components = models.JSONField(
-        default=list,
+        default=dict,
         blank=True,
-        help_text="JSON array of component requirements with IDs, names, and quantities"
+        help_text="JSON object mapping component IDs to quantities"
     )
     
     health = models.FloatField(
         help_text="Block health/integrity points"
-    )
-    
-    pcu_cost = models.IntegerField(
-        default=0,
-        help_text="Performance Cost Units (PCU) required to place this block"
     )
     
     pcu = models.IntegerField(
@@ -60,11 +55,15 @@ class Block(models.Model):
     )
     
     input_mass = models.IntegerField(
-        help_text="Input mass capacity in kg"
+        null=True,
+        blank=True,
+        help_text="Input mass capacity in kg (optional - only for production blocks)"
     )
     
     output_mass = models.IntegerField(
-        help_text="Output mass capacity in kg"
+        null=True,
+        blank=True,
+        help_text="Output mass capacity in kg (optional - only for production blocks)"
     )
     
     consumer_type = models.CharField(
@@ -125,30 +124,18 @@ class Block(models.Model):
         
         errors = []
         
-        for item in self.components:
+        # Components is now a dict mapping component_id -> quantity
+        for component_id, quantity in self.components.items():
             try:
-                # Validate structure
-                if not isinstance(item, dict):
-                    errors.append(f"Component item must be dict, got {type(item)}")
-                    continue
-                
-                required_keys = ['component_id', 'component_name', 'quantity']
-                missing_keys = [k for k in required_keys if k not in item]
-                if missing_keys:
-                    errors.append(f"Component missing keys: {missing_keys}")
-                    continue
-                
                 # Validate quantity
-                quantity = item.get('quantity')
-                if not isinstance(quantity, int) or quantity <= 0:
+                if not isinstance(quantity, (int, float)) or quantity <= 0:
                     errors.append(
-                        f"Invalid quantity for component {item.get('component_name')}: "
-                        f"must be positive integer, got {quantity}"
+                        f"Invalid quantity for component {component_id}: "
+                        f"must be positive number, got {quantity}"
                     )
                     continue
                 
                 # Validate component_id references existing Component
-                component_id = item.get('component_id')
                 try:
                     Component.objects.get(component_id=component_id)
                 except Component.DoesNotExist:
@@ -156,7 +143,7 @@ class Block(models.Model):
                         f"Component with ID {component_id} does not exist"
                     )
             except Exception as e:
-                errors.append(f"Error validating component: {str(e)}")
+                errors.append(f"Error validating component {component_id}: {str(e)}")
         
         return len(errors) == 0, errors
     
@@ -210,25 +197,21 @@ class Block(models.Model):
         if not self.components:
             return Component.objects.none()
         
-        component_ids = [item['component_id'] for item in self.components]
+        component_ids = list(self.components.keys())
         return Component.objects.filter(component_id__in=component_ids)
 
     def iter_component_requirements(self):
         """Return component requirements with resolved Component objects when present."""
         requirements = []
 
-        for item in self.components or []:
-            if not isinstance(item, dict):
-                continue
-
-            comp_id = item.get('component_id')
+        for comp_id, quantity in (self.components or {}).items():
             comp = Component.objects.filter(component_id=comp_id).first() if comp_id else None
 
             requirements.append(
                 (
                     comp_id,
-                    item.get('component_name'),
-                    item.get('quantity'),
+                    comp.name if comp else 'Unknown',
+                    quantity,
                     comp,
                 )
             )

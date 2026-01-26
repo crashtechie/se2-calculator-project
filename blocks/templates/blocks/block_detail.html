@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load block_filters %}
+
+{% block title %}{{ object.name }} - Blocks - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="bi bi-box-seam"></i> {{ object.name }}
+            </h1>
+            <div>
+                <a href="{% url 'blocks:block_update' object.block_id %}" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                </a>
+                <a href="{% url 'blocks:block_delete' object.block_id %}" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+                <a href="{% url 'blocks:block_list' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Block Details -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-info-circle"></i> Block Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Name:</dt>
+                            <dd class="col-sm-8">{{ object.name }}</dd>
+
+                            <dt class="col-sm-4">Description:</dt>
+                            <dd class="col-sm-8">{{ object.description|default:"No description" }}</dd>
+
+                            <dt class="col-sm-4">Block ID:</dt>
+                            <dd class="col-sm-8"><code>{{ object.block_id }}</code></dd>
+
+                            <dt class="col-sm-4">Created:</dt>
+                            <dd class="col-sm-8">{{ object.created_at|date:"Y-m-d H:i" }}</dd>
+
+                            <dt class="col-sm-4">Updated:</dt>
+                            <dd class="col-sm-8">{{ object.updated_at|date:"Y-m-d H:i" }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Physical Properties -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-speedometer2"></i> Physical Properties</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-6">Mass:</dt>
+                            <dd class="col-sm-6">{{ object.mass }} kg</dd>
+
+                            <dt class="col-sm-6">Health:</dt>
+                            <dd class="col-sm-6">{{ object.health }}</dd>
+
+                            <dt class="col-sm-6">PCU:</dt>
+                            <dd class="col-sm-6">{{ object.pcu }}</dd>
+
+                            <dt class="col-sm-6">Snap Size:</dt>
+                            <dd class="col-sm-6">{{ object.snap_size }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capacity and Resource Properties -->
+        <div class="row">
+            <!-- Capacity Properties -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-archive"></i> Capacity Properties</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-6">Input Mass:</dt>
+                            <dd class="col-sm-6">{{ object.input_mass }} kg</dd>
+
+                            <dt class="col-sm-6">Output Mass:</dt>
+                            <dd class="col-sm-6">{{ object.output_mass }} kg</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resource Properties -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="bi bi-fuel-pump"></i> Resource Properties</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-6">Consumer Type:</dt>
+                            <dd class="col-sm-6">{{ object.consumer_type|default:"None" }}</dd>
+
+                            <dt class="col-sm-6">Consumer Rate:</dt>
+                            <dd class="col-sm-6">{{ object.consumer_rate }} /s</dd>
+
+                            <dt class="col-sm-6">Producer Type:</dt>
+                            <dd class="col-sm-6">{{ object.producer_type|default:"None" }}</dd>
+
+                            <dt class="col-sm-6">Producer Rate:</dt>
+                            <dd class="col-sm-6">{{ object.producer_rate }} /s</dd>
+
+                            <dt class="col-sm-6">Storage Capacity:</dt>
+                            <dd class="col-sm-6">{{ object.storage_capacity }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-graph-up"></i> Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-6">Components Used:</dt>
+                            <dd class="col-sm-6">{{ stats.component_count }}</dd>
+
+                            <dt class="col-sm-6">Total Components:</dt>
+                            <dd class="col-sm-6">{{ stats.total_component_quantity }}</dd>
+
+                            <dt class="col-sm-6">Ore Types Needed:</dt>
+                            <dd class="col-sm-6">{{ stats.ore_type_count }}</dd>
+
+                            <dt class="col-sm-6">Total Ore Mass:</dt>
+                            <dd class="col-sm-6">{{ stats.total_ore_mass|floatformat:2 }} kg</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Components List -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-box"></i> Required Components</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if resource_chain.components %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Component</th>
+                                            <th>Quantity</th>
+                                            <th>Mass/Unit</th>
+                                            <th>Total Mass</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for comp in resource_chain.components %}
+                                        <tr>
+                                            <td><strong>{{ comp.name }}</strong></td>
+                                            <td>{{ comp.quantity }}</td>
+                                            <td>{{ comp.mass_per_unit }} kg</td>
+                                            <td>{{ comp.total_mass|floatformat:2 }} kg</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No components defined for this block.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource Chain (Full Breakdown) -->
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-diagram-3"></i> Full Resource Chain</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if resource_chain.components %}
+                            <h6>Block → Components → Ores</h6>
+                            <div class="resource-chain">
+                                {% for comp in resource_chain.components %}
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <strong>{{ comp.name }}</strong> ({{ comp.quantity }}x)
+                                    </div>
+                                    <div class="card-body">
+                                        {% if comp.materials %}
+                                            <ul class="list-group">
+                                                {% for ore in comp.materials %}
+                                                <li class="list-group-item d-flex justify-content-between">
+                                                    <span>
+                                                        <i class="bi bi-gem"></i> {{ ore.name }}
+                                                    </span>
+                                                    <span>
+                                                        {{ ore.quantity_per_component }} kg/component ×  {{ comp.quantity }} = 
+                                                        <strong>{{ ore.total_quantity|floatformat:2 }} kg</strong>
+                                                    </span>
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <p class="text-muted small">No materials defined for this component.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Ore Totals -->
+                            <div class="card mt-4 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">Total Ores Required</h6>
+                                </div>
+                                <div class="card-body">
+                                    {% if resource_chain.ores %}
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ore</th>
+                                                    <th>Total Quantity</th>
+                                                    <th>Total Mass</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for ore_id, ore_data in resource_chain.ores.items %}
+                                                <tr>
+                                                    <td><i class="bi bi-gem"></i> {{ ore_data.name }}</td>
+                                                    <td>{{ ore_data.quantity|floatformat:2 }} kg</td>
+                                                    <td>{{ ore_data.quantity|multiply:ore_data.mass|floatformat:2 }} kg</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr class="table-success">
+                                                    <th colspan="2">Total Ore Mass:</th>
+                                                    <th>{{ resource_chain.total_ore_mass|floatformat:2 }} kg</th>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    {% else %}
+                                        <p class="text-muted">No ore data available.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No resource chain data available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

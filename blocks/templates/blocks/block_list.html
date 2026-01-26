@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blocks - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="bi bi-bricks"></i> Blocks
+            </h1>
+            <a href="{% url 'blocks:block_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create Block
+            </a>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="search" 
+                               name="q" 
+                               value="{{ search_query }}"
+                               placeholder="Search by name or description...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+                            <option value="mass" {% if current_sort == 'mass' %}selected{% endif %}>Mass</option>
+                            <option value="pcu" {% if current_sort == 'pcu' %}selected{% endif %}>PCU</option>
+                            <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>Created Date</option>
+                            <option value="updated_at" {% if current_sort == 'updated_at' %}selected{% endif %}>Updated Date</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="order" class="form-label">Order</label>
+                        <select class="form-select" id="order" name="order">
+                            <option value="asc" {% if current_order == 'asc' %}selected{% endif %}>Ascending</option>
+                            <option value="desc" {% if current_order == 'desc' %}selected{% endif %}>Descending</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                        <a href="{% url 'blocks:block_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Blocks List -->
+        {% if block_list %}
+            <div class="row">
+                {% for block in block_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-box-seam"></i> {{ block.name }}
+                            </h5>
+                            <p class="card-text text-muted small">
+                                {{ block.description|truncatewords:20 }}
+                            </p>
+                            <ul class="list-unstyled small">
+                                <li><strong>Mass:</strong> {{ block.mass }} kg</li>
+                                <li><strong>PCU:</strong> {{ block.pcu }}</li>
+                                <li><strong>Components:</strong> {{ block.components|length }}</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'blocks:block_detail' block.block_id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <a href="{% url 'blocks:block_update' block.block_id %}" 
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a href="{% url 'blocks:block_delete' block.block_id %}" 
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Block pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query_string %}&{{ query_string }}{% endif %}">
+                                <i class="bi bi-chevron-double-left"></i> First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i> Previous
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                Next <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                Last <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <!-- Empty State -->
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle fs-1"></i>
+                <h4 class="mt-3">No Blocks Found</h4>
+                <p>
+                    {% if search_query %}
+                        No blocks match your search criteria.
+                        <a href="{% url 'blocks:block_list' %}">Clear search</a>
+                    {% else %}
+                        Get started by creating your first block!
+                    {% endif %}
+                </p>
+                <a href="{% url 'blocks:block_create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create First Block
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

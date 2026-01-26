@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete {{ delete_block.name }} - Blocks - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3><i class="bi bi-exclamation-triangle"></i> Confirm Deletion</h3>
+            </div>
+            <div class="card-body">
+                <h4>Are you sure you want to delete "{{ delete_block.name }}"?</h4>
+                
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Block Name:</dt>
+                            <dd class="col-sm-8">{{ delete_block.name }}</dd>
+
+                            <dt class="col-sm-4">Mass:</dt>
+                            <dd class="col-sm-8">{{ delete_block.mass }} kg</dd>
+
+                            <dt class="col-sm-4">PCU:</dt>
+                            <dd class="col-sm-8">{{ delete_block.pcu }}</dd>
+
+                            <dt class="col-sm-4">Components:</dt>
+                            <dd class="col-sm-8">{{ component_count }} components</dd>
+
+                            <dt class="col-sm-4">Created:</dt>
+                            <dd class="col-sm-8">{{ delete_block.created_at|date:"Y-m-d H:i" }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'blocks:block_detail' pk=delete_block.block_id %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Yes, Delete Block
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

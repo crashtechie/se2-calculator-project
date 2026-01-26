@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('ores/', include('ores.urls', namespace='ores')), # From ENH0000005
-    path('components/', include('components.urls', namespace='components')), # From ENH0000006
+    path('ores/', include('ores.urls', namespace='ores')),
+    path('components/', include('components.urls', namespace='components')),
+    path('blocks/', include('blocks.urls', namespace='blocks')),  # ENH-0000007
 ]
