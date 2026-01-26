@@ -459,7 +459,7 @@ class BlockForm(forms.ModelForm):
     
     class Meta:
         model = Block
-        fields = ['name', 'description', 'mass', 'pcu_cost', 'build_time']
+        fields = ['name', 'description', 'mass', 'pcu_cost']
         widgets = {
             'name': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -483,19 +483,12 @@ class BlockForm(forms.ModelForm):
                 'placeholder': 'Enter PCU cost (e.g., 10)',
                 'min': '1',
             }),
-            'build_time': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter build time in seconds (e.g., 15)',
-                'step': '0.1',
-                'min': '0',
-            }),
         }
         help_texts = {
             'name': 'Unique name for the block (max 100 characters)',
             'description': 'Detailed description of the block',
             'mass': 'Total mass of the block in kilograms',
             'pcu_cost': 'Performance Cost Units required',
-            'build_time': 'Time in seconds to build this block',
         }
 
     def __init__(self, *args, **kwargs):
@@ -553,15 +546,6 @@ class BlockForm(forms.ModelForm):
             raise ValidationError('PCU cost cannot be negative.')
         
         return pcu_cost
-
-    def clean_build_time(self):
-        """Validate build time is non-negative."""
-        build_time = self.cleaned_data.get('build_time')
-        
-        if build_time is not None and build_time < 0:
-            raise ValidationError('Build time cannot be negative.')
-        
-        return build_time
 
     def clean(self):
         """
@@ -891,7 +875,7 @@ class BlockListView(ListView):
     
     Query Parameters:
     - q: Search query (searches name and description)
-    - sort: Sort field (name, mass, pcu_cost, build_time, created_at, updated_at)
+    - sort: Sort field (name, mass, pcu_cost, created_at, updated_at)
     - order: Sort order (asc, desc)
     - page: Page number for pagination
     """
@@ -917,7 +901,7 @@ class BlockListView(ListView):
         order = self.request.GET.get('order', 'asc')
         
         # Validate sort field
-        valid_sort_fields = ['name', 'mass', 'pcu_cost', 'build_time', 'created_at', 'updated_at']
+        valid_sort_fields = ['name', 'mass', 'pcu_cost', 'created_at', 'updated_at']
         if sort_by not in valid_sort_fields:
             sort_by = 'name'
         
@@ -1522,7 +1506,6 @@ cat > blocks/templates/blocks/block_list.html << 'LISTEOF'
                             <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
                             <option value="mass" {% if current_sort == 'mass' %}selected{% endif %}>Mass</option>
                             <option value="pcu_cost" {% if current_sort == 'pcu_cost' %}selected{% endif %}>PCU Cost</option>
-                            <option value="build_time" {% if current_sort == 'build_time' %}selected{% endif %}>Build Time</option>
                             <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>Created Date</option>
                             <option value="updated_at" {% if current_sort == 'updated_at' %}selected{% endif %}>Updated Date</option>
                         </select>
@@ -1562,7 +1545,6 @@ cat > blocks/templates/blocks/block_list.html << 'LISTEOF'
                             <ul class="list-unstyled small">
                                 <li><strong>Mass:</strong> {{ block.mass }} kg</li>
                                 <li><strong>PCU Cost:</strong> {{ block.pcu_cost }}</li>
-                                <li><strong>Build Time:</strong> {{ block.build_time }}s</li>
                                 <li><strong>Components:</strong> {{ block.components|length }}</li>
                             </ul>
                         </div>
@@ -1701,9 +1683,6 @@ cat > blocks/templates/blocks/block_detail.html << 'DETAILEOF'
 
                             <dt class="col-sm-4">PCU Cost:</dt>
                             <dd class="col-sm-8">{{ block.pcu_cost }}</dd>
-
-                            <dt class="col-sm-4">Build Time:</dt>
-                            <dd class="col-sm-8">{{ block.build_time }} seconds</dd>
 
                             <dt class="col-sm-4">Block ID:</dt>
                             <dd class="col-sm-8"><code>{{ block.block_id }}</code></dd>
@@ -1910,25 +1889,18 @@ cat > blocks/templates/blocks/block_form.html << 'FORMTPLEOF'
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="{{ form.mass.id_for_label }}" class="form-label">Mass (kg) *</label>
                             {{ form.mass }}
                             {% if form.mass.errors %}
                                 <div class="text-danger">{{ form.mass.errors }}</div>
                             {% endif %}
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label for="{{ form.pcu_cost.id_for_label }}" class="form-label">PCU Cost *</label>
                             {{ form.pcu_cost }}
                             {% if form.pcu_cost.errors %}
                                 <div class="text-danger">{{ form.pcu_cost.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label for="{{ form.build_time.id_for_label }}" class="form-label">Build Time (s) *</label>
-                            {{ form.build_time }}
-                            {% if form.build_time.errors %}
-                                <div class="text-danger">{{ form.build_time.errors }}</div>
                             {% endif %}
                         </div>
                     </div>

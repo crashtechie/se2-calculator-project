@@ -46,6 +46,11 @@ class Block(models.Model):
         help_text="Block health/integrity points"
     )
     
+    pcu_cost = models.IntegerField(
+        default=0,
+        help_text="Performance Cost Units (PCU) required to place this block"
+    )
+    
     pcu = models.IntegerField(
         help_text="Performance Cost Units (PCU) for this block"
     )
