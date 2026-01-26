@@ -7,12 +7,65 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- TBD
-
 ### In Development
-- Phase 2: Views & Templates (ENH-0000005 through ENH-0000008)
-- Build Order Calculator feature (Phase 3 - planned)
+- Phase 3: Build Order Calculator (planned)
+- REST API for Blocks module (ENH-0000008 - planned)
+
+## [0.4.1-alpha] - 2026-01-26
+
+### Changed
+- Version bump to 0.4.1-alpha
+- README updated with Docker Quick Start and full stack details
+- Documentation links added for ENH-0000008 under docs/enhancementRequests/Phase2_views/ENH0000008/
+- Consolidated Docker/Deployment docs into ENH-0000008 directory
+
+### Fixed
+- Dockerfile dependency installation using `uv pip install -e .` (fixes compose build failure)
+
+## [0.4.0-alpha] - 2026-01-26
+
+### Added
+- ENH-0000007: Blocks views, templates, and dynamic component selector
+  - List view with full-text search by name/description, pagination, sorting, and filtering
+  - Detail view with resource chain calculation (Blocks → Components → Ores)
+  - Create and Update forms with JSONField component handling and server-side validation
+  - Delete confirmation view with component summary
+  - Responsive Bootstrap 5 templates
+  - Dynamic JavaScript component selector for adding/removing components
+  - Template filters for component name and mass lookups with caching
+  - 19 comprehensive form tests (99% coverage)
+  - 19 comprehensive view tests (90% coverage)
+  - 18 comprehensive template tag tests (96% coverage)
+  - Total coverage: 92% for blocks app (exceeds 85% target)
+  - Performance optimization with query caching for resource chains
+  - 404 error handling for nonexistent blocks
+  - Form validation: unique names, positive quantities, UUID format validation
+  - ENH-0000008: Core Infrastructure — Docker Option C (Django + nginx + PostgreSQL)
+    - Production-like Docker stack using docker-compose (web + nginx + database)
+    - New Dockerfile for Python 3.13 with health checks and non-root user
+    - nginx reverse proxy with security headers and static file serving
+    - Expanded docker-compose.yml with health checks, volumes, and custom network
+    - .dockerignore added for smaller, faster builds
+    - Comprehensive deployment documentation:
+      - ENH0000008_DEPLOYMENT_GUIDE.md (technical deployment guide)
+      - DOCKER_SETUP_GUIDE.md (setup, testing, troubleshooting)
+      - DOCKER_CONFIGURATION_SUMMARY.md (quick reference)
+
+### Fixed
+- Fixed 404 error handling in Detail, Update, and Delete views
+- Fixed invalid UUID error handling in template filters
+- Fixed form validation for PCU field (must be ≥ 1)
+- Made input_mass and output_mass fields optional (migration 0004)
+- Context variable naming consistency (available_components alias)
+
+### Changed
+- Enhanced Block model with better error handling
+- Improved form validation with server-side checks
+- Optimized resource chain calculation with caching strategy
+- Project infrastructure:
+  - docker-compose.yml expanded from single DB service to full stack
+  - Documentation consolidated under docs/enhancementRequests/Phase2_views/ENH0000008/
+  - .env.example updated with Docker notes (use DB_HOST=database)
 
 ## [0.3.1-alpha] - 2026-01-25
 

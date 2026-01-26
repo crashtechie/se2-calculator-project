@@ -183,6 +183,7 @@ config.local.*
 *.swp
 *~.nib
 *.backup
+*.backup*
 
 # Node modules (if using any JS tools)
 node_modules/

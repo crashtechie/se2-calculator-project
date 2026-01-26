@@ -5,13 +5,9 @@
     "fields": {
       "name": "Light Armor Cube 0.5m",
       "description": "Basic armor protection for ships and stations",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 1
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 1
+      },
       "mass": 33.1,
       "snap_size": 2,
       "created_at": "2026-01-20T00:00:00Z",
@@ -33,13 +29,9 @@
     "fields": {
       "name": "Light Armor Cube 2.5m",
       "description": "Larger basic armor protection for ships and stations",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 30
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 30
+      },
       "mass": 1048.55,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -61,23 +53,11 @@
     "fields": {
       "name": "Reactor 2.5m",
       "description": "Compact nuclear reactor for power generation",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9afa33440841",
-          "component_name": "Wire",
-          "quantity": 1
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9c9d8a6c1234",
-          "component_name": "Motherboard",
-          "quantity": 1
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ca1b2c3d4e5",
-          "component_name": "Reactor Core",
-          "quantity": 4
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9afa33440841": 1,
+        "019bf344-24d5-7ae1-a9bc-9c9d8a6c1234": 1,
+        "019bf344-24d5-7ae1-a9bc-9ca1b2c3d4e5": 4
+      },
       "mass": 1902.37,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -99,23 +79,11 @@
     "fields": {
       "name": "O2/H2 Generator 1.5m",
       "description": "Generates oxygen and hydrogen from Ice for life support systems",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 14
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ada39f7f40e",
-          "component_name": "Motor",
-          "quantity": 4
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9b0a3a6694c5",
-          "component_name": "Turbine Blades",
-          "quantity": 2
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 14,
+        "019bf344-24d5-7ae1-a9bc-9ada39f7f40e": 4,
+        "019bf344-24d5-7ae1-a9bc-9b0a3a6694c5": 2
+      },
       "mass": 523.01,
       "snap_size": 2,
       "created_at": "2026-01-20T00:00:00Z",
@@ -137,18 +105,10 @@
     "fields": {
       "name": "Atmospheric Thruster 1m",
       "description": "Provides thrust in atmospheric environments",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 4
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ada39f7f40e",
-          "component_name": "Motor",
-          "quantity": 3
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 4,
+        "019bf344-24d5-7ae1-a9bc-9ada39f7f40e": 3
+      },
       "created_at": "2026-01-20T00:00:00Z",
       "updated_at": "2026-01-20T00:00:00Z",
       "input_mass": 0,
@@ -170,18 +130,10 @@
     "fields": {
       "name": "Battery 0.5m",
       "description": "Small energy storage unit",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ac351c45800",
-          "component_name": "Electronic Parts",
-          "quantity": 3
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ae77f011769",
-          "component_name": "Construction Component",
-          "quantity": 7
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9ac351c45800": 3,
+        "019bf344-24d5-7ae1-a9bc-9ae77f011769": 7
+      },
       "mass": 56.09,
       "snap_size": 2,
       "created_at": "2026-01-20T00:00:00Z",
@@ -203,18 +155,10 @@
     "fields": {
       "name": "Antenna 1.5m",
       "description": "Long range communication device",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9aa50c5fddaa",
-          "component_name": "Steel Tube",
-          "quantity": 7
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ac351c45800",
-          "component_name": "Electronic Parts",
-          "quantity": 3
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9aa50c5fddaa": 7,
+        "019bf344-24d5-7ae1-a9bc-9ac351c45800": 3
+      },
       "mass": 43.12,
       "snap_size": 1,
       "created_at": "2026-01-20T00:00:00Z",
@@ -236,13 +180,9 @@
     "fields": {
       "name": "LargeBlock 1.5m",
       "description": "A large block for building",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 10
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 10
+      },
       "mass": 100.0,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -264,13 +204,9 @@
     "fields": {
       "name": "SmallBlock 0.5m",
       "description": "A small block for building",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 2
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 2
+      },
       "mass": 20.0,
       "snap_size": 2,
       "created_at": "2026-01-20T00:00:00Z",
@@ -292,13 +228,9 @@
     "fields": {
       "name": "Powered LargeBlock 1.5m",
       "description": "A large block with power consumption",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 10
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 10
+      },
       "mass": 100.0,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -320,13 +252,9 @@
     "fields": {
       "name": "Powered SmallBlock 0.5m",
       "description": "A small block with power production",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 2
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 2
+      },
       "mass": 20.0,
       "snap_size": 2,
       "created_at": "2026-01-20T00:00:00Z",
@@ -348,13 +276,9 @@
     "fields": {
       "name": "Storage Block 1.5m",
       "description": "A block with storage capacity",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 10
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 10
+      },
       "mass": 100.0,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -376,13 +300,9 @@
     "fields": {
       "name": "Powered Storage Block 1.5m",
       "description": "A block with both power and storage",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 10
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 10
+      },
       "mass": 100.0,
       "snap_size": 10,
       "created_at": "2026-01-20T00:00:00Z",
@@ -404,13 +324,9 @@
     "fields": {
       "name": "Simple Block",
       "description": "A simple block with no special features",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 5
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 5
+      },
       "mass": 50.0,
       "snap_size": 5,
       "created_at": "2026-01-20T00:00:00Z",
@@ -432,23 +348,11 @@
     "fields": {
       "name": "Complex Block",
       "description": "A complex block with multiple features",
-      "components": [
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0",
-          "component_name": "Steel Plate",
-          "quantity": 5
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ac351c45800",
-          "component_name": "Electronic Parts",
-          "quantity": 2
-        },
-        {
-          "component_id": "019bf344-24d5-7ae1-a9bc-9ae77f011769",
-          "component_name": "Construction Component",
-          "quantity": 3
-        }
-      ],
+      "components": {
+        "019bf344-24d5-7ae1-a9bc-9a9a6af84ec0": 5,
+        "019bf344-24d5-7ae1-a9bc-9ac351c45800": 2,
+        "019bf344-24d5-7ae1-a9bc-9ae77f011769": 3
+      },
       "mass": 50.0,
       "snap_size": 5,
       "created_at": "2026-01-20T00:00:00Z",

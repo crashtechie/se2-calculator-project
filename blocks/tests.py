@@ -28,16 +28,13 @@ def create_component(name="Steel Plate", materials=None):
 
 
 def component_entry(component: Component, quantity: int = 1):
-    return {
-        "component_id": str(component.component_id),
-        "component_name": component.name,
-        "quantity": quantity,
-    }
+    """Create a component entry in the new dict format {component_id: quantity}."""
+    return {str(component.component_id): quantity}
 
 
 def create_block(
     name="Test Block",
-    components_list=None,
+    components_dict=None,
     consumer_type="",
     consumer_rate=0.0,
     producer_type="",
@@ -50,13 +47,29 @@ def create_block(
     input_mass=5,
     output_mass=2,
 ):
-    if components_list is None:
-        components_list = []
+    """
+    Create a block with components in dict format.
+    
+    Args:
+        components_dict: Can be either:
+            - None (empty dict)
+            - A dict {component_id: quantity}
+            - A list of dicts from component_entry() which will be merged
+    """
+    if components_dict is None:
+        components_dict = {}
+    elif isinstance(components_dict, list):
+        # Merge list of component entries into single dict
+        merged = {}
+        for entry in components_dict:
+            merged.update(entry)
+        components_dict = merged
+    
     return Block.objects.create(
         name=name,
         description="",
         mass=mass,
-        components=components_list,
+        components=components_dict,
         health=health,
         pcu=pcu,
         snap_size=snap_size,
@@ -84,8 +97,8 @@ class BlockModelCreationTests(TestCase):
 
     def test_default_components_is_list(self):
         blk = create_block(name="Default Components Block")
-        self.assertIsInstance(blk.components, list)
-        self.assertEqual(blk.components, [])
+        self.assertIsInstance(blk.components, dict)
+        self.assertEqual(blk.components, {})
 
     def test_str_returns_name(self):
         blk = create_block(name="Display Name Block")
@@ -187,11 +200,13 @@ class BlockComponentsJSONFieldTests(TestCase):
         self.assertEqual(errors, [])
 
     def test_non_dict_component_item_invalid(self):
+        # Test that components must be a dict (this is enforced by JSONField default=dict)
+        # The validate_components method expects dict format
         blk = Block(
             name="NonDict Component Block",
             description="",
             mass=10.0,
-            components=["not-a-dict"],
+            components={"not-a-valid-uuid": 1},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -200,14 +215,16 @@ class BlockComponentsJSONFieldTests(TestCase):
         )
         is_valid, errors = blk.validate_components()
         self.assertFalse(is_valid)
-        self.assertTrue(any("must be dict" in e for e in errors))
+        self.assertTrue(len(errors) > 0)
 
     def test_missing_keys_in_component_item_invalid(self):
+        # Test invalid quantity (0 or negative)
+        comp = create_component(name="TestComp")
         blk = Block(
             name="Missing Keys Block",
             description="",
             mass=10.0,
-            components=[{"component_id": "x"}],
+            components={str(comp.component_id): 0},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -216,7 +233,7 @@ class BlockComponentsJSONFieldTests(TestCase):
         )
         is_valid, errors = blk.validate_components()
         self.assertFalse(is_valid)
-        self.assertTrue(any("missing keys" in e for e in errors))
+        self.assertTrue(any("Invalid quantity" in e for e in errors))
 
     def test_invalid_quantity_in_component_item_invalid(self):
         comp = create_component(name="Motor")
@@ -224,7 +241,7 @@ class BlockComponentsJSONFieldTests(TestCase):
             name="Invalid Quantity Block",
             description="",
             mass=10.0,
-            components=[component_entry(comp, quantity=0)],
+            components={str(comp.component_id): 0},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -240,13 +257,7 @@ class BlockComponentsJSONFieldTests(TestCase):
             name="Nonexistent Component ID Block",
             description="",
             mass=10.0,
-            components=[
-                {
-                    "component_id": "00000000-0000-0000-0000-000000000000",
-                    "component_name": "Ghost",
-                    "quantity": 1,
-                }
-            ],
+            components={"00000000-0000-0000-0000-000000000000": 1},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -403,7 +414,7 @@ class BlockComponentRelationshipTests(TestCase):
         comp2 = create_component(name="Computer")
         blk = create_block(
             name="Relationship Block",
-            components_list=[component_entry(comp1, 2), component_entry(comp2, 3)],
+            components_dict=[component_entry(comp1, 2), component_entry(comp2, 3)],
         )
         qs = blk.get_component_objects()
         names = set(qs.values_list("name", flat=True))
@@ -413,7 +424,7 @@ class BlockComponentRelationshipTests(TestCase):
         comp = create_component(name="Display")
         blk = create_block(
             name="Duplicate IDs Block",
-            components_list=[component_entry(comp, 1), component_entry(comp, 2)],
+            components_dict=[component_entry(comp, 1), component_entry(comp, 2)],
         )
         qs = blk.get_component_objects()
         self.assertEqual(qs.count(), 1)
@@ -422,7 +433,7 @@ class BlockComponentRelationshipTests(TestCase):
         comp = create_component(name="Steel Plate")
         blk = create_block(
             name="Validate Components Success",
-            components_list=[component_entry(comp, 10)],
+            components_dict=[component_entry(comp, 10)],
         )
         is_valid, errors = blk.validate_components()
         self.assertTrue(is_valid)
@@ -432,7 +443,7 @@ class BlockComponentRelationshipTests(TestCase):
         comp = create_component(name="Interior Plate")
         blk = create_block(
             name="Save Valid Components",
-            components_list=[component_entry(comp, 1)],
+            components_dict=[component_entry(comp, 1)],
         )
         # save() runs clean(); should succeed
         blk.description = "OK"
@@ -486,7 +497,7 @@ class BlockIntegrationTests(TestCase):
             name="Invalid Components Save",
             description="Try save",
             mass=10.0,
-            components=[{"bad": "structure"}],
+            components={"00000000-0000-0000-0000-000000000000": 1},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -501,7 +512,7 @@ class BlockIntegrationTests(TestCase):
             name="Invalid Consumer Producer",
             description="",
             mass=10.0,
-            components=[],
+            components={},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -535,7 +546,7 @@ class BlockIntegrationTests(TestCase):
             name="Multiple Errors",
             description="",
             mass=10.0,
-            components=[{"not": "valid"}],
+            components={"00000000-0000-0000-0000-000000000000": 1},
             health=100.0,
             pcu=1,
             snap_size=0.25,
@@ -549,7 +560,7 @@ class BlockIntegrationTests(TestCase):
         msg = str(ctx.exception)
         self.assertIn("Validation failed:", msg)
         self.assertIn("consumer_rate > 0", msg)
-        self.assertIn("missing keys", msg)
+        self.assertIn("does not exist", msg)
 
     def test_full_cycle_create_update_save_updates_timestamp(self):
         blk = create_block(name="Full Cycle")

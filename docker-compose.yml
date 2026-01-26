@@ -1,8 +1,11 @@
 name: se2-calculator
+
 services:
+  # PostgreSQL Database Service
   database:
     image: postgres:17
     restart: always
+    container_name: se2_database
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -11,6 +14,78 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - se2_network
 
+  # Django Web Application Service
+  web:
+    build: .
+    restart: always
+    container_name: se2_web
+    environment:
+      # Django Settings
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      # Database Configuration (use service name for Docker networking)
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=database
+      - DB_PORT=${DB_PORT}
+      # Environment Indicator
+      - ENVIRONMENT=docker
+    volumes:
+      # Mount entire project for development
+      - .:/app
+      # Persist logs across container restarts
+      - logs:/app/logs
+      # Persist static files for nginx
+      - static_files:/app/static
+    depends_on:
+      database:
+        condition: service_healthy
+    expose:
+      - "8000"
+    networks:
+      - se2_network
+
+  # Nginx Reverse Proxy Service
+  nginx:
+    image: nginx:alpine
+    restart: always
+    container_name: se2_nginx
+    ports:
+      # Main HTTP port
+      - "80:80"
+    volumes:
+      # Nginx configuration
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Serve static files from volume (read-only for nginx)
+      - static_files:/app/static:ro
+      # Access logs directory (optional)
+      - logs:/app/logs:ro
+    depends_on:
+      - web
+    networks:
+      - se2_network
+
+# Named volumes for data persistence
 volumes:
   db_data:
+    driver: local
+  logs:
+    driver: local
+  static_files:
+    driver: local
+
+# Custom network for service-to-service communication
+networks:
+  se2_network:
+    driver: bridge

@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.3.1-alpha  
+**Version:** 0.4.1-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +10,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.3.1-alpha). The project is under active development with core features being implemented. The foundation is in place, but functional features are still being developed.
+This is an early alpha release (0.4.1-alpha). The project is under active development with Phase 2 (Views & Templates) complete and core CRUD functionality implemented. Phase 3 (Build Order Calculator) is planned.
 
 ### Current Development Status
 
@@ -18,10 +18,10 @@ This is an early alpha release (0.3.1-alpha). The project is under active develo
   - Ores, Components, Blocks models implemented
   - Fixtures created and validated
   
-- 🔄 **Phase 2: Views & Templates** (In Progress)
+- ✅ **Phase 2: Views & Templates** (Completed)
   - ✅ ENH-0000005: Ores views and templates (Completed)
-   - ✅ ENH-0000006: Components views and templates (Completed)
-  - ⏳ ENH-0000007: Blocks views (Pending)
+  - ✅ ENH-0000006: Components views and templates (Completed)
+  - ✅ ENH-0000007: Blocks views and templates (Completed)
   
 - ⏳ **Phase 3: Build Order Calculator** (Planned)
 - ⏳ **Phase 4: Documentation & Deployment** (Planned)
@@ -30,9 +30,12 @@ This is an early alpha release (0.3.1-alpha). The project is under active develo
 
 - 📊 **Ore Management**: Track and manage raw material data
 - 🔧 **Component Tracking**: Database of craftable components with material requirements
-- 🏗️ **Block Catalog**: Complete database of Space Engineers 2 blocks
-- 🧮 **Build Order Calculator**: Multi-block resource calculation and optimization
-- 📈 **Resource Chain Visualization**: See the full crafting chain from ore to final block
+- 🏗️ **Block Catalog**: Complete database of Space Engineers 2 blocks with CRUD interface
+  - Full resource chain visualization (Blocks → Components → Ores)
+  - Component quantity management with validation
+  - Dynamic component selector interface
+- 🧮 **Build Order Calculator**: Multi-block resource calculation and optimization (Phase 3 - planned)
+- 📈 **Resource Chain Visualization**: See the full crafting chain from ore to final block (implemented)
 - 💾 **Data Export/Import**: Save and share build orders
 
 ## Features
@@ -40,9 +43,15 @@ This is an early alpha release (0.3.1-alpha). The project is under active develo
 - 🚀 Built on Django 6.0.1 framework
 - 🐘 PostgreSQL database support with SQLite fallback
 - 🔒 Secure environment-based configuration
-- 🐳 Docker Compose setup for easy database deployment
-- 🧪 Testing infrastructure with pytest-django
+- 🐳 Docker Compose stack for web + nginx + PostgreSQL
+- 🛡️ Security headers via nginx reverse proxy
+- 📦 Static files served by nginx with caching
+- 🧪 Testing infrastructure with pytest-django (107 tests, 92% coverage)
 - 📝 Comprehensive development documentation
+- 💾 JSONField-based component/material management
+- ⚡ Performance optimization with caching
+- 🔗 Full resource chain tracking and calculations
+- 📋 Advanced search, filtering, and pagination
 
 ## Quick Start
 
@@ -76,9 +85,11 @@ This is an early alpha release (0.3.1-alpha). The project is under active develo
    uv run python scripts/secrets_gen.py
    ```
 
-5. **Start PostgreSQL (optional):**
+5. **Start Docker stack (web + nginx + database):**
    ```bash
+   docker compose build
    docker compose up -d
+   docker compose exec web python manage.py migrate
    ```
 
 6. **Run the development server:**
@@ -88,6 +99,30 @@ This is an early alpha release (0.3.1-alpha). The project is under active develo
 
 7. **Open your browser:**
    Navigate to http://localhost:8000
+
+## Docker Quick Start
+
+Run the production-like stack locally (nginx reverse proxy + Django + PostgreSQL):
+
+```bash
+# Build images
+docker compose build
+
+# Start services
+docker compose up -d
+
+# Apply migrations
+docker compose exec web python manage.py migrate
+
+# Verify
+curl -I http://localhost/
+curl -I http://localhost/static/css/main.css
+```
+
+Notes:
+- Set DB_HOST=database in your .env when using Docker
+- nginx listens on port 80; Django runs internally on port 8000
+- Logs and static files persist via named volumes (logs, static_files)
 
 ## Development Setup
 
@@ -110,7 +145,9 @@ se2-calculator-project/
 ├── logs/                    # Application logs directory
 ├── manage.py               # Django management script
 ├── pyproject.toml          # Project dependencies
-├── docker-compose.yml      # PostgreSQL container setup
+├── docker-compose.yml      # Full stack: web + nginx + PostgreSQL
+├── Dockerfile              # Python 3.13 image with health checks
+├── nginx.conf              # Reverse proxy and static file serving
 ├── CHANGELOG.md            # Version history and changes
 ├── CONTRIBUTING.md         # Contribution guidelines
 └── README.md              # This file
@@ -273,6 +310,13 @@ Comprehensive documentation is available in the `docs/` directory:
 - **[Design Documents](docs/design/)** - Application architecture and design decisions
 - **[Enhancement Requests](docs/enhancementRequests/)** - Feature requests and development workflow
 - **[Development Setup](docs/devEnvSetup/uv_installation.md)** - Detailed environment setup guide
+
+### ENH-0000008 (Core Infrastructure) Documentation
+
+- **Core Spec:** [docs/enhancementRequests/Phase2_views/ENH0000008/ENH0000008-core-infrastructure.md](docs/enhancementRequests/Phase2_views/ENH0000008/ENH0000008-core-infrastructure.md)
+- **Deployment Guide:** [docs/enhancementRequests/Phase2_views/ENH0000008/ENH0000008_DEPLOYMENT_GUIDE.md](docs/enhancementRequests/Phase2_views/ENH0000008/ENH0000008_DEPLOYMENT_GUIDE.md)
+- **Docker Setup:** [docs/enhancementRequests/Phase2_views/ENH0000008/DOCKER_SETUP_GUIDE.md](docs/enhancementRequests/Phase2_views/ENH0000008/DOCKER_SETUP_GUIDE.md)
+- **Docker Summary:** [docs/enhancementRequests/Phase2_views/ENH0000008/DOCKER_CONFIGURATION_SUMMARY.md](docs/enhancementRequests/Phase2_views/ENH0000008/DOCKER_CONFIGURATION_SUMMARY.md)
 
 ## Contributing
 
