@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phase 3: Build Order Calculator (planned)
 - REST API for Blocks module (ENH-0000008 - planned)
 
+## [0.4.1-alpha] - 2026-01-26
+
+### Changed
+- Version bump to 0.4.1-alpha
+- README updated with Docker Quick Start and full stack details
+- Documentation links added for ENH-0000008 under docs/enhancementRequests/Phase2_views/ENH0000008/
+- Consolidated Docker/Deployment docs into ENH-0000008 directory
+
+### Fixed
+- Dockerfile dependency installation using `uv pip install -e .` (fixes compose build failure)
+
 ## [0.4.0-alpha] - 2026-01-26
 
 ### Added
@@ -29,6 +40,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Performance optimization with query caching for resource chains
   - 404 error handling for nonexistent blocks
   - Form validation: unique names, positive quantities, UUID format validation
+  - ENH-0000008: Core Infrastructure — Docker Option C (Django + nginx + PostgreSQL)
+    - Production-like Docker stack using docker-compose (web + nginx + database)
+    - New Dockerfile for Python 3.13 with health checks and non-root user
+    - nginx reverse proxy with security headers and static file serving
+    - Expanded docker-compose.yml with health checks, volumes, and custom network
+    - .dockerignore added for smaller, faster builds
+    - Comprehensive deployment documentation:
+      - ENH0000008_DEPLOYMENT_GUIDE.md (technical deployment guide)
+      - DOCKER_SETUP_GUIDE.md (setup, testing, troubleshooting)
+      - DOCKER_CONFIGURATION_SUMMARY.md (quick reference)
 
 ### Fixed
 - Fixed 404 error handling in Detail, Update, and Delete views
@@ -41,6 +62,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced Block model with better error handling
 - Improved form validation with server-side checks
 - Optimized resource chain calculation with caching strategy
+- Project infrastructure:
+  - docker-compose.yml expanded from single DB service to full stack
+  - Documentation consolidated under docs/enhancementRequests/Phase2_views/ENH0000008/
+  - .env.example updated with Docker notes (use DB_HOST=database)
 
 ## [0.3.1-alpha] - 2026-01-25
 
