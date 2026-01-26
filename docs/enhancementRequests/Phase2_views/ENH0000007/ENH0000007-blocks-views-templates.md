@@ -10,7 +10,7 @@
 **Status:** inReview  
 **Priority:** High  
 **Created Date:** 2026-01-24  
-**Updated Date:** 2026-01-24  
+**Updated Date:** 2026-01-25  
 **Completion Date:** (pending)  
 **Assigned To:** (pending)  
 **Estimated Effort:** 1.5-2 days  
@@ -74,7 +74,7 @@ Create web interface for managing block data including list, detail, create, upd
 ## Acceptance Criteria
 
 - [ ] BlockListView displays all blocks with fixture data
-- [ ] Filtering by name works correctly
+- [ ] Search functionality searches both name and description fields
 - [ ] Sorting by mass (ascending/descending) works
 - [ ] Pagination displays 25 items per page
 - [ ] BlockDetailView shows all properties including formatted components
@@ -90,9 +90,15 @@ Create web interface for managing block data including list, detail, create, upd
 - [ ] Success messages display after create/update/delete
 - [ ] Error messages display for validation failures (invalid UUIDs, negative quantities)
 - [ ] All templates are mobile responsive
-- [ ] Minimum 20 automated tests (view + form + resource chain)
+- [ ] URL namespaces use `blocks:` prefix (e.g., `blocks:block_list`)
+- [ ] Navigation integration in base template works
+- [ ] Bootstrap 5 styling applied consistently
+- [ ] Empty state messages display when no blocks exist
+- [ ] Query parameter preservation works across pagination
+- [ ] Minimum 25 automated tests (view + form + resource chain)
 - [ ] All tests pass with 100% pass rate
-- [ ] Test execution time <1.5 seconds
+- [ ] Test execution time <2 seconds
+- [ ] Test coverage ≥85% for blocks package
 - [ ] Documentation updated
 - [ ] Code reviewed
 
@@ -120,14 +126,16 @@ Create web interface for managing block data including list, detail, create, upd
 - `blocks/templates/blocks/block_detail.html` (new)
 - `blocks/templates/blocks/block_form.html` (new)
 - `blocks/templates/blocks/block_confirm_delete.html` (new)
-- `static/js/component-selector.js` (new, adapted from material-selector.js)
-- `blocks/tests_views.py` (new)
+- `static/js/block-component-selector.js` (new, adapted from material-selector.js)
+- `blocks/test_views.py` (new)
 - `blocks/tests_forms.py` (new)
-- `blocks/templatetags/block_filters.py` (new, for resource chain display)
+- `blocks/templatetags/__init__.py` (new)
+- `blocks/templatetags/block_filters.py` (new, for component name resolution)
 
 **Modified Files:**
 - `blocks/views.py` (currently empty)
-- `se2CalcProject/urls.py` (add blocks URL include)
+- `se2CalcProject/urls.py` (add blocks URL include: path('blocks/', include('blocks.urls', namespace='blocks')))
+- `templates/base.html` (add Blocks navigation entry)
 
 ### Database Changes
 - [ ] No migrations required
@@ -139,27 +147,29 @@ Create web interface for managing block data including list, detail, create, upd
 ## Implementation Plan
 
 ### Step 1: Forms with JSONField Handling
-- Create `blocks/forms.py` with BlockForm
-- Adapt ComponentForm pattern from ENH-0000006
-- Override __init__ to exclude components from ModelForm
-- Add custom clean_components() method
+- Create `blocks/forms.py` following ComponentForm pattern from ENH-0000006
+- Use hidden `components_json` field (analogous to `materials_json` in ENH-0000006)
+- Convert component_id[], quantity[] arrays to JSON format
+- Add custom clean() method with validation
 - Integrate Phase 1 Block.validate_components() helper
 - Handle conversion between form data (component_id[], quantity[]) and JSON storage
+- Apply Bootstrap 5 form styling to all widgets
 
 ### Step 2: URL Configuration
-- Update `se2CalcProject/urls.py` to include blocks URLs
-- Create URL patterns in `blocks/urls.py`:
-  - `''` → BlockListView (name='block_list')
+- Update `se2CalcProject/urls.py` to include blocks URLs with namespace
+- Add: `path('blocks/', include('blocks.urls', namespace='blocks'))`
+- Create URL patterns in `blocks/urls.py` with namespace='blocks':
+  - `''` → BlockListView (name='block_list', accessible as 'blocks:block_list')
   - `'<uuid:pk>/'` → BlockDetailView (name='block_detail')
   - `'create/'` → BlockCreateView (name='block_create')
   - `'<uuid:pk>/update/'` → BlockUpdateView (name='block_update')
   - `'<uuid:pk>/delete/'` → BlockDeleteView (name='block_delete')
 
 ### Step 3: Views Implementation
-- Implement BlockListView with filtering and sorting
+- Implement BlockListView with search (name/description) and sorting
 - Implement BlockDetailView with:
   - Formatted components display
-  - Resource chain calculation (components → ores)
+  - Resource chain calculation (components → ores) in get_context_data()
   - Statistics (total mass, component count)
 - Implement BlockCreateView with component form handling
 - Implement BlockUpdateView with component pre-population
@@ -167,17 +177,19 @@ Create web interface for managing block data including list, detail, create, upd
 - Add get_context_data() to pass components queryset to templates
 
 ### Step 4: JavaScript Component Selector
-- Create `static/js/component-selector.js` (adapt material-selector.js)
+- Create `static/js/block-component-selector.js` (adapt material-selector.js from ENH-0000006)
 - Implement addComponentRow() function
 - Implement removeComponentRow() function
 - Populate component dropdown from template context
 - Validate quantities client-side (positive integers)
 - Handle form submission (convert rows to JSON)
+- Include CSRF token handling for AJAX requests
 
 ### Step 5: Resource Chain Display
 - Create template tags in `blocks/templatetags/block_filters.py`
-- Implement get_component_name filter
-- Implement calculate_resource_chain filter/helper
+- Implement get_component_name filter (analogous to get_ore_name in ENH-0000006)
+- Calculate resource chain in view's get_context_data() method, not template
+- Cache component lookups (5 minute TTL) for performance
 - Display full breakdown: Block → Components (with quantities) → Ores (with quantities)
 - Example output:
   ```
@@ -206,13 +218,14 @@ Create web interface for managing block data including list, detail, create, upd
 - Create `block_confirm_delete.html`
 
 ### Step 7: Testing
-- Create `blocks/tests_views.py` (15+ tests)
-- Create `blocks/tests_forms.py` (10+ tests)
+- Create `blocks/test_views.py` (20+ tests)
+- Create `blocks/test_forms.py` (10+ tests)
 - Test JSONField validation with invalid UUIDs
 - Test resource chain calculation with fixture data
 - Test component selector with fixture data
 - Use `fixtures = ['sample_ores.json', 'sample_components.json', 'sample_blocks.json']`
-- Verify 100% pass rate and <1.5s execution time
+- Verify 100% pass rate and <2s execution time (cumulative project suite)
+- Achieve ≥85% test coverage for blocks package
 
 ### Step 8: Documentation
 - Document resource chain calculation algorithm
@@ -225,7 +238,7 @@ Create web interface for managing block data including list, detail, create, upd
 
 ## Testing Requirements
 
-### Unit Tests (Minimum 20)
+### Unit Tests (Minimum 25)
 
 **BlockListView (5 tests):**
 - [ ] View renders successfully with fixture data
@@ -300,8 +313,10 @@ Create web interface for managing block data including list, detail, create, upd
 - [ ] Dynamic component selector with JavaScript
 - [ ] Resource chain visualization in detail view
 - [ ] JSONField form handling pattern documented
-- [ ] Automated test suite (20+ tests, all passing)
-- [ ] Test execution time <1.5 seconds
+- [ ] Navigation integration in base template
+- [ ] Automated test suite (25+ tests, all passing)
+- [ ] Test execution time <2 seconds (cumulative project suite)
+- [ ] Test coverage ≥85% for blocks package
 - [ ] Deployment guide completed
 - [ ] Post-deployment review completed
 - [ ] Phase 2 completion report
@@ -378,11 +393,11 @@ Create web interface for managing block data including list, detail, create, upd
 
 ## Related Issues/Enhancements
 
-- **Depends On:** ENH-0000001 (Ores Model) - Completed
-- **Depends On:** ENH-0000002 (Components Model) - Completed
-- **Depends On:** ENH-0000003 (Blocks Model) - Completed
-- **Depends On:** ENH-0000005 (Ores Views) - In Review
-- **Depends On:** ENH-0000006 (Components Views) - In Review
+- **Depends On:** ENH-0000001 (Ores Model) - ✅ Completed
+- **Depends On:** ENH-0000002 (Components Model) - ✅ Completed
+- **Depends On:** ENH-0000003 (Blocks Model) - ✅ Completed
+- **Depends On:** ENH-0000005 (Ores Views) - ✅ Completed (2026-01-25)
+- **Depends On:** ENH-0000006 (Components Views) - ✅ Completed (2026-01-25)
 - **Enables:** Phase 3 Build Order Calculator
 - **Enables:** Multi-block resource calculation
 
