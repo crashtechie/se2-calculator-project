@@ -207,6 +207,28 @@ class Block(models.Model):
         
         component_ids = [item['component_id'] for item in self.components]
         return Component.objects.filter(component_id__in=component_ids)
+
+    def iter_component_requirements(self):
+        """Return component requirements with resolved Component objects when present."""
+        requirements = []
+
+        for item in self.components or []:
+            if not isinstance(item, dict):
+                continue
+
+            comp_id = item.get('component_id')
+            comp = Component.objects.filter(component_id=comp_id).first() if comp_id else None
+
+            requirements.append(
+                (
+                    comp_id,
+                    item.get('component_name'),
+                    item.get('quantity'),
+                    comp,
+                )
+            )
+
+        return requirements
     
     def clean(self):
         """Validate model before saving."""

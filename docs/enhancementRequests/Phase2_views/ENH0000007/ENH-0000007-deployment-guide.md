@@ -252,21 +252,17 @@ uv run python manage.py loaddata sample_blocks.json
 # Verify blocks loaded
 uv run python manage.py shell -c "from blocks.models import Block; print(f'Loaded {Block.objects.count()} blocks')"
 
-# Verify component relationships
-uv run python manage.py shell << EOF
+# Verify component relationships (uses Block helper)
+uv run python manage.py shell <<'EOF'
 from blocks.models import Block
-from components.models import Component
 
 b = Block.objects.first()
-if b and b.components:
-    comp_id = list(b.components.keys())[0]
-    comp = Component.objects.filter(component_id=comp_id).first()
-    if comp:
-        print(f"✓ Block '{b.name}' references Component '{comp.name}'")
-    else:
-        print(f"✗ Component {comp_id} not found in database")
+if b:
+    for comp_id, comp_name, qty, comp in b.iter_component_requirements():
+        status = "✓" if comp else "✗"
+        print(f"{status} {comp_name} ({comp_id}) x{qty} for block '{b.name}'")
 else:
-    print("⚠ No blocks with components found")
+    print("⚠ No blocks found")
 EOF
 ```
 
