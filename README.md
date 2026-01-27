@@ -24,7 +24,10 @@ This is an early alpha release (0.4.1-alpha). The project is under active develo
   - ✅ ENH-0000007: Blocks views and templates (Completed)
   
 - ⏳ **Phase 3: Build Order Calculator** (Planned)
-- ⏳ **Phase 4: Documentation & Deployment** (Planned)
+- ⏳ **Phase 4: API Documentation & Architecture Guides** (Planned)
+  - OpenAPI/Swagger specifications
+  - Architecture diagrams and data flow documentation
+  - Advanced performance tuning guides
 
 ### Planned Features
 

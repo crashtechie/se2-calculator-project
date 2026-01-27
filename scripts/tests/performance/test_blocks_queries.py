@@ -10,7 +10,9 @@ Usage:
 """
 import os
 import sys
+import uuid
 import django
+import pytest
 
 # Setup Django environment
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
@@ -21,9 +23,39 @@ from django.test.utils import setup_test_environment
 from django.db import connection, reset_queries
 from django.test import Client
 from blocks.models import Block
+from components.models import Component
+from ores.models import Ore
 
 
-def test_list_view_queries():
+@pytest.fixture
+def sample_data(db):
+    """Create minimal data so performance tests run without skips."""
+    ore = Ore.objects.create(name="Perf Ore", mass=1.0, description="")
+    comp = Component.objects.create(
+        name="Perf Component",
+        description="",
+        materials={str(ore.ore_id): 1},
+        fabricator_type="",
+        crafting_time=0.0,
+        mass=1.0,
+    )
+    block = Block.objects.create(
+        name="Perf Block",
+        description="",
+        mass=1.0,
+        components={str(comp.component_id): 1},
+        health=100.0,
+        pcu=1,
+        snap_size=1.0,
+        consumer_rate=0.0,
+        producer_rate=0.0,
+        storage_capacity=0.0,
+    )
+    return {"ore": ore, "component": comp, "block": block}
+
+
+@pytest.mark.django_db(transaction=True)
+def test_list_view_queries(sample_data):
     """Test query count for blocks list view."""
     client = Client()
     reset_queries()
@@ -35,18 +67,13 @@ def test_list_view_queries():
     
     if query_count > 10:
         print(f"  ⚠️  WARNING: High query count detected!")
-    
-    return query_count
 
 
-def test_detail_view_queries():
+@pytest.mark.django_db(transaction=True)
+def test_detail_view_queries(sample_data):
     """Test query count for blocks detail view."""
     client = Client()
-    block = Block.objects.first()
-    
-    if not block:
-        print("✗ No blocks found in database. Please load fixtures first.")
-        return 0
+    block = sample_data["block"]
     
     reset_queries()
     response = client.get(f'/blocks/{block.block_id}/')
@@ -56,11 +83,10 @@ def test_detail_view_queries():
     
     if query_count > 20:
         print(f"  ⚠️  WARNING: High query count detected!")
-    
-    return query_count
 
 
-def test_create_view_queries():
+@pytest.mark.django_db(transaction=True)
+def test_create_view_queries(sample_data):
     """Test query count for blocks create view (GET)."""
     client = Client()
     reset_queries()
@@ -72,18 +98,13 @@ def test_create_view_queries():
     
     if query_count > 15:
         print(f"  ⚠️  WARNING: High query count detected!")
-    
-    return query_count
 
 
-def test_update_view_queries():
+@pytest.mark.django_db(transaction=True)
+def test_update_view_queries(sample_data):
     """Test query count for blocks update view (GET)."""
     client = Client()
-    block = Block.objects.first()
-    
-    if not block:
-        print("✗ No blocks found in database. Please load fixtures first.")
-        return 0
+    block = sample_data["block"]
     
     reset_queries()
     response = client.get(f'/blocks/{block.block_id}/update/')
@@ -93,8 +114,6 @@ def test_update_view_queries():
     
     if query_count > 20:
         print(f"  ⚠️  WARNING: High query count detected!")
-    
-    return query_count
 
 
 def print_query_details():
