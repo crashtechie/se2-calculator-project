@@ -1,43 +1,79 @@
-# Issue: Docker Compose warning "r" variable is not set
+# ISSUE-005: Docker Compose Warning "r" Variable Not Set
 
-## Summary
-When running Docker Compose, a warning appears indicating the "r" environment variable is not set.
+**Status:** Open  
+**Priority:** Low  
+**Created:** 2026-01-30  
+**Component:** Docker Infrastructure  
+**Affects Version:** 0.4.1-alpha
 
-## Impact
-- Confusing startup output for developers
-- Potential misconfiguration of environment variable interpolation
-- Reduces confidence in Docker setup
+## Problem Description
 
-## Environment
-- Project: se2-calculator-project
-- Branch: develop
-- Affected area: Docker Compose configuration
+Docker Compose displays a warning about an undefined "r" environment variable during startup, causing confusing output and potential misconfiguration concerns.
 
-## Symptoms
-- Docker Compose output includes a warning similar to:
-  - `WARNING: The "r" variable is not set. Defaulting to a blank string.`
+## Error Output
 
-## Steps to Reproduce
-1. Run `docker compose up --build` from the repository root.
-2. Observe the warning in the Compose output.
+```
+WARNING: The "r" variable is not set. Defaulting to a blank string.
+```
 
 ## Root Cause
-Unknown. Likely an accidental `${r}` interpolation in a file read by Docker Compose or an unintended environment variable reference.
 
-## Resolution
-- [ ] Search for `${r}` or `$r` in Docker-related configuration files
-- [ ] Identify the file or setting causing the Compose interpolation warning
-- [ ] Remove or correct the variable reference
-- [ ] Re-run Docker Compose to confirm the warning is gone
+Accidental `${r}` or `$r` interpolation in Docker Compose configuration files or related environment files.
 
-## Verification
-After fix, verify:
-- Docker Compose starts without the "r" variable warning
-- Containers start successfully and remain healthy
+## Technical Details
 
-## Notes / Follow-ups
-- Check `.env`, `docker-compose.yml`, `Dockerfile`, and `nginx.conf`
-- Also check CI/CD or scripts that may inject variables during Compose execution
+**Affected Files:**
+- `docker-compose.yml` (likely)
+- `.env`
+- `Dockerfile`
+- `nginx.conf`
 
-## Date Reported
-January 30, 2026
+**Steps to Reproduce:**
+1. Run `docker compose up --build`
+2. Observe warning in output
+
+## Solution
+
+### Step 1: Search for variable reference
+
+```bash
+grep -r '\${r}\|\$r' docker-compose.yml .env Dockerfile nginx.conf
+```
+
+### Step 2: Identify the source
+
+Locate the file containing the unintended variable reference.
+
+### Step 3: Remove or correct the reference
+
+Remove `${r}` or replace with intended variable.
+
+### Step 4: Verify fix
+
+```bash
+docker compose down
+docker compose up --build
+```
+
+Expected: No "r" variable warning.
+
+## Verification Checklist
+
+- [ ] Search Docker config files for `${r}` or `$r`
+- [ ] Identify source file
+- [ ] Remove or correct variable reference
+- [ ] Run Docker Compose without warning
+- [ ] Verify containers start successfully
+- [ ] Verify containers remain healthy
+
+## Related Files
+
+- `docker-compose.yml`
+- `.env`
+- `Dockerfile`
+- `nginx.conf`
+
+## Notes
+
+- Check CI/CD scripts that may inject variables
+- Verify no other spurious variable warnings exist
