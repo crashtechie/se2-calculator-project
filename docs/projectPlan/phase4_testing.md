@@ -1,6 +1,6 @@
-# Phase 4: Testing & Documentation
+# Phase 4: Testing, Documentation & Core Infrastructure
 
-**Duration:** 2-3 days  
+**Duration:** 3-4 days  
 **Priority:** High  
 **Dependencies:** Phases 1, 2, 3 complete
 
@@ -10,8 +10,91 @@
 - Update project documentation
 - Perform integration testing
 - Fix bugs and polish UI
+- **NEW:** Implement core infrastructure (deferred from ENH-0000008)
 
 ## Tasks
+
+### 4.0 Core Infrastructure (Deferred from ENH-0000008)
+**Duration:** 1-1.5 days  
+**Priority:** High
+
+#### 4.0.1 Core App Setup
+**Files:** `core/__init__.py`, `core/apps.py`, `core/mixins.py`, `core/utils.py`
+
+- [ ] Create core Django app
+- [ ] Add core app to INSTALLED_APPS
+- [ ] Create JSONFieldValidationMixin for form validation
+- [ ] Create utility functions (validate_uuid, sanitize_html)
+- [ ] Create core/templatetags/core_filters.py for reusable template filters
+- [ ] Write comprehensive docstrings
+
+#### 4.0.2 API Endpoints
+**Files:** `ores/api.py`, `components/api.py`, `blocks/api.py`
+
+- [ ] Create OreAPIListView (GET /ores/api/)
+- [ ] Create ComponentAPIListView (GET /components/api/)
+- [ ] Create BlockAPIListView (GET /blocks/api/)
+- [ ] Return JSON with id, name, mass fields
+- [ ] Add API routes to urls.py
+- [ ] Return 405 for non-GET methods
+- [ ] Add API documentation in docstrings
+
+#### 4.0.3 Structured Logging
+**Files:** `se2CalcProject/settings.py`, view files
+
+- [ ] Add LOGGING configuration to settings.py
+- [ ] Configure file handler (logs/app.log)
+- [ ] Configure console handler
+- [ ] Add loggers for ores, components, blocks, core apps
+- [ ] Add logging to view operations (CREATE, UPDATE, DELETE)
+- [ ] Log API requests and responses
+- [ ] Log errors with stack traces
+
+#### 4.0.4 Custom Error Pages
+**Files:** `templates/404.html`, `templates/500.html`, `core/views.py`
+
+- [ ] Create custom 404.html template
+- [ ] Create custom 500.html template
+- [ ] Create error handler views in core/views.py
+- [ ] Add handler404 and handler500 to urls.py
+- [ ] Test error pages with DEBUG=False
+
+#### 4.0.5 Additional Security Settings
+**Files:** `se2CalcProject/settings.py`
+
+- [ ] Add SECURE_BROWSER_XSS_FILTER = True
+- [ ] Add SECURE_CONTENT_TYPE_NOSNIFF = True
+- [ ] Add CSRF_COOKIE_HTTPONLY = True
+- [ ] Add SESSION_COOKIE_HTTPONLY = True
+- [ ] Configure production HTTPS settings
+
+#### 4.0.6 CSRF Token JavaScript
+**Files:** `static/js/csrf.js`, `templates/base.html`
+
+- [ ] Create csrf.js with getCookie function
+- [ ] Export csrftoken constant
+- [ ] Include in base.html template
+- [ ] Document usage for AJAX requests
+
+#### 4.0.7 Core Infrastructure Tests
+**Files:** `core/tests.py`
+
+- [ ] Test JSONFieldValidationMixin (4 tests)
+- [ ] Test utility functions (3 tests)
+- [ ] Test API endpoints (6 tests)
+- [ ] Test error pages (2 tests)
+- [ ] Test logging configuration (4 tests)
+- [ ] Achieve >80% coverage for core app
+
+#### 4.0.8 Core Infrastructure Documentation
+**Files:** Various documentation files
+
+- [ ] Document API endpoint usage
+- [ ] Document mixin usage with examples
+- [ ] Document logging configuration
+- [ ] Document error handling strategy
+- [ ] Update CHANGELOG.md
+- [ ] Update README.md
 
 ### 4.1 Model Tests
 **Files:** `ores/tests/test_models.py`, `components/tests/test_models.py`, `blocks/tests/test_models.py`
@@ -145,6 +228,10 @@ uv run pytest --cov=ores --cov=components --cov=blocks --cov-report=term
 - [ ] Optimize CSS/JS
 
 ## Deliverables
+- **NEW:** Core app with utilities, mixins, and API endpoints
+- **NEW:** Structured logging configuration
+- **NEW:** Custom error pages
+- **NEW:** Additional security settings
 - Comprehensive test suite with >80% coverage
 - Updated documentation
 - Bug-free application
@@ -194,8 +281,12 @@ docs/
 ```
 
 ## Notes
+- **Core infrastructure from ENH-0000008 is now part of Phase 4**
 - Use pytest fixtures for common test data
 - Mock external dependencies if any
 - Test both success and failure cases
 - Document any known limitations
 - Create issue tickets for future enhancements
+- Core app should not break existing functionality
+- API endpoints are read-only (GET only) for now
+- Logging should be comprehensive but not verbose

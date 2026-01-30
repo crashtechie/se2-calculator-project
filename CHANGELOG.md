@@ -9,7 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### In Development
 - Phase 3: Build Order Calculator (planned)
-- REST API for Blocks module (ENH-0000008 - planned)
+
+## [0.5.0-alpha] - 2026-01-30
+
+### Added - Phase 2 Complete: Views & Templates
+- **Phase 2 completion:** All CRUD interfaces implemented with 107 automated tests (87% coverage)
+- Phase 2 Post-Deployment Report with CI/CD recommendations
+- Issue tracking system with 4 open issues documented (ISSUE-004, ISSUE-005, ISSUE-007, ISSUE-008)
+- ISSUE-007: Missing health endpoint for Docker health check (documented)
+- ISSUE-008: Static files volume mount conflict (documented)
+
+### Documentation
+- Phase 2 Post-Deployment Report with comprehensive metrics and CI/CD workflow recommendations
+- GitHub Actions workflow recommendations for automated testing, Docker validation, and linting
+- Open issue reports for Docker health endpoint and static files configuration
+- Test coverage analysis: Ores (90%), Components (91%), Blocks (92%), Overall (87%)
+
+### Changed
+- Updated project status to reflect Phase 2 completion in README and home page UI
+- Version bumped to 0.5.0-alpha across README, CHANGELOG, and pyproject.toml
+- Corrected test coverage reporting from 92% to 87% overall
+- Home page UI now shows Phase 2 as "Complete" with success icon
+- Documented readiness for Phase 3 (Build Order Calculator)
+- Established CI/CD implementation roadmap for Phase 3 and Phase 4
 
 ## [0.4.2-alpha] - 2026-01-26
 
@@ -281,7 +303,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.2-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.5.0-alpha...HEAD
+[0.5.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.2-alpha...v0.5.0-alpha
 [0.4.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.1-alpha...v0.4.2-alpha
 [0.4.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.0-alpha...v0.4.1-alpha
 [0.4.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.1-alpha...v0.4.0-alpha

@@ -1,9 +1,10 @@
 # ENH-0000008 Technical Deployment Guide
 
-**Enhancement:** Core Infrastructure Enhancement with Docker Support  
-**Version:** 1.0  
-**Date:** January 26, 2026  
+**Enhancement:** Docker Infrastructure (Partial ENH-0000008)  
+**Version:** 1.1  
+**Date:** January 27, 2026  
 **Environment:** Development, Staging, Production  
+**Scope:** Docker infrastructure only (core app features deferred to Phase 4)  
 
 ---
 
@@ -30,13 +31,20 @@
 
 ### What is ENH-0000008?
 
-ENH-0000008 is the Core Infrastructure Enhancement that provides:
-- **Logging Framework:** Centralized application logging to persistent volumes
-- **Error Handling:** Custom error pages and error handlers (404, 500, etc.)
-- **Security Headers:** CORS, CSRF, X-Frame-Options, X-Content-Type-Options
-- **Static File Management:** Production-ready static file serving via nginx
+ENH-0000008 originally planned comprehensive core infrastructure. As of v0.4.0-alpha, only Docker infrastructure has been deployed. Application-level features are deferred to Phase 4.
+
+**Implemented in v0.4.0-alpha:**
 - **Docker Infrastructure:** Container orchestration with PostgreSQL, Django, nginx
+- **Security Headers:** X-Frame-Options, X-Content-Type-Options, X-XSS-Protection (nginx)
+- **Static File Management:** Production-ready static file serving via nginx
 - **Configuration Management:** Environment-based settings and secrets
+
+**Deferred to Phase 4:**
+- Logging Framework (structured application logging)
+- Error Handling (custom 404/500 pages)
+- Core app with utilities and mixins
+- API endpoints for AJAX
+- Additional Django security settings
 
 ### Architecture Components
 
@@ -68,13 +76,13 @@ ENH-0000008 is the Core Infrastructure Enhancement that provides:
 
 ### Key Features
 
-| Feature | Benefit | Deployment Impact |
-|---------|---------|-------------------|
-| **Logging** | Track application behavior and errors | Requires logs volume mount |
-| **Error Handling** | Professional error pages | Requires DEBUG=False testing |
-| **Security Headers** | Protection from common attacks | Configured in nginx.conf |
-| **Static Files** | Production-grade static serving | Requires nginx service |
-| **Docker Support** | Reproducible deployments | Requires Docker & Docker Compose |
+| Feature | Benefit | Deployment Impact | Status |
+|---------|---------|-------------------|--------|
+| **Docker Support** | Reproducible deployments | Requires Docker & Docker Compose | ✅ Complete |
+| **Security Headers** | Protection from common attacks | Configured in nginx.conf | ✅ Complete |
+| **Static Files** | Production-grade static serving | Requires nginx service | ✅ Complete |
+| **Logging** | Track application behavior and errors | Requires logs volume mount | ⏳ Phase 4 |
+| **Error Handling** | Professional error pages | Requires DEBUG=False testing | ⏳ Phase 4 |
 
 ---
 
@@ -176,18 +184,8 @@ echo "All prerequisites installed!"
 - [x] Coverage >= 80%
 - [x] No pending migrations
 - [x] ENH-0000005, ENH-0000006, ENH-0000007 deployed successfully
-- [x] CONTRIBUTING.md updated with new patterns
-- [x] Documentation complete (Deployment guide, CONTRIBUTING.md, and project README; API docs and architecture diagrams planned for Phase 4)
-
-### Configuration Preparation
-
-- [x] .env file created from .env.example
-- [x] Database credentials configured securely
-- [x] DEBUG variable set appropriately (False for production)
-- [x] ALLOWED_HOSTS configured
-- [x] SECRET_KEY set (unique, strong password)
-- [x] STATIC_ROOT configured correctly
-- [x] LOGGING configuration tested locally
+- [x] CHANGELOG.md updated
+- [ ] LOGGING configuration tested locally (deferred to Phase 4)
 
 ### Docker Preparation
 
@@ -449,18 +447,14 @@ curl http://localhost/
 # Expected: HTML response (not 500 error)
 ```
 
-**6.3 Test API Endpoints**
+**6.3 Test Endpoints**
 ```bash
-# Test Ores API
-curl http://localhost/ores/api/
+# Test home page
+curl http://localhost/
 
-# Test Components API
-curl http://localhost/components/api/
+# Expected: HTML response (not 500 error)
 
-# Test Blocks API
-curl http://localhost/blocks/api/
-
-# Expected: JSON responses with 200 status
+# Note: API endpoints not yet implemented (deferred to Phase 4)
 ```
 
 ---
@@ -511,7 +505,7 @@ curl -I http://localhost/static/css/main.css
 # Test 404 error page
 curl http://localhost/nonexistent-page-12345/
 
-# Expected: Custom 404 page (not default Django 404)
+# Expected: Generic Django 404 page (custom pages deferred to Phase 4)
 ```
 
 #### 6. Security Headers
@@ -530,9 +524,10 @@ curl -I http://localhost/
 
 ```bash
 # Check application logs
-docker compose exec web tail -50 /app/logs/app.log
+docker compose logs web | tail -50
 
-# Expected: Recent log entries
+# Note: Structured logging to files deferred to Phase 4
+# Currently logs to console only
 ```
 
 #### 8. Database Persistence
@@ -575,9 +570,9 @@ else
     ((FAILURES++))
 fi
 
-# Test 3: API Endpoints
-echo -n "3. API Endpoints: "
-if curl -s http://localhost/ores/api/ | grep -q "ores"; then
+# Test 3: Endpoints
+echo -n "3. Web Endpoints: "
+if curl -s http://localhost/ > /dev/null; then
     echo "✓ PASS"
 else
     echo "✗ FAIL"
@@ -622,8 +617,8 @@ fi
 
 # Test 8: Logging
 echo -n "8. Application Logging: "
-if docker compose exec -T web test -f /app/logs/app.log; then
-    echo "✓ PASS"
+if docker compose logs web | tail -1 > /dev/null; then
+    echo "✓ PASS (console only)"
 else
     echo "✗ FAIL"
     ((FAILURES++))
@@ -891,47 +886,17 @@ services:
 
 **View Application Logs:**
 ```bash
-# Real-time logs
-docker compose exec web tail -f /app/logs/app.log
+# Real-time logs (console output)
+docker compose logs -f web
 
 # Last 100 lines
-docker compose exec web tail -100 /app/logs/app.log
+docker compose logs --tail=100 web
 
 # Search logs for errors
-docker compose exec web grep "ERROR" /app/logs/app.log
-
-# Log statistics
-docker compose exec web wc -l /app/logs/app.log
+docker compose logs web | grep "ERROR"
 ```
 
-**Log Configuration:**
-
-In `se2CalcProject/settings.py`:
-
-```python
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(LOGS_DIR, 'app.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'root': {
-        'handlers': ['file'],
-        'level': 'ERROR',
-    },
-}
-```
+**Note:** Structured logging to files is deferred to Phase 4. Currently, Django logs to console only.
 
 ### Performance Monitoring
 
@@ -1259,42 +1224,15 @@ docker inspect se2_static_files | grep Mountpoint
 
 #### Issue 5: Logging Not Working
 
-**Symptoms:**
-- No logs in /app/logs/
-- "Permission denied" errors when writing logs
+**Note:** Structured file logging is deferred to Phase 4. Current deployment logs to console only via Docker.
 
-**Diagnosis:**
+**View Console Logs:**
 ```bash
-docker compose exec web ls -la /app/logs/
-docker compose logs web | grep -i "permission"
-```
+# View web service logs
+docker compose logs web
 
-**Solutions:**
-
-1. **Directory Doesn't Exist:**
-```bash
-# Create logs directory
-docker compose exec web mkdir -p /app/logs
-
-# Set permissions
-docker compose exec web chmod 755 /app/logs
-```
-
-2. **Permission Issues:**
-```bash
-# Check Dockerfile creates logs properly
-docker compose exec web stat /app/logs
-
-# Should show user=app (non-root)
-```
-
-3. **Logging Not Configured:**
-```bash
-# Verify LOGGING settings
-docker compose exec web python manage.py shell
->>> from django.conf import settings
->>> settings.LOGGING
-# Should show handler with 'filename': '.../app.log'
+# Follow logs in real-time
+docker compose logs -f web
 ```
 
 #### Issue 6: nginx Returns 502 Bad Gateway
@@ -1732,8 +1670,8 @@ docker compose up -d
 - [ ] Database verified and healthy
 - [ ] Static files serving correctly
 - [ ] Security headers present
-- [ ] Error pages working (404, 500)
-- [ ] Logging configured and working
+- [ ] Error pages working (404, 500) - Deferred to Phase 4
+- [ ] Logging configured and working - Deferred to Phase 4 (console logging functional)
 - [ ] Backup procedure tested
 - [ ] Monitoring configured
 - [ ] Team trained on deployment process
@@ -1795,8 +1733,8 @@ docker volume prune
 
 ---
 
-**End of ENH-0000008 Technical Deployment Guide**
+**End of ENH-0000008 Docker Infrastructure Deployment Guide**
 
-*Last Updated: January 26, 2026*  
-*Version: 1.0*  
-*Status: Production Ready*
+*Last Updated: January 27, 2026*  
+*Version: 1.1*  
+*Status: Docker Infrastructure Complete (Core app features deferred to Phase 4)*
