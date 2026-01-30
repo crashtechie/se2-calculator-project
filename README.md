@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.4.1-alpha  
+**Version:** 0.4.2-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +10,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.4.1-alpha). The project is under active development with Phase 2 (Views & Templates) complete and core CRUD functionality implemented. Phase 3 (Build Order Calculator) is planned.
+This is an early alpha release (0.4.2-alpha). The project is under active development with Phase 2 (Views & Templates) complete and core CRUD functionality implemented. Phase 3 (Build Order Calculator) is planned.
 
 ### Current Development Status
 

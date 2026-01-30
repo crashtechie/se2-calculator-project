@@ -1,40 +1,75 @@
-# Issue: Components link in title bar redirects to blocks page
+# ISSUE-004: Components Link Redirects to Blocks Page
 
-## Summary
-The "components" link in the title bar of the UI incorrectly directs users to the "blocks" page instead of the "components" page.
+**Status:** Open  
+**Priority:** Medium  
+**Created:** 2026-01-30  
+**Component:** UI Navigation  
+**Affects Version:** 0.4.1-alpha
 
-## Impact
-- Users clicking on the "components" link in the navigation cannot access the components page
-- Navigation confusion between blocks and components functionality
-- UI inconsistency and poor user experience
+## Problem Description
 
-## Environment
-- Project: se2-calculator-project
-- Branch: develop
-- Affected area: Title bar navigation
+The "components" link in the title bar navigation incorrectly directs users to the blocks page instead of the components page.
 
-## Symptoms
-- Clicking the "components" link in the title bar navigates to `/blocks/` or the blocks page
-- Expected behavior: Should navigate to `/components/` or the components page
+## Error Output
+
+- Clicking "components" link navigates to `/blocks/`
+- Expected: Navigate to `/components/`
 
 ## Root Cause
-Likely incorrect URL configuration in the navigation template or URL routing mismatch in the title bar/navigation component.
 
-## Resolution
-- [ ] Identify the template file containing the title bar navigation
-- [ ] Verify the URL configuration for the components link
-- [ ] Update the link to point to the correct components URL/route
-- [ ] Test navigation to confirm both blocks and components links work correctly
+Incorrect URL configuration in the navigation template or URL routing mismatch in the title bar component.
 
-## Verification
-After fix, verify:
-- Components link navigates to the components page
-- Blocks link still navigates to the blocks page
-- No other navigation links are affected
+## Technical Details
 
-## Notes / Follow-ups
-- Review all navigation links to ensure consistency
-- Consider adding automated tests for navigation routing
+**Affected Files:**
+- `app/templates/base.html` (likely)
+- Navigation template/component
 
-## Date Reported
-January 30, 2026
+**Expected Behavior:**
+- Components link → `/components/` → Components list page
+
+**Actual Behavior:**
+- Components link → `/blocks/` → Blocks list page
+
+## Solution
+
+### Step 1: Identify navigation template
+
+```bash
+grep -r "components" app/templates/
+```
+
+### Step 2: Verify URL configuration
+
+Check the href attribute for the components link in the navigation.
+
+### Step 3: Update the link
+
+Correct the URL to point to `{% url 'components:component_list' %}` or equivalent.
+
+### Step 4: Test navigation
+
+```bash
+uv run python manage.py runserver
+# Click components link in browser
+```
+
+## Verification Checklist
+
+- [ ] Identify template file with navigation
+- [ ] Verify components URL configuration
+- [ ] Update link to correct URL
+- [ ] Test components link navigates correctly
+- [ ] Test blocks link still works
+- [ ] Test all other navigation links
+
+## Related Files
+
+- `app/templates/base.html`
+- `app/components/urls.py`
+- `app/blocks/urls.py`
+
+## Notes
+
+- Review all navigation links for consistency
+- Consider adding automated navigation tests

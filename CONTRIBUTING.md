@@ -52,7 +52,7 @@
 
 5. **Run tests:**
    ```bash
-   DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env python -m pytest
+   uv run pytest
    ```
 
 ## Making Changes
@@ -75,15 +75,15 @@
 
 2. **Test Execution** (using pytest + Django)
    ```bash
-   # Run all tests with PostgreSQL
-   DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env python -m pytest
+   # Run all tests
+   uv run pytest
    
    # Run specific app tests
-   DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env python -m pytest blocks/
+   uv run pytest app/blocks/
    
    # Run with coverage
-   DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env coverage run -m pytest
-   DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env coverage report
+   uv run pytest --cov
+   uv run pytest --cov --cov-report=html
    ```
 
 3. **Coverage Requirements**
@@ -192,9 +192,9 @@ If modifying Dockerfile, docker-compose.yml, or nginx.conf:
 ## Submitting Changes
 
 1. **Before creating a PR:**
-   - Run full test suite: `DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env python -m pytest`
-   - Check coverage: `DJANGO_SETTINGS_MODULE=se2CalcProject.settings uv run --env-file .env coverage report` (≥80%)
-   - Run migrations on clean database: `uv run --env-file .env python manage.py migrate`
+   - Run full test suite: `uv run pytest`
+   - Check coverage: `uv run pytest --cov` (≥80%)
+   - Run migrations on clean database: `uv run python manage.py migrate`
    - Format code (follow PEP 8)
 
 2. **Create a Pull Request:**
