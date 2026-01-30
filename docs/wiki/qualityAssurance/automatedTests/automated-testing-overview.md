@@ -546,6 +546,7 @@ uv run python manage.py test
 
 ### Internal Documentation
 
+- [Pytest Configuration](./pytest-configuration.md) - Pytest setup and configuration
 - [Unit Test Guide](./automated-testing-unit-tests.md) - Writing and organizing unit tests
 - [Integration Test Guide](./automated-testing-integration-tests.md) - Integration test procedures
 - [Coverage Guide](./automated-testing-coverage.md) - Code coverage best practices

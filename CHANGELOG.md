@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phase 3: Build Order Calculator (planned)
 - REST API for Blocks module (ENH-0000008 - planned)
 
+## [0.4.2-alpha] - 2026-01-26
+
+### Fixed
+- ISSUE-006: Pytest configuration missing after refactor
+  - Created `app/conftest.py` to configure Django settings before pytest runs
+  - Added `[tool.pytest.ini_options]` section to `pyproject.toml`
+  - All automated tests now run successfully with `uv run pytest`
+
+### Changed
+- Updated CONTRIBUTING.md with simplified pytest commands
+- Added pytest configuration documentation to project wiki
+- Updated automated testing overview with pytest configuration link
+
 ## [0.4.1-alpha] - 2026-01-26
 
 ### Changed
@@ -268,7 +281,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.1-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.2-alpha...HEAD
+[0.4.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.1-alpha...v0.4.2-alpha
+[0.4.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.0-alpha...v0.4.1-alpha
+[0.4.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.1-alpha...v0.4.0-alpha
 [0.3.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.3.0-alpha...v0.3.1-alpha
 [0.3.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.3-alpha...v0.3.0-alpha
 [0.2.3-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.2.2-alpha...v0.2.3-alpha
