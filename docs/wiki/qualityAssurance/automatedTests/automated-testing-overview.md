@@ -503,7 +503,7 @@ When running tests with `uv run python manage.py test`, you may see logger warni
 Component creation failed - validation errors: <ul class="errorlist">...
 ............................................................................................................................................
 ----------------------------------------------------------------------
-Ran 240 tests in 4.327s
+Ran 107 tests in 4.327s
 
 OK
 ```
