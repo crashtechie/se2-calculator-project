@@ -489,6 +489,45 @@ Destroying test database for alias 'default'...
 
 ---
 
+## Expected Test Output
+
+### Logger Messages During Tests
+
+When running tests with `uv run python manage.py test`, you may see logger warning and error messages interspersed with test progress dots. **This is expected behavior** and does not indicate test failures.
+
+**Example Expected Output:**
+```
+......................Error resolving component invalid-id: ["invalid-id" is not a valid UUID.]
+..Component 00000000-0000-0000-0000-000000000000 not found in database
+..........Block creation failed: <ul class="errorlist">...
+Component creation failed - validation errors: <ul class="errorlist">...
+............................................................................................................................................
+----------------------------------------------------------------------
+Ran 107 tests in 4.327s
+
+OK
+```
+
+**Why These Messages Appear:**
+- Tests intentionally trigger validation errors to verify error handling works correctly
+- Application code logs these events using Python's logging module (logger.warning, logger.error)
+- Logger output is displayed during test execution by default
+
+**What to Look For:**
+- ✅ **Test dots (.)** - Each dot represents a passing test
+- ✅ **"OK" at the end** - All tests passed successfully
+- ❌ **"F" or "E" characters** - Actual test failures or errors (investigate these)
+- ❌ **"FAILED" at the end** - Tests failed (requires attention)
+
+**Suppressing Logger Output (Optional):**
+
+If you prefer cleaner output, add to `pytest.ini` or run with:
+```bash
+uv run python manage.py test --no-input 2>/dev/null
+```
+
+---
+
 ## Troubleshooting Tests
 
 ### Common Issues

@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.4.2-alpha  
+**Version:** 0.5.0-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +10,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.4.2-alpha). The project is under active development with Phase 2 (Views & Templates) complete and core CRUD functionality implemented. Phase 3 (Build Order Calculator) is planned.
+This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is planned next.
 
 ### Current Development Status
 
@@ -18,13 +18,20 @@ This is an early alpha release (0.4.2-alpha). The project is under active develo
   - Ores, Components, Blocks models implemented
   - Fixtures created and validated
   
-- ✅ **Phase 2: Views & Templates** (Completed)
-  - ✅ ENH-0000005: Ores views and templates (Completed)
-  - ✅ ENH-0000006: Components views and templates (Completed)
-  - ✅ ENH-0000007: Blocks views and templates (Completed)
+- ✅ **Phase 2: Views & Templates** (Complete)
+  - ✅ ENH-0000005: Ores views and templates (Complete)
+  - ✅ ENH-0000006: Components views and templates (Complete)
+  - ✅ ENH-0000007: Blocks views and templates (Complete)
+  - ✅ ENH-0000008: Core Infrastructure - Docker stack (Complete)
   
 - ⏳ **Phase 3: Build Order Calculator** (Planned)
-- ⏳ **Phase 4: API Documentation & Architecture Guides** (Planned)
+- ⏳ **Phase 4: Testing, Documentation & Core Infrastructure** (Planned)
+  - Core app with validation mixins and utilities (deferred from ENH-0000008)
+  - API endpoints for AJAX functionality
+  - Structured logging configuration
+  - Custom error pages (404/500)
+  - Additional security settings
+  - Comprehensive test suite (>80% coverage)
   - OpenAPI/Swagger specifications
   - Architecture diagrams and data flow documentation
   - Advanced performance tuning guides
@@ -49,7 +56,7 @@ This is an early alpha release (0.4.2-alpha). The project is under active develo
 - 🐳 Docker Compose stack for web + nginx + PostgreSQL
 - 🛡️ Security headers via nginx reverse proxy
 - 📦 Static files served by nginx with caching
-- 🧪 Testing infrastructure with pytest-django (107 tests, 92% coverage)
+- 🧪 Testing infrastructure with pytest-django (107 tests, 87% coverage)
 - 📝 Comprehensive development documentation
 - 💾 JSONField-based component/material management
 - ⚡ Performance optimization with caching
@@ -179,7 +186,7 @@ se2-calculator-project/
 - Performance optimization
 - Documentation completion
 
-**Estimated Total Timeline:** 9-13 days
+**Estimated Total Timeline:** 10-14 days
 
 ## Configuration
 
