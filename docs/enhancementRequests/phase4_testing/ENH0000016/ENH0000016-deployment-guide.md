@@ -542,7 +542,7 @@ jobs:
       
       - name: Run database migrations
         run: |
-          docker compose exec -T web python manage.py migrate --noinput
+          docker compose exec -T web python app/manage.py migrate --noinput
       
       - name: Test web service endpoint
         run: |
@@ -1815,7 +1815,7 @@ jobs:
       
       - name: Run database migrations
         run: |
-          docker compose exec -T web python manage.py migrate --noinput
+          docker compose exec -T web python app/manage.py migrate --noinput
       
       - name: Test web service endpoint
         run: |
