@@ -1,6 +1,6 @@
 [project]
 name = "se2-calculator-project"
-version = "0.6.0-alpha"
+version = "0.6.1-alpha"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -15,6 +15,7 @@ dependencies = [
     "tblib>=3.2.2",
     "uuid-utils>=0.13.0",
     "uuid7>=0.1.0",
+    "yamllint>=1.38.0",
 ]
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "se2CalcProject.settings"

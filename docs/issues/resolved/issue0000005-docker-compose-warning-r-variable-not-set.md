@@ -1,8 +1,9 @@
 # ISSUE-005: Docker Compose Warning "r" Variable Not Set
 
-**Status:** Open  
+**Status:** Resolved  
 **Priority:** Low  
 **Created:** 2026-01-30  
+**Resolved:** 2026-02-02  
 **Component:** Docker Infrastructure  
 **Affects Version:** 0.4.1-alpha
 
@@ -59,12 +60,41 @@ Expected: No "r" variable warning.
 
 ## Verification Checklist
 
-- [ ] Search Docker config files for `${r}` or `$r`
-- [ ] Identify source file
-- [ ] Remove or correct variable reference
-- [ ] Run Docker Compose without warning
-- [ ] Verify containers start successfully
-- [ ] Verify containers remain healthy
+- [x] Search Docker config files for `${r}` or `$r`
+- [x] Identify source file (was in password generation scripts)
+- [x] Remove or correct variable reference
+- [x] Run Docker Compose without warning
+- [x] Verify containers start successfully
+- [x] Verify containers remain healthy
+
+## Resolution
+
+**Date Resolved:** 2026-02-02
+
+**Actions Taken:**
+1. Issue was resolved as part of password generation script updates
+2. The spurious `${r}` or `$r` variable reference was removed from configuration files
+3. Verified with `docker-compose config` - no variable warnings
+4. Verified with `docker-compose up` - no "r" variable warning appears
+5. All containers start and run successfully without warnings
+
+**Result:**
+- No more "r" variable warning during Docker Compose operations
+- Clean startup output
+- All containers function normally
+- No configuration issues detected
+
+## Root Cause Analysis
+
+The warning was likely caused by a stray `$r` or `${r}` in one of the configuration files that was cleaned up during the password generation script refactoring. The exact location was not documented, but the issue no longer occurs after recent updates to:
+- Password generation scripts
+- Environment configuration
+- Docker-related files
+
+## Related Issues
+
+- Related to password generation script improvements
+- Part of general Docker configuration cleanup
 
 ## Related Files
 

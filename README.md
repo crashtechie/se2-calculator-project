@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.6.0-alpha  
+**Version:** 0.6.1-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +10,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.6.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented.
+This is an early alpha release (0.6.1-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented. Docker infrastructure has been stabilized with all known issues resolved.
 
 ### Current Development Status
 
@@ -63,9 +63,10 @@ This is an early alpha release (0.6.0-alpha). Phase 2 (Views & Templates) is com
 - 🚀 Built on Django 6.0.1 framework
 - 🐘 PostgreSQL database support with SQLite fallback
 - 🔒 Secure environment-based configuration
-- 🐳 Docker Compose stack for web + nginx + PostgreSQL
+- 🐳 Docker Compose stack for web + nginx + PostgreSQL (fully operational)
 - 🛡️ Security headers via nginx reverse proxy
 - 📦 Static files served by nginx with caching
+- ❤️ Health check endpoints for container monitoring
 - 🧪 Testing infrastructure with pytest-django (107 tests, 87% coverage)
 - 📝 Comprehensive development documentation
 - 💾 JSONField-based component/material management
@@ -132,17 +133,32 @@ docker compose build
 docker compose up -d
 
 # Apply migrations
-docker compose exec web python manage.py migrate
+docker compose exec web python app/manage.py migrate
 
-# Verify
-curl -I http://localhost/
-curl -I http://localhost/static/css/main.css
+# Create superuser (optional)
+docker compose exec web python app/manage.py createsuperuser
+
+# Load sample data (optional)
+docker compose exec web python app/manage.py loaddata sample_ores sample_components sample_blocks
+
+# Verify health
+curl http://localhost/health/
+
+# Access application
+open http://localhost/
 ```
 
-Notes:
-- Set DB_HOST=database in your .env when using Docker
+**Important Notes:**
+- Set `DB_HOST=database` in your `.env` when using Docker
 - nginx listens on port 80; Django runs internally on port 8000
-- Logs and static files persist via named volumes (logs, static_files)
+- Logs and static files persist via named volumes (`logs`, `static_files`)
+- Health check endpoint available at `/health/`
+- All containers include health checks and will show as "healthy" when ready
+
+**Troubleshooting:**
+- If containers fail to start, check logs: `docker compose logs web`
+- If database connection fails, recreate volumes: `docker compose down -v && docker compose up -d`
+- If health checks fail, verify nginx configuration and Django ALLOWED_HOSTS setting
 
 ## Development Setup
 
@@ -243,14 +259,30 @@ uv run pytest path/to/test_file.py
 
 ### Database Container Management
 ```bash
-# Start PostgreSQL container
+# Start full stack (web + nginx + database)
 docker compose up -d
 
-# Stop PostgreSQL container
+# Stop all services
 docker compose down
 
-# View logs
-docker compose logs -f
+# Stop and remove volumes (WARNING: destroys data)
+docker compose down -v
+
+# View logs for specific service
+docker compose logs -f web
+docker compose logs -f database
+docker compose logs -f nginx
+
+# Check container health status
+docker compose ps
+
+# Restart a specific service
+docker compose restart web
+docker compose restart nginx
+
+# Execute commands in web container
+docker compose exec web python app/manage.py migrate
+docker compose exec web python app/manage.py createsuperuser
 ```
 
 ## Testing

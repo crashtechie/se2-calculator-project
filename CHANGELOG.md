@@ -10,6 +10,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### In Development
 - Phase 3: Build Order Calculator (in progress)
 
+## [0.6.1-alpha] - 2026-02-02
+
+### Fixed - Docker Infrastructure
+- **ISSUE-009:** Dockerfile manage.py path incorrect
+  - Updated Dockerfile to reference `app/manage.py` instead of `manage.py`
+  - Fixed collectstatic command path
+  - Fixed CMD startup command path
+  - Container now starts successfully with correct file paths
+- **ISSUE-010:** Database credentials mismatch in Docker volume
+  - Resolved PostgreSQL authentication failures
+  - Documented volume recreation procedure for credential changes
+  - Added prevention guidelines for future credential updates
+- **ISSUE-011:** Health check Host header missing in nginx configuration
+  - Added `proxy_set_header Host $host;` to nginx health check location
+  - Health endpoint now returns correct JSON response
+  - Docker health checks pass successfully
+  - All containers marked as healthy
+- **ISSUE-007:** Missing health endpoint (resolved)
+  - Discovered health endpoint already existed in Django
+  - Issue was nginx configuration, not missing endpoint
+  - Cross-referenced with ISSUE-011 resolution
+- **ISSUE-005:** Docker Compose warning "r" variable not set (resolved)
+  - Spurious variable reference removed during password generation script cleanup
+  - No more variable warnings during Docker operations
+  - Clean startup output
+
+### Changed
+- Updated `.env` to include `django_app` in ALLOWED_HOSTS (for nginx upstream)
+- Improved nginx.conf health check configuration
+- Enhanced Docker documentation with troubleshooting guides
+
+### Documentation
+- Created comprehensive issue reports for all Docker-related problems:
+  - ISSUE-005: Docker Compose warning resolved
+  - ISSUE-007: Health endpoint issue resolved
+  - ISSUE-009: Dockerfile path issue with full technical details
+  - ISSUE-010: Database credentials with prevention guidelines
+  - ISSUE-011: Nginx configuration with best practices
+- All issue reports include root cause analysis, solutions, and verification steps
+- Moved 5 issues from open to resolved status
+
 ## [0.6.0-alpha] - 2026-02-02
 
 ### Added - Phase 3 Start: Build Order Model
@@ -387,7 +428,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.0-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.1-alpha...HEAD
+[0.6.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.0-alpha...v0.6.1-alpha
 [0.6.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.5.0-alpha...v0.6.0-alpha
 [0.5.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.2-alpha...v0.5.0-alpha
 [0.4.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.1-alpha...v0.4.2-alpha

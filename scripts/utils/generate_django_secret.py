@@ -1,12 +1,40 @@
 ## This script generates a new django secret key and updates the .env file accordingly.
 import os
 import re
+import secrets
+import string
 
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
 
 # Get grandparent directory of the current file
 PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
+
+def generate_safe_secret_key(length=50):
+    """
+    Generate a Django-compatible secret key without problematic special characters.
+    
+    Excludes characters that can cause issues with:
+    - Shell variable substitution: $ ! ` \
+    - Docker Compose variable substitution: $
+    - YAML parsing issues: : { } [ ] , & * # ? | - < > = ! % @ `
+    
+    Uses only alphanumeric characters and safe special characters: - _ + . ~
+    This provides sufficient entropy while avoiding shell/Docker conflicts.
+    
+    Args:
+        length: Length of the secret key (default: 50 characters)
+        
+    Returns:
+        A secure random string safe for use in .env files
+    """
+    # Safe character set: alphanumeric + safe special characters
+    # Excludes: $ ! ` \ : { } [ ] , & * # ? | < > = % @
+    safe_chars = string.ascii_letters + string.digits + '-_+.~'
+    
+    # Generate cryptographically secure random string
+    secret_key = ''.join(secrets.choice(safe_chars) for _ in range(length))
+    
+    return secret_key
 
 def generate_django_secret():
     # check if .env file exists in parent directory
@@ -20,8 +48,8 @@ def generate_django_secret():
     with open(env_file, 'r') as f:
         content = f.read()
 
-    # Generate a new secret key
-    new_secret_key = get_random_secret_key()
+    # Generate a new secret key (safe for shell/Docker)
+    new_secret_key = generate_safe_secret_key()
 
     # Replace the old secret key with the new one
     content = re.sub(r"SECRET_KEY=(.*)", f"SECRET_KEY={new_secret_key}", content)
@@ -30,7 +58,9 @@ def generate_django_secret():
     with open(env_file, 'w') as f:
         f.write(content)
 
-    print(f"New secret key generated and updated in {env_file}  successfully.")
+    print(f"New secret key generated and updated in {env_file} successfully.")
+    print(f"Secret key length: {len(new_secret_key)} characters")
+    print(f"Character set: alphanumeric + safe special characters (-_+.~)")
     
 if __name__ == "__main__":
     generate_django_secret()
