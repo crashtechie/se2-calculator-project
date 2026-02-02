@@ -132,11 +132,11 @@ Create `.github/workflows/test.yml` with:
 **Configuration:**
 ```yaml
 name: Tests
-on: 
+on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   test:
@@ -187,14 +187,14 @@ Create `.github/workflows/docker.yml` with:
 name: Docker Build
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'nginx.conf'
       - '.dockerignore'
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
@@ -261,9 +261,9 @@ Create `.github/workflows/lint.yml` with:
 name: Code Quality
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   lint:

@@ -421,9 +421,9 @@ name: Tests
 
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   test:
@@ -494,14 +494,14 @@ name: Docker Build
 
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'nginx.conf'
       - '.dockerignore'
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
@@ -607,9 +607,9 @@ name: Code Quality
 
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   lint:
@@ -1723,9 +1723,9 @@ name: Tests
 
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   test:
@@ -1767,14 +1767,14 @@ name: Docker Build
 
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'nginx.conf'
       - '.dockerignore'
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
@@ -1851,9 +1851,9 @@ name: Code Quality
 
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   lint:
