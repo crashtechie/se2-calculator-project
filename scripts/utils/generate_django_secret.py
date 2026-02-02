@@ -2,12 +2,15 @@
 import os
 import re
 
+from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
+# Get grandparent directory of the current file
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
 
 def generate_django_secret():
     # check if .env file exists in parent directory
-    env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+    env_file = os.path.join(PROJECT_ROOT, '.env')
     if not os.path.exists(env_file):
         ## return error if it doesn't exist informing user to create one from .env.example
         print(f".env file not found at {env_file}. Please create one from .env.example before running this script.")

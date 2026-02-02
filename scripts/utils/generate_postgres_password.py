@@ -4,9 +4,13 @@ import os
 import re
 import secrets
 
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).parent.parent.parent.absolute()
+
 def generate_postgres_password():
     # check if .env file exists in parent directory
-    env_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+    env_file = os.path.join(PROJECT_ROOT, '.env')
     if not os.path.exists(env_file):
         ## return error if it doesn't exist informing user to create one from .env.example
         print(f".env file not found at {env_file}. Please create one from .env.example before running this script.")
