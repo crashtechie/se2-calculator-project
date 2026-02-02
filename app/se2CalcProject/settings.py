@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ores', # ENH-0000001: Ores app
     'components', # ENH-0000002: Components app
     'blocks', # ENH-0000003: Blocks app
+    'buildorders', # ENH-0000009: Build Orders app
 ]
 
 MIDDLEWARE = [

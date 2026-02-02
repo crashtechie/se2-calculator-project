@@ -1,6 +1,6 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.5.0-alpha  
+**Version:** 0.6.0-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +10,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is planned next.
+This is an early alpha release (0.6.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented.
 
 ### Current Development Status
 
@@ -24,7 +24,17 @@ This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is com
   - ✅ ENH-0000007: Blocks views and templates (Complete)
   - ✅ ENH-0000008: Core Infrastructure - Docker stack (Complete)
   
-- ⏳ **Phase 3: Build Order Calculator** (Planned)
+- 🚧 **Phase 3: Build Order Calculator** (In Progress)
+  - ✅ ENH-0000009: BuildOrder Model & Core Logic (Complete)
+    - BuildOrder model with UUIDv7 primary keys
+    - Calculation methods for resource aggregation
+    - Caching system with 5-minute TTL
+    - Admin interface with custom displays
+    - 52 comprehensive tests (90% coverage)
+    - Complete documentation (algorithms, deployment, post-deployment)
+  - ⏳ ENH-0000010: Build Order Views & Templates (Planned)
+  - ⏳ ENH-0000011: Dynamic Block Selector (Planned)
+  
 - ⏳ **Phase 4: Testing, Documentation & Core Infrastructure** (Planned)
   - Core app with validation mixins and utilities (deferred from ENH-0000008)
   - API endpoints for AJAX functionality
