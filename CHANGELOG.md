@@ -84,9 +84,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed conflicting `static_files` named volume mount that was creating empty directory
   - Updated nginx service to use project mount (`.:/app:ro`) for static file access
   - Removed unused `static_files` volume definition from docker-compose.yml
+  - Fixed Dockerfile permissions: create appuser before staticfiles directory, set proper ownership
+  - Run collectstatic as appuser instead of root to prevent PermissionError
   - Added explicit `collectstatic` step to CI/CD workflow for verification
   - Updated `.gitignore` to exclude generated `staticfiles/` directory
-  - Root cause: Volume mount path mismatch with nested Django project structure
+  - Root cause: Volume mount path mismatch with nested Django project structure + permission issues
   - Static files now serve correctly through nginx with 200 OK response
   - CI/CD Docker build workflow now passes static file serving test
 

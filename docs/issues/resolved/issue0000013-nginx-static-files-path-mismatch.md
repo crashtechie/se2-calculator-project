@@ -173,17 +173,30 @@ Update `.github/workflows/docker.yml` to ensure static files are collected:
 3. Updated nginx service to use project mount (`.:/app:ro`)
 4. Removed unused `static_files` volume definition
 5. Added explicit `collectstatic` step to CI/CD workflow
-6. Rebuilt containers and verified static files are accessible
-7. Updated `.gitignore` to exclude `staticfiles/` directory
+6. Fixed Dockerfile permissions issue:
+   - Create `appuser` before creating staticfiles directory
+   - Set proper ownership (`appuser:appuser`) on `/app/app/staticfiles`
+   - Run `collectstatic` as `appuser` instead of root
+   - Prevents PermissionError when CI/CD runs collectstatic
+7. Rebuilt containers and verified static files are accessible
+8. Updated `.gitignore` to exclude `staticfiles/` directory
 
 **Verification Results:**
 ```bash
-$ docker compose exec nginx ls -la /app/app/staticfiles/css/
-total 12
-drwxrwxr-x    2 1000     1000          4096 Feb  3 06:24 .
-drwxrwxr-x    5 1000     1000          4096 Feb  3 06:16 ..
--rw-r--r--    1 root     root          3747 Feb  3 06:24 main.css
+# Check directory ownership
+$ docker compose exec web ls -la /app/app/staticfiles/
+total 20
+drwxrwxr-x  5 appuser appuser 4096 Feb  3 06:16 .
+drwxr-xr-x 11 appuser appuser 4096 Feb  3 06:16 ..
+drwxrwxr-x  5 appuser appuser 4096 Feb  3 06:16 admin
+drwxrwxr-x  2 appuser appuser 4096 Feb  3 06:45 css
+drwxrwxr-x  2 appuser appuser 4096 Feb  3 06:45 js
 
+# Test collectstatic as CI/CD does
+$ docker compose exec -T web python app/manage.py collectstatic --noinput --clear
+133 static files deleted, 133 static files copied to '/app/app/staticfiles'.
+
+# Verify static file serving
 $ curl -f -s -o /dev/null -w "%{http_code}" http://localhost/static/css/main.css
 200
 
