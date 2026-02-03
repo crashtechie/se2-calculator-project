@@ -27,18 +27,19 @@ RUN pip install uv && \
 # Copy project code
 COPY . .
 
-# Create logs and staticfiles directories
-RUN mkdir -p /app/logs /app/staticfiles && \
-    chmod 755 /app/logs /app/staticfiles
-
-# Collect static files for production
-RUN python app/manage.py collectstatic --noinput --clear || echo "Warning: collectstatic failed, continuing..."
-
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
+# Create logs and staticfiles directories with proper ownership
+RUN mkdir -p /app/logs /app/app/staticfiles && \
+    chown -R appuser:appuser /app/logs /app/app/staticfiles && \
+    chmod 755 /app/logs /app/app/staticfiles
+
 USER appuser
+
+# Collect static files for production (as appuser)
+RUN python app/manage.py collectstatic --noinput --clear || echo "Warning: collectstatic failed, continuing..."
 
 # Expose port for Django application
 EXPOSE 8000
