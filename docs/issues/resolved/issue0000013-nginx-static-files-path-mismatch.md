@@ -172,12 +172,14 @@ Update `.github/workflows/docker.yml` to ensure static files are collected:
 2. Removed conflicting `static_files` volume mount from `docker-compose.yml`
 3. Updated nginx service to use project mount (`.:/app:ro`)
 4. Removed unused `static_files` volume definition
-5. Added explicit `collectstatic` step to CI/CD workflow
-6. Fixed Dockerfile permissions issue:
+5. Fixed Dockerfile permissions issue:
    - Create `appuser` before creating staticfiles directory
    - Set proper ownership (`appuser:appuser`) on `/app/app/staticfiles`
-   - Run `collectstatic` as `appuser` instead of root
-   - Prevents PermissionError when CI/CD runs collectstatic
+   - Run `collectstatic` as `appuser` instead of root during build
+6. Simplified CI/CD workflow:
+   - Removed explicit `collectstatic` step (files already collected during build)
+   - Static files from Docker build are accessible through volume mount
+   - Avoids permission errors from volume mount overwriting ownership
 7. Rebuilt containers and verified static files are accessible
 8. Updated `.gitignore` to exclude `staticfiles/` directory
 
@@ -205,9 +207,11 @@ $ curl -f -s -o /dev/null -w "%{http_code}" http://localhost/
 ```
 
 **Result:**
-- Static files now serve correctly through nginx
-- CI/CD workflow passes static file test
-- No 404 errors in nginx logs
+- Static files now serve correctly through nginx with 200 OK response
+- CI/CD Docker build workflow passes all tests
+- No permission errors in CI/CD
+- Static files collected during build are accessible through volume mount
+- Simplified workflow without redundant collectstatic step
 - All containers healthy and functioning
 
 ## Technical Explanation
