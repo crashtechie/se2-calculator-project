@@ -3,9 +3,9 @@ name: Code Quality
 
 on:
   push:
-    branches: [main, development, 'enhancement/**']
+    branches: [main, develop, 'enhancement/**']
   pull_request:
-    branches: [main, development]
+    branches: [main, develop]
 
 jobs:
   lint:
