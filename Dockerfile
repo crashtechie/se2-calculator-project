@@ -27,6 +27,10 @@ RUN pip install uv && \
 # Copy project code
 COPY . .
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
@@ -50,5 +54,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Default command - for development
 # Production should use gunicorn or similar
-CMD ["sh", "-c", "python app/manage.py migrate --noinput && python app/manage.py runserver 0.0.0.0:8000"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 # CI/CD test - trigger Docker workflow validation

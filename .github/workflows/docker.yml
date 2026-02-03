@@ -33,10 +33,10 @@ jobs:
           echo "DB_HOST=database" >> .env
 
       - name: Build Docker images
-        run: docker compose build
+        run: docker compose -f docker-compose.yml build
 
       - name: Start Docker stack
-        run: docker compose up -d
+        run: docker compose -f docker-compose.yml up -d
 
       - name: Wait for services to initialize
         run: |
@@ -46,12 +46,12 @@ jobs:
       - name: Check service health
         run: |
           echo "Checking service status..."
-          docker compose ps
-          docker compose ps | grep -q "Up" || exit 1
+          docker compose -f docker-compose.yml ps
+          docker compose -f docker-compose.yml ps | grep -q "Up" || exit 1
 
       - name: Run database migrations
         run: |
-          docker compose exec -T web python app/manage.py migrate --noinput
+          docker compose -f docker-compose.yml exec -T web python app/manage.py migrate --noinput
 
       - name: Test web service endpoint
         run: |
@@ -69,12 +69,12 @@ jobs:
         if: failure()
         run: |
           echo "=== Web Service Logs ==="
-          docker compose logs web
+          docker compose -f docker-compose.yml logs web
           echo "=== Nginx Logs ==="
-          docker compose logs nginx
+          docker compose -f docker-compose.yml logs nginx
           echo "=== Database Logs ==="
-          docker compose logs database
+          docker compose -f docker-compose.yml logs database
 
       - name: Tear down stack
         if: always()
-        run: docker compose down -v
+        run: docker compose -f docker-compose.yml down -v

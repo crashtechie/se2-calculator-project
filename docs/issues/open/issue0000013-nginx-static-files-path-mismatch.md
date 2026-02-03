@@ -1,9 +1,9 @@
 # ISSUE-013: Nginx Static Files Path Mismatch in Docker Environment
 
-**Status:** Resolved  
+**Status:** Open  
 **Priority:** High  
 **Created:** 2026-02-03  
-**Resolved:** 2026-02-03  
+**Resolved:** Not yet resolved  
 **Component:** Docker Infrastructure / Nginx / Static Files  
 **Affects Version:** 0.7.0-alpha
 
@@ -165,7 +165,42 @@ Update `.github/workflows/docker.yml` to ensure static files are collected:
 
 ## Resolution
 
-**Date Resolved:** 2026-02-03
+**Date Resolved:** Not yet resolved
+
+**Current Status:** Issue remains open. Multiple approaches have been attempted but CI/CD workflow still fails.
+
+**Attempts Made:**
+
+### Attempt 1: Fix Path Mismatch (Partial Success)
+1. Updated `nginx.conf` to serve from `/app/app/staticfiles/` instead of `/app/staticfiles/`
+2. Removed conflicting `static_files` volume mount from `docker-compose.yml`
+3. Updated nginx service to use project mount (`.:/app:ro`)
+4. Removed unused `static_files` volume definition
+
+**Result:** Fixed 404 errors locally, but CI/CD still fails with permission errors.
+
+### Attempt 2: Fix Dockerfile Permissions (Partial Success)
+1. Reordered Dockerfile to create `appuser` before creating directories
+2. Set proper ownership (`appuser:appuser`) on `/app/app/staticfiles`
+3. Run `collectstatic` as `appuser` during Docker build
+
+**Result:** Works locally, but CI/CD fails because volume mount `.:/app` overwrites ownership with GitHub Actions runner user.
+
+### Attempt 3: Remove Collectstatic from CI/CD (Current)
+1. Removed explicit `collectstatic` step from CI/CD workflow
+2. Rely on static files collected during Docker build
+
+**Result:** Still investigating. Static files should be accessible through volume mount.
+
+**Next Steps:**
+1. Review latest CI/CD logs to identify current failure point
+2. Consider alternative approaches:
+   - Use docker-compose override for development vs CI/CD
+   - Copy static files to a different location accessible by both
+   - Use a shared volume with proper permissions
+   - Serve static files directly from Django in CI/CD (DEBUG=True)
+
+## Previous Resolution Attempts
 
 **Actions Taken:**
 1. Updated `nginx.conf` to serve from `/app/app/staticfiles/` instead of `/app/staticfiles/`

@@ -173,6 +173,7 @@ credentials.json
 config.local.*
 
 # Logs and databases
+logs/
 *.log
 *.sql
 *.sqlite

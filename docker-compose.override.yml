@@ -1,0 +1,25 @@
+# Docker Compose Override for Development
+# This file is automatically loaded by docker-compose in addition to docker-compose.yml
+# It provides development-specific configurations like volume mounts for live code reloading
+#
+# For CI/CD or production, this file should NOT be used.
+# Use: docker-compose -f docker-compose.yml up (without override)
+
+services:
+  # Development overrides for web service
+  web:
+    volumes:
+      # Mount entire project for development (live code reloading)
+      - .:/app
+      # Persist logs across container restarts
+      - logs:/app/logs
+
+  # Development overrides for nginx service
+  nginx:
+    volumes:
+      # Nginx configuration
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Serve static files from project mount (read-only for nginx)
+      - .:/app:ro
+      # Access logs directory (optional)
+      - logs:/app/logs:ro
