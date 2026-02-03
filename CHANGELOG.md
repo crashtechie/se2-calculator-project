@@ -10,6 +10,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### In Development
 - Phase 3: Build Order Calculator (in progress)
 
+## [0.7.0-alpha] - 2026-02-02
+
+### Added - CI/CD Pipeline (ENH-0000016)
+- **GitHub Actions workflow for automated testing**
+  - Runs pytest suite on every push and PR
+  - Executes 107+ tests with 87%+ coverage
+  - Generates coverage reports in XML and terminal formats
+  - Uploads coverage to Codecov (optional)
+  - Uses UV package manager for fast dependency installation
+  - Forces SQLite in CI for consistent test environment
+  - Completes in ~2-3 minutes
+- **Docker build validation workflow**
+  - Validates Docker stack builds correctly
+  - Tests service health and endpoints
+  - Runs database migrations in containerized environment
+  - Validates static file serving through nginx
+  - Only runs on infrastructure file changes (Dockerfile, docker-compose.yml, nginx.conf, .dockerignore)
+  - Includes comprehensive logging on failure
+  - Automatic cleanup with volume removal
+  - Completes in ~5-7 minutes
+- **Code quality workflow**
+  - Runs Ruff linter on Python code (app/ and scripts/)
+  - Checks code formatting standards
+  - Provides non-blocking quality feedback
+  - Continues workflow even with linting issues
+  - Completes in ~1 minute
+- **Workflow status badges in README**
+  - Tests badge with link to workflow runs
+  - Docker Build badge with link to workflow runs
+  - Code Quality badge with link to workflow runs
+  - Codecov coverage badge (optional)
+  - Real-time status visibility
+- **Comprehensive CI/CD documentation**
+  - Pipeline overview (docs/wiki/cicd/cicd-overview.md)
+  - Detailed workflow documentation (docs/wiki/cicd/github-actions-workflows.md)
+  - Troubleshooting guide (docs/wiki/cicd/troubleshooting-workflows.md)
+  - Step-by-step deployment guide
+  - Common issues and solutions
+  - Local debugging instructions
+
+### Changed
+- **README.md:** Added workflow status badges at top of document
+- **Development workflow:** Tests now run automatically on push
+- **pyproject.toml:** Added pytest-cov>=6.0.0 dependency for coverage reporting
+- **Code formatting:** Applied Ruff formatting to 54 Python files across codebase
+- **Code quality:** Removed unused imports and fixed linting issues
+
+### Technical Details
+- All workflows use Python 3.13
+- All workflows use UV package manager for fast dependency management
+- Test workflow runs in ~2-3 minutes
+- Docker workflow runs in ~5-7 minutes (conditional)
+- Lint workflow runs in ~1 minute
+- Total CI time: ~3-8 minutes depending on triggers
+- Workflows trigger on push to main, development, and enhancement/** branches
+- Pull requests to main and development trigger all applicable workflows
+- Docker workflow uses path filters for efficiency
+- Test workflow uses SQLite to avoid PostgreSQL dependency in CI
+- All workflows include proper error handling and logging
+
+### Benefits
+- **Automated quality assurance:** Every code change is tested automatically
+- **Early bug detection:** Issues caught before merge
+- **Faster development:** Immediate feedback on changes
+- **Team collaboration:** Consistent quality standards across contributors
+- **Professional practices:** Industry-standard CI/CD implementation
+- **Visibility:** Build status visible via badges and PR checks
+
+
+
 ## [0.6.1-alpha] - 2026-02-02
 
 ### Fixed - Docker Infrastructure
