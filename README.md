@@ -1,5 +1,10 @@
 # Space Engineers 2 Calculator Project
 
+[![Tests](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml)  
+[![Docker Build](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml)  
+[![Code Quality](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml)  
+[![codecov](https://codecov.io/gh/crashtechie/se2-calculator-project/branch/main/graph/badge.svg)](https://codecov.io/gh/crashtechie/se2-calculator-project)  
+
 **Version:** 0.6.1-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
