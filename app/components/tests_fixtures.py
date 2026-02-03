@@ -17,7 +17,9 @@ class ComponentFixtureValidationTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.components = json.loads(Path("components/fixtures/sample_components.json").read_text())
+        cls.components = json.loads(
+            Path("components/fixtures/sample_components.json").read_text()
+        )
         cls.ores = json.loads(Path("ores/fixtures/sample_ores.json").read_text())
         cls.ore_ids = {entry["pk"] for entry in cls.ores}
 
@@ -48,7 +50,9 @@ class ComponentFixtureUUIDTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.components = json.loads(Path("components/fixtures/sample_components.json").read_text())
+        cls.components = json.loads(
+            Path("components/fixtures/sample_components.json").read_text()
+        )
         cls.component_ids = [entry["pk"] for entry in cls.components]
 
     def test_all_component_uuids_valid_v7(self):
@@ -59,4 +63,6 @@ class ComponentFixtureUUIDTests(TestCase):
         self.assertEqual(len(self.component_ids), len(set(self.component_ids)))
 
     def test_no_placeholder_uuids(self):
-        self.assertFalse(any("REPLACE_WITH" in comp_id for comp_id in self.component_ids))
+        self.assertFalse(
+            any("REPLACE_WITH" in comp_id for comp_id in self.component_ids)
+        )

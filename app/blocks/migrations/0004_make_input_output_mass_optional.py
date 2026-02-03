@@ -4,20 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blocks', '0003_remove_pcu_cost'),
+        ("blocks", "0003_remove_pcu_cost"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='block',
-            name='input_mass',
-            field=models.IntegerField(blank=True, help_text='Input mass capacity in kg (optional - only for production blocks)', null=True),
+            model_name="block",
+            name="input_mass",
+            field=models.IntegerField(
+                blank=True,
+                help_text="Input mass capacity in kg (optional - only for production blocks)",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='block',
-            name='output_mass',
-            field=models.IntegerField(blank=True, help_text='Output mass capacity in kg (optional - only for production blocks)', null=True),
+            model_name="block",
+            name="output_mass",
+            field=models.IntegerField(
+                blank=True,
+                help_text="Output mass capacity in kg (optional - only for production blocks)",
+                null=True,
+            ),
         ),
     ]

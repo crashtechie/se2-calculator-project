@@ -18,7 +18,9 @@ class BlockFixtureValidationTests(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.blocks = json.loads(Path("blocks/fixtures/sample_blocks.json").read_text())
-        cls.components = json.loads(Path("components/fixtures/sample_components.json").read_text())
+        cls.components = json.loads(
+            Path("components/fixtures/sample_components.json").read_text()
+        )
         cls.component_ids = {entry["pk"] for entry in cls.components}
 
     def test_minimum_block_count(self):

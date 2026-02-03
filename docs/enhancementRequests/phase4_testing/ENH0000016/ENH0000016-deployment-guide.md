@@ -6,7 +6,10 @@
 **Created:** 2026-02-02  
 **Last Updated:** 2026-02-02  
 **Estimated Time:** 4-6 hours  
-**Difficulty Level:** Medium
+**Difficulty Level:** Medium  
+**Assigned To** Dan Smith (CrashTechie)  
+**Start Date/Time** 2026-02-01 22:00 CT  
+**End Date/Time**  
 
 ---
 
