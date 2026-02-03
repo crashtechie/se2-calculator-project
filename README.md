@@ -3,7 +3,7 @@
 [![Tests](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml)  
 [![Docker Build](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml)  
 [![Code Quality](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml)  
-[![codecov](https://codecov.io/gh/crashtechie/se2-calculator-project/branch/main/graph/badge.svg)](https://codecov.io/github/crashtechie/se2-calculator-project)  
+[![codecov](https://codecov.io/github/crashtechie/se2-calculator-project/graph/badge.svg?token=TohStlR1r2)](https://codecov.io/github/crashtechie/se2-calculator-project)  
 
 **Version:** 0.6.1-alpha  
 **License:** MIT  
