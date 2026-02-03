@@ -58,6 +58,8 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+staticfiles/
+app/staticfiles/
 
 # Flask stuff:
 instance/
@@ -171,6 +173,7 @@ credentials.json
 config.local.*
 
 # Logs and databases
+logs/
 *.log
 *.sql
 *.sqlite
@@ -200,3 +203,6 @@ backup/
 
 # Placeholder to ensure directory is tracked
 !scripts/tests/testResults/.placeholder
+
+#Kiro
+.kiro/

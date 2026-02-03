@@ -1,8 +1,9 @@
 # ISSUE-007: Missing Health Endpoint for Docker Health Check
 
-**Status:** Open  
+**Status:** Resolved  
 **Priority:** Medium  
 **Created:** 2026-01-30  
+**Resolved:** 2026-02-02  
 **Component:** Docker Infrastructure  
 **Affects Version:** 0.4.2-alpha
 
@@ -77,12 +78,34 @@ HEALTHCHECK CMD python manage.py check --deploy || exit 1
 
 ## Verification Checklist
 
-- [ ] Choose solution approach
-- [ ] Implement health endpoint or modify check
-- [ ] Rebuild Docker image
-- [ ] Verify health check passes
-- [ ] Test with `docker inspect <container>` shows healthy
-- [ ] Update nginx.conf if needed (already has /health/ location)
+- [x] Choose solution approach (Option 2 - health endpoint already existed)
+- [x] Verify health endpoint exists at `/health/`
+- [x] Fix nginx configuration to pass Host header (see ISSUE-011)
+- [x] Rebuild Docker image
+- [x] Verify health check passes
+- [x] Test with `docker inspect <container>` shows healthy
+- [x] Verify nginx.conf /health/ location works correctly
+
+## Resolution
+
+**Date Resolved:** 2026-02-02
+
+**Actions Taken:**
+1. Discovered that health endpoint already existed in `se2CalcProject/urls.py`
+2. Issue was actually nginx configuration not passing Host header (see ISSUE-011)
+3. Fixed nginx.conf to include `proxy_set_header Host $host;` in health check location
+4. Verified health check returns `{"status": "ok"}` with 200 status
+5. Confirmed Docker health check passes successfully
+
+**Result:**
+- Health endpoint works correctly at `/health/`
+- Returns JSON response: `{"status": "ok"}`
+- Docker health check passes
+- All containers marked as healthy
+
+## Related Issues
+
+- ISSUE-011: Health check Host header missing (resolved) - This was the actual root cause
 
 ## Related Files
 

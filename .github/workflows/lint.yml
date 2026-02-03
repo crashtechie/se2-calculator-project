@@ -1,0 +1,42 @@
+---
+name: Code Quality
+
+on:
+  push:
+    branches: [main, develop, 'enhancement/**']
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: |
+          echo "Running Ruff linter..."
+          ruff check app/ scripts/ || echo "Linting issues found (non-blocking)"
+        continue-on-error: true
+
+      - name: Run Ruff formatter check
+        run: |
+          echo "Checking code formatting..."
+          ruff format --check app/ scripts/ || \
+            echo "Formatting issues found (non-blocking)"
+        continue-on-error: true
+
+      - name: Summary
+        run: |
+          echo "Code quality checks complete"
+          echo "Review any issues above and fix in future commits"

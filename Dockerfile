@@ -27,19 +27,23 @@ RUN pip install uv && \
 # Copy project code
 COPY . .
 
-# Create logs directory
-RUN mkdir -p /app/logs && \
-    chmod 755 /app/logs
-
-# Collect static files for production
-# Use || true to continue even if no static files exist
-RUN python manage.py collectstatic --noinput --clear 2>/dev/null || true
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
+# Create logs and staticfiles directories with proper ownership
+RUN mkdir -p /app/logs /app/app/staticfiles && \
+    chown -R appuser:appuser /app/logs /app/app/staticfiles && \
+    chmod 755 /app/logs /app/app/staticfiles
+
 USER appuser
+
+# Collect static files for production (as appuser)
+RUN python app/manage.py collectstatic --noinput --clear || echo "Warning: collectstatic failed, continuing..."
 
 # Expose port for Django application
 EXPOSE 8000
@@ -50,4 +54,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Default command - for development
 # Production should use gunicorn or similar
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+# CI/CD test - trigger Docker workflow validation

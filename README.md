@@ -1,6 +1,11 @@
 # Space Engineers 2 Calculator Project
 
-**Version:** 0.5.0-alpha  
+[![Tests](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/test.yml)  
+[![Docker Build](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/docker.yml)  
+[![Code Quality](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml)  
+[![codecov](https://codecov.io/github/crashtechie/se2-calculator-project/graph/badge.svg?token=TohStlR1r2)](https://codecov.io/github/crashtechie/se2-calculator-project)  
+
+**Version:** 0.7.0-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -10,7 +15,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is planned next.
+This is an early alpha release (0.6.1-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented. Docker infrastructure has been stabilized with all known issues resolved.
 
 ### Current Development Status
 
@@ -24,7 +29,17 @@ This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is com
   - ✅ ENH-0000007: Blocks views and templates (Complete)
   - ✅ ENH-0000008: Core Infrastructure - Docker stack (Complete)
   
-- ⏳ **Phase 3: Build Order Calculator** (Planned)
+- 🚧 **Phase 3: Build Order Calculator** (In Progress)
+  - ✅ ENH-0000009: BuildOrder Model & Core Logic (Complete)
+    - BuildOrder model with UUIDv7 primary keys
+    - Calculation methods for resource aggregation
+    - Caching system with 5-minute TTL
+    - Admin interface with custom displays
+    - 52 comprehensive tests (90% coverage)
+    - Complete documentation (algorithms, deployment, post-deployment)
+  - ⏳ ENH-0000010: Build Order Views & Templates (Planned)
+  - ⏳ ENH-0000011: Dynamic Block Selector (Planned)
+  
 - ⏳ **Phase 4: Testing, Documentation & Core Infrastructure** (Planned)
   - Core app with validation mixins and utilities (deferred from ENH-0000008)
   - API endpoints for AJAX functionality
@@ -53,9 +68,10 @@ This is an early alpha release (0.5.0-alpha). Phase 2 (Views & Templates) is com
 - 🚀 Built on Django 6.0.1 framework
 - 🐘 PostgreSQL database support with SQLite fallback
 - 🔒 Secure environment-based configuration
-- 🐳 Docker Compose stack for web + nginx + PostgreSQL
+- 🐳 Docker Compose stack for web + nginx + PostgreSQL (fully operational)
 - 🛡️ Security headers via nginx reverse proxy
 - 📦 Static files served by nginx with caching
+- ❤️ Health check endpoints for container monitoring
 - 🧪 Testing infrastructure with pytest-django (107 tests, 87% coverage)
 - 📝 Comprehensive development documentation
 - 💾 JSONField-based component/material management
@@ -122,17 +138,32 @@ docker compose build
 docker compose up -d
 
 # Apply migrations
-docker compose exec web python manage.py migrate
+docker compose exec web python app/manage.py migrate
 
-# Verify
-curl -I http://localhost/
-curl -I http://localhost/static/css/main.css
+# Create superuser (optional)
+docker compose exec web python app/manage.py createsuperuser
+
+# Load sample data (optional)
+docker compose exec web python app/manage.py loaddata sample_ores sample_components sample_blocks
+
+# Verify health
+curl http://localhost/health/
+
+# Access application
+open http://localhost/
 ```
 
-Notes:
-- Set DB_HOST=database in your .env when using Docker
+**Important Notes:**
+- Set `DB_HOST=database` in your `.env` when using Docker
 - nginx listens on port 80; Django runs internally on port 8000
-- Logs and static files persist via named volumes (logs, static_files)
+- Logs and static files persist via named volumes (`logs`, `static_files`)
+- Health check endpoint available at `/health/`
+- All containers include health checks and will show as "healthy" when ready
+
+**Troubleshooting:**
+- If containers fail to start, check logs: `docker compose logs web`
+- If database connection fails, recreate volumes: `docker compose down -v && docker compose up -d`
+- If health checks fail, verify nginx configuration and Django ALLOWED_HOSTS setting
 
 ## Development Setup
 
@@ -233,14 +264,30 @@ uv run pytest path/to/test_file.py
 
 ### Database Container Management
 ```bash
-# Start PostgreSQL container
+# Start full stack (web + nginx + database)
 docker compose up -d
 
-# Stop PostgreSQL container
+# Stop all services
 docker compose down
 
-# View logs
-docker compose logs -f
+# Stop and remove volumes (WARNING: destroys data)
+docker compose down -v
+
+# View logs for specific service
+docker compose logs -f web
+docker compose logs -f database
+docker compose logs -f nginx
+
+# Check container health status
+docker compose ps
+
+# Restart a specific service
+docker compose restart web
+docker compose restart nginx
+
+# Execute commands in web container
+docker compose exec web python app/manage.py migrate
+docker compose exec web python app/manage.py createsuperuser
 ```
 
 ## Testing

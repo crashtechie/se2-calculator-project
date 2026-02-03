@@ -15,9 +15,9 @@ class OreModelCreationTests(TestCase):
         ore = Ore.objects.create(
             name="Iron Ore",
             description="Common ore used for steel production",
-            mass=1.5
+            mass=1.5,
         )
-        
+
         self.assertIsNotNone(ore.ore_id)
         self.assertEqual(ore.name, "Iron Ore")
         self.assertEqual(ore.description, "Common ore used for steel production")
@@ -28,7 +28,7 @@ class OreModelCreationTests(TestCase):
     def test_create_ore_minimal_fields(self):
         """Test creating an Ore with only required fields."""
         ore = Ore.objects.create(name="Silicon", mass=0.8)
-        
+
         self.assertEqual(ore.name, "Silicon")
         self.assertEqual(ore.mass, 0.8)
         self.assertEqual(ore.description, "")  # blank=True
@@ -37,7 +37,7 @@ class OreModelCreationTests(TestCase):
     def test_create_ore_with_float_mass(self):
         """Test that mass field correctly stores float values."""
         test_values = [0.1, 1.0, 2.5, 100.999]
-        
+
         for mass in test_values:
             ore = Ore.objects.create(name=f"Test Ore {mass}", mass=mass)
             self.assertEqual(ore.mass, mass)
@@ -54,7 +54,7 @@ class OreModelFieldValidationTests(TestCase):
     def test_unique_name_constraint(self):
         """Test that ore names must be unique."""
         Ore.objects.create(name="Unique Ore", mass=1.0)
-        
+
         with self.assertRaises(IntegrityError):
             Ore.objects.create(name="Unique Ore", mass=2.0)
 
@@ -88,9 +88,7 @@ class OreModelFieldValidationTests(TestCase):
         """Test that description can store long text."""
         long_description = "A" * 10000
         ore = Ore.objects.create(
-            name="Long Description Ore",
-            description=long_description,
-            mass=1.0
+            name="Long Description Ore", description=long_description, mass=1.0
         )
         self.assertEqual(ore.description, long_description)
 
@@ -121,18 +119,17 @@ class OreModelUUIDTests(TestCase):
         for i in range(10):
             ore = Ore.objects.create(name=f"UUID Test Ore {i}", mass=1.0)
             ores.append(ore.ore_id)
-        
+
         # All UUIDs should be unique
         self.assertEqual(len(ores), len(set(ores)))
 
     def test_ore_id_not_editable(self):
         """Test that ore_id cannot be manually changed after creation."""
-        ore = Ore.objects.create(name="Non-editable UUID Ore", mass=1.0)
-        original_id = ore.ore_id
-        
+        Ore.objects.create(name="Non-editable UUID Ore", mass=1.0)
+
         # Since the field is editable=False, attempting to change it in the form
         # won't be allowed. We can verify the field property is set correctly.
-        field = Ore._meta.get_field('ore_id')
+        field = Ore._meta.get_field("ore_id")
         self.assertFalse(field.editable)
 
     def test_uuid7_time_ordered(self):
@@ -143,7 +140,7 @@ class OreModelUUIDTests(TestCase):
             ores.append(ore)
             # Small delay to ensure different timestamps
             time.sleep(0.01)
-        
+
         # Extract UUIDs
         uuids = [ore.ore_id for ore in ores]
         # UUIDv7 should be sequentially ordered by time
@@ -160,7 +157,7 @@ class OreModelTimestampTests(TestCase):
         before = timezone.now()
         ore = Ore.objects.create(name="Timestamp Ore", mass=1.0)
         after = timezone.now()
-        
+
         self.assertIsNotNone(ore.created_at)
         self.assertGreaterEqual(ore.created_at, before)
         self.assertLessEqual(ore.created_at, after)
@@ -170,7 +167,7 @@ class OreModelTimestampTests(TestCase):
         before = timezone.now()
         ore = Ore.objects.create(name="Updated Timestamp Ore", mass=1.0)
         after = timezone.now()
-        
+
         self.assertIsNotNone(ore.updated_at)
         self.assertGreaterEqual(ore.updated_at, before)
         self.assertLessEqual(ore.updated_at, after)
@@ -179,12 +176,12 @@ class OreModelTimestampTests(TestCase):
         """Test that created_at doesn't change when ore is updated."""
         ore = Ore.objects.create(name="Creation Time Test", mass=1.0)
         original_created_at = ore.created_at
-        
+
         # Wait a bit and update
         time.sleep(0.1)
         ore.mass = 2.0
         ore.save()
-        
+
         ore.refresh_from_db()
         self.assertEqual(ore.created_at, original_created_at)
 
@@ -192,19 +189,19 @@ class OreModelTimestampTests(TestCase):
         """Test that updated_at changes when ore is updated."""
         ore = Ore.objects.create(name="Update Time Test", mass=1.0)
         original_updated_at = ore.updated_at
-        
+
         # Wait and update
         time.sleep(0.1)
         ore.mass = 2.0
         ore.save()
-        
+
         ore.refresh_from_db()
         self.assertGreater(ore.updated_at, original_updated_at)
 
     def test_timestamps_are_timezone_aware(self):
         """Test that timestamps include timezone information."""
         ore = Ore.objects.create(name="Timezone Ore", mass=1.0)
-        
+
         # Should have timezone info
         self.assertIsNotNone(ore.created_at.tzinfo)
         self.assertIsNotNone(ore.updated_at.tzinfo)
@@ -283,7 +280,7 @@ class OreModelPrimaryKeyTests(TestCase):
     def test_cannot_create_ore_with_duplicate_id(self):
         """Test that duplicate ore_ids cannot be created."""
         ore1 = Ore.objects.create(name="Ore 1", mass=1.0)
-        
+
         # Manually try to create with same ID (shouldn't happen in normal operation)
         with self.assertRaises(IntegrityError):
             Ore.objects.create(ore_id=ore1.ore_id, name="Ore 2", mass=1.0)
@@ -296,37 +293,32 @@ class OreModelIntegrationTests(TestCase):
         """Test complete CRUD operation cycle."""
         # Create
         ore = Ore.objects.create(
-            name="CRUD Test Ore",
-            description="Initial description",
-            mass=1.0
+            name="CRUD Test Ore", description="Initial description", mass=1.0
         )
         self.assertIsNotNone(ore.ore_id)
-        
+
         # Read
         retrieved = Ore.objects.get(ore_id=ore.ore_id)
         self.assertEqual(retrieved.name, "CRUD Test Ore")
-        
+
         # Update
         retrieved.description = "Updated description"
         retrieved.mass = 2.0
         retrieved.save()
-        
+
         # Verify update
         ore.refresh_from_db()
         self.assertEqual(ore.description, "Updated description")
         self.assertEqual(ore.mass, 2.0)
-        
+
         # Delete
         ore.delete()
         self.assertEqual(Ore.objects.filter(ore_id=ore.ore_id).count(), 0)
 
     def test_bulk_create_ores(self):
         """Test creating multiple ores at once."""
-        ores_to_create = [
-            Ore(name=f"Bulk Ore {i}", mass=float(i))
-            for i in range(1, 6)
-        ]
-        
+        ores_to_create = [Ore(name=f"Bulk Ore {i}", mass=float(i)) for i in range(1, 6)]
+
         created_ores = Ore.objects.bulk_create(ores_to_create)
         self.assertEqual(len(created_ores), 5)
         self.assertEqual(Ore.objects.filter(name__startswith="Bulk").count(), 5)
@@ -336,7 +328,7 @@ class OreModelIntegrationTests(TestCase):
         Ore.objects.create(name="Iron Ore", mass=1.0)
         Ore.objects.create(name="Iron Oxide", mass=1.5)
         Ore.objects.create(name="Copper", mass=1.2)
-        
+
         iron_ores = Ore.objects.filter(name__icontains="Iron")
         self.assertEqual(iron_ores.count(), 2)
 
@@ -344,10 +336,10 @@ class OreModelIntegrationTests(TestCase):
         """Test updating multiple ores at once."""
         for i in range(5):
             Ore.objects.create(name=f"Update Test {i}", mass=1.0)
-        
+
         # Update all created ores
         Ore.objects.filter(name__startswith="Update Test").update(mass=2.0)
-        
+
         updated = Ore.objects.filter(name__startswith="Update Test")
         for ore in updated:
             self.assertEqual(ore.mass, 2.0)

@@ -5,28 +5,58 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Ore',
+            name="Ore",
             fields=[
-                ('ore_id', models.UUIDField(default=uuid_utils._uuid_utils.uuid7, editable=False, help_text='A unique identifier for each ore instance.', primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(help_text='Unique name of the ore.', max_length=100, unique=True)),
-                ('description', models.TextField(blank=True, help_text='Detailed description of the ore.')),
-                ('mass', models.FloatField(help_text='Mass of the ore in kilograms.')),
-                ('created_at', models.DateTimeField(auto_now_add=True, help_text='Timestamp when the ore was created.')),
-                ('updated_at', models.DateTimeField(auto_now=True, help_text='Timestamp when the ore was last updated.')),
+                (
+                    "ore_id",
+                    models.UUIDField(
+                        default=uuid_utils._uuid_utils.uuid7,
+                        editable=False,
+                        help_text="A unique identifier for each ore instance.",
+                        primary_key=True,
+                        serialize=False,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Unique name of the ore.", max_length=100, unique=True
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, help_text="Detailed description of the ore."
+                    ),
+                ),
+                ("mass", models.FloatField(help_text="Mass of the ore in kilograms.")),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        help_text="Timestamp when the ore was created.",
+                    ),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(
+                        auto_now=True,
+                        help_text="Timestamp when the ore was last updated.",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Ore',
-                'verbose_name_plural': 'Ores',
-                'db_table': 'ores_ore',
-                'ordering': ['name'],
+                "verbose_name": "Ore",
+                "verbose_name_plural": "Ores",
+                "db_table": "ores_ore",
+                "ordering": ["name"],
             },
         ),
     ]
