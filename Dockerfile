@@ -33,7 +33,7 @@ RUN mkdir -p /app/logs && \
 
 # Collect static files for production
 # Use || true to continue even if no static files exist
-RUN python manage.py collectstatic --noinput --clear 2>/dev/null || true
+RUN python app/manage.py collectstatic --noinput --clear 2>/dev/null || true
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
@@ -50,4 +50,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Default command - for development
 # Production should use gunicorn or similar
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"]
+CMD ["sh", "-c", "python app/manage.py migrate --noinput && python app/manage.py runserver 0.0.0.0:8000"]
+# CI/CD test - trigger Docker workflow validation

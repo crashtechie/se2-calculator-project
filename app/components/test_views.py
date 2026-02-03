@@ -164,7 +164,9 @@ class ComponentViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "components/component_detail.html")
-        self.assertEqual(str(response.context["component"].pk), str(self.detail_component.pk))
+        self.assertEqual(
+            str(response.context["component"].pk), str(self.detail_component.pk)
+        )
         self.assertIn("formatted_materials", response.context)
         self.assertIn("total_material_mass", response.context)
         self.assertEqual(response.context["total_material_mass"], 7)
@@ -173,7 +175,9 @@ class ComponentViewTestCase(TestCase):
         url = reverse("components:component_detail", args=[self.detail_component.pk])
         response = self.client.get(url)
 
-        ore_names = [item["ore_name"] for item in response.context["formatted_materials"]]
+        ore_names = [
+            item["ore_name"] for item in response.context["formatted_materials"]
+        ]
         self.assertIn(self.ore_iron.name, ore_names)
         self.assertIn(self.ore_copper.name, ore_names)
 
@@ -247,7 +251,11 @@ class ComponentViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(Component.objects.filter(name="No Materials").exists())
-        self.assertFormError(response.context["form"], "materials_json", "At least one material is required.")
+        self.assertFormError(
+            response.context["form"],
+            "materials_json",
+            "At least one material is required.",
+        )
 
     def test_component_create_rejects_duplicate_name(self):
         url = reverse("components:component_create")
@@ -262,7 +270,11 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, payload)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response.context["form"], "name", f"A component with name '{self.search_component.name}' already exists.")
+        self.assertFormError(
+            response.context["form"],
+            "name",
+            f"A component with name '{self.search_component.name}' already exists.",
+        )
 
     def test_component_create_rejects_negative_mass(self):
         url = reverse("components:component_create")
@@ -277,7 +289,9 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, payload)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response.context["form"], "mass", "Mass must be greater than 0.")
+        self.assertFormError(
+            response.context["form"], "mass", "Mass must be greater than 0."
+        )
 
     def test_component_create_rejects_negative_quantity(self):
         url = reverse("components:component_create")
@@ -292,10 +306,11 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, payload)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response.context["form"], "materials_json", [
-            "Quantity for ore "
-            f"{self.ore_iron.ore_id} must be positive (got -2.0)."
-        ])
+        self.assertFormError(
+            response.context["form"],
+            "materials_json",
+            [f"Quantity for ore {self.ore_iron.ore_id} must be positive (got -2.0)."],
+        )
 
     # ComponentUpdateView tests (5)
     def test_component_update_view_get(self):
@@ -304,7 +319,9 @@ class ComponentViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "components/component_form.html")
-        self.assertEqual(response.context["existing_materials"], self.updatable_component.materials)
+        self.assertEqual(
+            response.context["existing_materials"], self.updatable_component.materials
+        )
         self.assertIn("form_title", response.context)
 
     def test_component_update_valid_post(self):
@@ -343,10 +360,11 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, payload)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response.context["form"], "materials_json", [
-            "Quantity for ore "
-            f"{self.ore_iron.ore_id} must be positive (got -1.0)."
-        ])
+        self.assertFormError(
+            response.context["form"],
+            "materials_json",
+            [f"Quantity for ore {self.ore_iron.ore_id} must be positive (got -1.0)."],
+        )
 
     def test_component_update_changes_materials(self):
         url = reverse("components:component_update", args=[self.updatable_component.pk])
@@ -355,19 +373,24 @@ class ComponentViewTestCase(TestCase):
             "description": "Materials changed",
             "mass": "6",
             "crafting_time": "12",
-            "materials_json": json.dumps({
-                str(self.ore_iron.ore_id): 2,
-                str(self.ore_copper.ore_id): 3,
-            }),
+            "materials_json": json.dumps(
+                {
+                    str(self.ore_iron.ore_id): 2,
+                    str(self.ore_copper.ore_id): 3,
+                }
+            ),
         }
 
         response = self.client.post(url, payload, follow=True)
 
         updated = Component.objects.get(pk=self.updatable_component.pk)
-        self.assertEqual(updated.materials, {
-            str(self.ore_iron.ore_id): 2.0,
-            str(self.ore_copper.ore_id): 3.0,
-        })
+        self.assertEqual(
+            updated.materials,
+            {
+                str(self.ore_iron.ore_id): 2.0,
+                str(self.ore_copper.ore_id): 3.0,
+            },
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_component_update_handles_validation_errors(self):
@@ -383,7 +406,9 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, payload)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response.context["form"], "name", "This field is required.")
+        self.assertFormError(
+            response.context["form"], "name", "This field is required."
+        )
 
     # ComponentDeleteView tests (3)
     def test_component_delete_view_get(self):
@@ -400,7 +425,9 @@ class ComponentViewTestCase(TestCase):
         response = self.client.post(url, follow=True)
 
         self.assertRedirects(response, reverse("components:component_list"))
-        self.assertFalse(Component.objects.filter(pk=self.deletable_component.pk).exists())
+        self.assertFalse(
+            Component.objects.filter(pk=self.deletable_component.pk).exists()
+        )
 
     def test_component_delete_sets_success_message(self):
         component = Component.objects.create(
@@ -412,8 +439,12 @@ class ComponentViewTestCase(TestCase):
         url = reverse("components:component_delete", args=[component.pk])
         response = self.client.post(url, follow=True)
 
-        messages_ctx = response.context.get("messages") if hasattr(response, "context") else []
-        messages = [m.message for m in messages_ctx] if messages_ctx else [m.message for m in get_messages(response.wsgi_request)]
+        messages_ctx = (
+            response.context.get("messages") if hasattr(response, "context") else []
+        )
+        [m.message for m in messages_ctx] if messages_ctx else [
+            m.message for m in get_messages(response.wsgi_request)
+        ]
         self.assertIsNotNone(getattr(response.wsgi_request, "_messages", None))
 
     # Template rendering checks (4)
@@ -422,7 +453,9 @@ class ComponentViewTestCase(TestCase):
         self.assertTemplateUsed(response, "components/component_list.html")
 
     def test_component_detail_template_used(self):
-        response = self.client.get(reverse("components:component_detail", args=[self.detail_component.pk]))
+        response = self.client.get(
+            reverse("components:component_detail", args=[self.detail_component.pk])
+        )
         self.assertTemplateUsed(response, "components/component_detail.html")
 
     def test_component_form_template_used_for_create(self):

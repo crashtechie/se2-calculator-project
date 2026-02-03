@@ -5,29 +5,56 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='BuildOrder',
+            name="BuildOrder",
             fields=[
-                ('order_id', models.UUIDField(default=buildorders.models.generate_uuid, editable=False, help_text='UUIDv7 primary key', primary_key=True, serialize=False)),
-                ('name', models.CharField(help_text='Name of the build order', max_length=200)),
-                ('description', models.TextField(blank=True, help_text='Optional description')),
-                ('blocks', models.JSONField(blank=True, default=dict, help_text='JSON object mapping block IDs to quantities')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "order_id",
+                    models.UUIDField(
+                        default=buildorders.models.generate_uuid,
+                        editable=False,
+                        help_text="UUIDv7 primary key",
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Name of the build order", max_length=200
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(blank=True, help_text="Optional description"),
+                ),
+                (
+                    "blocks",
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
+                        help_text="JSON object mapping block IDs to quantities",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Build Order',
-                'verbose_name_plural': 'Build Orders',
-                'db_table': 'buildorders_buildorder',
-                'ordering': ['-created_at'],
-                'indexes': [models.Index(fields=['name'], name='buildorders_name_5e2939_idx'), models.Index(fields=['-created_at'], name='buildorders_created_c708df_idx')],
+                "verbose_name": "Build Order",
+                "verbose_name_plural": "Build Orders",
+                "db_table": "buildorders_buildorder",
+                "ordering": ["-created_at"],
+                "indexes": [
+                    models.Index(fields=["name"], name="buildorders_name_5e2939_idx"),
+                    models.Index(
+                        fields=["-created_at"], name="buildorders_created_c708df_idx"
+                    ),
+                ],
             },
         ),
     ]

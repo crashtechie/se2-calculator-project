@@ -200,3 +200,6 @@ backup/
 
 # Placeholder to ensure directory is tracked
 !scripts/tests/testResults/.placeholder
+
+#Kiro
+.kiro/

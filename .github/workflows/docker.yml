@@ -1,0 +1,80 @@
+---
+name: Docker Build
+
+on:
+  push:
+    branches: [main, development]
+    paths:
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - 'nginx.conf'
+      - '.dockerignore'
+  pull_request:
+    branches: [main, development]
+    paths:
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - 'nginx.conf'
+      - '.dockerignore'
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: |
+          cp .env.example .env
+          echo "SECRET_KEY=test-secret-key-for-ci-$(date +%s)" >> .env
+          echo "DB_PASSWORD=test-db-password-$(date +%s)" >> .env
+          echo "DB_HOST=database" >> .env
+
+      - name: Build Docker images
+        run: docker compose build
+
+      - name: Start Docker stack
+        run: docker compose up -d
+
+      - name: Wait for services to initialize
+        run: |
+          echo "Waiting for services to start..."
+          sleep 20
+
+      - name: Check service health
+        run: |
+          echo "Checking service status..."
+          docker compose ps
+          docker compose ps | grep -q "Up" || exit 1
+
+      - name: Run database migrations
+        run: |
+          docker compose exec -T web python app/manage.py migrate --noinput
+
+      - name: Test web service endpoint
+        run: |
+          echo "Testing web service..."
+          curl -f http://localhost/ || exit 1
+          echo "✓ Web service is responding"
+
+      - name: Test static files serving
+        run: |
+          echo "Testing static files..."
+          curl -f http://localhost/static/css/main.css || exit 1
+          echo "✓ Static files are being served"
+
+      - name: Check logs for errors
+        if: failure()
+        run: |
+          echo "=== Web Service Logs ==="
+          docker compose logs web
+          echo "=== Nginx Logs ==="
+          docker compose logs nginx
+          echo "=== Database Logs ==="
+          docker compose logs database
+
+      - name: Tear down stack
+        if: always()
+        run: docker compose down -v

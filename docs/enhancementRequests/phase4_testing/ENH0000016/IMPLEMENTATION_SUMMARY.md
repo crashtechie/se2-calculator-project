@@ -114,23 +114,23 @@ Adds three GitHub Actions workflows to automatically test, validate, and check c
 ```yaml
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 ```
 
 ### Docker Workflow
 ```yaml
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'nginx.conf'
       - '.dockerignore'
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
     paths: [same as above]
 ```
 
@@ -138,9 +138,9 @@ on:
 ```yaml
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 ```
 
 ---

@@ -4,9 +4,8 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blocks', '0002_fix_components_format'),
+        ("blocks", "0002_fix_components_format"),
     ]
 
     operations = [

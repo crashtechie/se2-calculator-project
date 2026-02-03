@@ -49,7 +49,7 @@ def create_block(
 ):
     """
     Create a block with components in dict format.
-    
+
     Args:
         components_dict: Can be either:
             - None (empty dict)
@@ -64,7 +64,7 @@ def create_block(
         for entry in components_dict:
             merged.update(entry)
         components_dict = merged
-    
+
     return Block.objects.create(
         name=name,
         description="",
@@ -187,6 +187,7 @@ class BlockTimestampTests(TestCase):
     def test_datetime_types(self):
         blk = create_block(name="Datetime Type Block")
         from datetime import datetime
+
         self.assertIsInstance(blk.created_at, datetime)
         self.assertIsInstance(blk.updated_at, datetime)
 
@@ -272,7 +273,9 @@ class BlockComponentsJSONFieldTests(TestCase):
 # ---- BlockConsumerValidationTests (5) ----
 class BlockConsumerValidationTests(TestCase):
     def test_consumer_valid_when_type_empty_and_rate_zero(self):
-        blk = create_block(name="Consumer OK Empty", consumer_type="", consumer_rate=0.0)
+        blk = create_block(
+            name="Consumer OK Empty", consumer_type="", consumer_rate=0.0
+        )
         is_valid, errors = blk.validate_consumer()
         self.assertTrue(is_valid)
         self.assertEqual(errors, [])
@@ -314,7 +317,9 @@ class BlockConsumerValidationTests(TestCase):
         self.assertTrue(any("cannot be negative" in e for e in errors))
 
     def test_consumer_valid_when_type_set_and_rate_positive(self):
-        blk = create_block(name="Consumer Valid", consumer_type="Power", consumer_rate=5.0)
+        blk = create_block(
+            name="Consumer Valid", consumer_type="Power", consumer_rate=5.0
+        )
         is_valid, errors = blk.validate_consumer()
         self.assertTrue(is_valid)
         self.assertEqual(errors, [])
@@ -341,7 +346,9 @@ class BlockConsumerValidationTests(TestCase):
 # ---- BlockProducerValidationTests (5) ----
 class BlockProducerValidationTests(TestCase):
     def test_producer_valid_when_type_empty_and_rate_zero(self):
-        blk = create_block(name="Producer OK Empty", producer_type="", producer_rate=0.0)
+        blk = create_block(
+            name="Producer OK Empty", producer_type="", producer_rate=0.0
+        )
         is_valid, errors = blk.validate_producer()
         self.assertTrue(is_valid)
         self.assertEqual(errors, [])
@@ -383,7 +390,9 @@ class BlockProducerValidationTests(TestCase):
         self.assertTrue(any("cannot be negative" in e for e in errors))
 
     def test_producer_valid_when_type_set_and_rate_positive(self):
-        blk = create_block(name="Producer Valid", producer_type="Hydrogen", producer_rate=3.0)
+        blk = create_block(
+            name="Producer Valid", producer_type="Hydrogen", producer_rate=3.0
+        )
         is_valid, errors = blk.validate_producer()
         self.assertTrue(is_valid)
         self.assertEqual(errors, [])
@@ -461,8 +470,8 @@ class BlockMetaTests(TestCase):
         self.assertEqual(Block._meta.db_table, "blocks_block")
 
     def test_ordering_by_name(self):
-        b1 = create_block(name="A")
-        b2 = create_block(name="B")
+        create_block(name="A")
+        create_block(name="B")
         names = list(Block.objects.values_list("name", flat=True))
         self.assertEqual(names, ["A", "B"])  # ordered by name
 
@@ -573,5 +582,9 @@ class BlockIntegrationTests(TestCase):
     def test_query_filtering_by_name_and_ordering(self):
         create_block(name="Alpha")
         create_block(name="Beta")
-        names = list(Block.objects.filter(name__in=["Alpha", "Beta"]).values_list("name", flat=True))
+        names = list(
+            Block.objects.filter(name__in=["Alpha", "Beta"]).values_list(
+                "name", flat=True
+            )
+        )
         self.assertEqual(names, ["Alpha", "Beta"])  # ordering by name

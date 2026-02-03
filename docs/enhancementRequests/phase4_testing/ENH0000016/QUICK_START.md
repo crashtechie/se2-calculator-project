@@ -36,11 +36,11 @@ Create `.github/workflows/test.yml`:
 
 ```yaml
 name: Tests
-on: 
+on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   test:
@@ -80,14 +80,14 @@ Create `.github/workflows/docker.yml`:
 name: Docker Build
 on:
   push:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
       - 'nginx.conf'
       - '.dockerignore'
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
     paths:
       - 'Dockerfile'
       - 'docker-compose.yml'
@@ -146,9 +146,9 @@ Create `.github/workflows/lint.yml`:
 name: Code Quality
 on:
   push:
-    branches: [ main, development, 'enhancement/**' ]
+    branches: [main, development, 'enhancement/**']
   pull_request:
-    branches: [ main, development ]
+    branches: [main, development]
 
 jobs:
   lint:
