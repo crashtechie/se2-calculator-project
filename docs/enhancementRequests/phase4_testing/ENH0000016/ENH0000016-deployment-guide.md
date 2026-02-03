@@ -9,7 +9,7 @@
 **Difficulty Level:** Medium  
 **Assigned To** Dan Smith (CrashTechie)  
 **Start Date/Time** 2026-02-01 22:00 CT  
-**End Date/Time**  
+**End Date/Time**  2026-02-02 23:55 CT
 
 ---
 
