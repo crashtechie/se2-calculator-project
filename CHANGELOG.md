@@ -78,6 +78,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Professional practices:** Industry-standard CI/CD implementation
 - **Visibility:** Build status visible via badges and PR checks
 
+### Fixed - Docker Infrastructure
+- **ISSUE-013:** Nginx static files path mismatch in Docker environment
+  - Fixed nginx.conf to serve static files from `/app/app/staticfiles/` instead of `/app/staticfiles/`
+  - Removed conflicting `static_files` named volume mount that was creating empty directory
+  - Updated nginx service to use project mount (`.:/app:ro`) for static file access
+  - Removed unused `static_files` volume definition from docker-compose.yml
+  - Added explicit `collectstatic` step to CI/CD workflow for verification
+  - Updated `.gitignore` to exclude generated `staticfiles/` directory
+  - Root cause: Volume mount path mismatch with nested Django project structure
+  - Static files now serve correctly through nginx with 200 OK response
+  - CI/CD Docker build workflow now passes static file serving test
+
 
 
 ## [0.6.1-alpha] - 2026-02-02

@@ -27,13 +27,12 @@ RUN pip install uv && \
 # Copy project code
 COPY . .
 
-# Create logs directory
-RUN mkdir -p /app/logs && \
-    chmod 755 /app/logs
+# Create logs and staticfiles directories
+RUN mkdir -p /app/logs /app/staticfiles && \
+    chmod 755 /app/logs /app/staticfiles
 
 # Collect static files for production
-# Use || true to continue even if no static files exist
-RUN python app/manage.py collectstatic --noinput --clear 2>/dev/null || true
+RUN python app/manage.py collectstatic --noinput --clear || echo "Warning: collectstatic failed, continuing..."
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
