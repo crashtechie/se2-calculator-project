@@ -6,6 +6,9 @@ This document provides an overview of the Kiro CLI configuration for the SE2 Cal
 
 ```
 .kiro/
+├── settings/              # Workspace-specific settings (overrides global)
+│   └── cli.json
+├── agents/                # Project-specific agents
 ├── steering/              # Project-specific guidance documents
 │   ├── 00-project-overview.md
 │   ├── 01-django-standards.md
@@ -36,6 +39,21 @@ This document provides an overview of the Kiro CLI configuration for the SE2 Cal
 ├── aliases.json          # Command shortcuts
 └── MCP_SETUP.md          # MCP setup documentation
 ```
+
+## Workspace Settings
+
+Project-specific settings in `.kiro/settings/cli.json` override global settings:
+
+- **chat.enableTangentMode**: true - Enable tangent mode for this project
+- **chat.enableThinking**: true - Enable thinking tool
+- **chat.enableCodeIntelligence**: true - Enable LSP code intelligence
+- **chat.enableContextUsageIndicator**: true - Show context usage
+- **chat.editMode**: true - Enable edit mode
+- **chat.enableTodoList**: true - Enable TODO list feature
+- **chat.enableCheckpoint**: true - Enable checkpoint feature
+- **chat.enableDelegate**: true - Enable delegate tool
+
+These settings apply only to this workspace and override any global defaults.
 
 ## Steering Documents (10)
 
