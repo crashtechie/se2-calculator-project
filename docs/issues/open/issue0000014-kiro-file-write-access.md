@@ -41,7 +41,9 @@ Based on diagnostic testing, the issue is **a bug in Kiro's fsWrite tool** when 
 ## Technical Details
 
 **Environment:**
-- OS: Linux
+- OS: Zorin OS 18 (based on Ubuntu 24.04)
+- Kernel: Linux 6.17.0-14-generic
+- Architecture: x86_64
 - Shell: bash
 - Workspace: `/home/dsmi001/Documents/projects/se2-calculator-project`
 - Project: SE2 Calculator Project v0.7.0-alpha
