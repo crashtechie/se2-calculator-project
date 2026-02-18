@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Security Check on Settings",
+  "description": "Verifies no secrets, passwords, or API keys are hardcoded when settings or env files are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.env",
+      "app/se2_calculator/settings.py",
+      ".env.example"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A configuration file was modified. Verify that no secrets, passwords, or API keys are hardcoded. Ensure .env files are in .gitignore and only .env.example is committed with placeholder values per security guidelines."
+  }
+}

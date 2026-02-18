@@ -1,0 +1,107 @@
+name: Create CRUD Views for Model
+description: Steps to create complete CRUD views and templates
+
+steps:
+  - name: Plan Views
+    actions:
+      - Identify required views (List, Detail, Create, Update, Delete)
+      - Determine URL patterns
+      - Plan template names
+      - Consider pagination and filtering
+
+  - name: Create URL Patterns
+    actions:
+      - Add app_name for namespacing
+      - Define URL patterns for all CRUD operations
+      - Use descriptive names (model_list, model_detail, etc.)
+      - Follow RESTful conventions
+
+  - name: Implement ListView
+    actions:
+      - Extend ListView class
+      - Set model and template_name
+      - Configure paginate_by (default 10)
+      - Add get_queryset() for filtering
+      - Implement search functionality
+      - Add get_context_data() for extra context
+
+  - name: Implement DetailView
+    actions:
+      - Extend DetailView class
+      - Set model and template_name
+      - Add get_context_data() for related data
+      - Consider resource chain calculations
+
+  - name: Implement CreateView
+    actions:
+      - Extend CreateView class
+      - Set model, fields, and template_name
+      - Add form validation
+      - Set success_url with reverse_lazy()
+      - Add success message
+
+  - name: Implement UpdateView
+    actions:
+      - Extend UpdateView class
+      - Set model, fields, and template_name
+      - Add form validation
+      - Set success_url with reverse_lazy()
+      - Add success message
+
+  - name: Implement DeleteView
+    actions:
+      - Extend DeleteView class
+      - Set model and template_name
+      - Set success_url with reverse_lazy()
+      - Add confirmation template
+      - Add success message
+
+  - name: Create Templates
+    actions:
+      - Create app/templates/{app}/ directory
+      - Create {model}_list.html (extends base.html)
+      - Create {model}_detail.html
+      - Create {model}_form.html (for create/update)
+      - Create {model}_confirm_delete.html
+      - Add Bootstrap 5 styling
+      - Include CSRF tokens in forms
+      - Add pagination controls
+      - Add search form
+
+  - name: Add Navigation
+    actions:
+      - Update base.html navigation
+      - Add links to list view
+      - Add breadcrumbs
+      - Add action buttons (create, edit, delete)
+
+  - name: Write View Tests
+    actions:
+      - Create test_views.py in app/tests/
+      - Test GET requests return correct templates
+      - Test POST requests create/update objects
+      - Test form validation errors
+      - Test redirects after success
+      - Test pagination
+      - Test search/filtering
+      - Test 404 for non-existent objects
+
+  - name: Update Documentation
+    actions:
+      - Document URL patterns
+      - Add screenshots if needed
+      - Update README
+      - Update CHANGELOG.md
+      - Update ENH document
+
+checklist:
+  - All CRUD views implemented
+  - URL patterns configured with namespacing
+  - Templates extend base.html
+  - Forms include CSRF tokens
+  - Pagination configured
+  - Search/filtering implemented
+  - Success messages added
+  - Tests written (>80% coverage)
+  - Navigation updated
+  - Documentation complete

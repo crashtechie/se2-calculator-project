@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Migration Reminder",
+  "description": "Reminds to create Django migrations when model files are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/*/models.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A Django model was modified. Check if migrations need to be created by running `uv run python app/manage.py makemigrations --dry-run`. If migrations are needed, ask the user if they want to create them following the database management guidelines."
+  }
+}

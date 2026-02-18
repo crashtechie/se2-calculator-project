@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Changelog Update Reminder",
+  "description": "Reminds to update CHANGELOG.md when significant code changes are made during the session",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Check if any significant features, fixes, or changes were made in this session. If so, remind the user to update CHANGELOG.md with appropriate entries under Added, Changed, or Fixed sections following the enhancement workflow guidelines."
+  }
+}

@@ -1,0 +1,81 @@
+name: Create New Django Model
+description: Steps to create a new Django model following project standards
+
+steps:
+  - name: Plan Model Structure
+    actions:
+      - Determine app location (ores, components, blocks, buildorders, or new app)
+      - Define fields and their types
+      - Identify relationships (ForeignKey, JSONField)
+      - Plan validation rules
+      - Consider indexes for performance
+
+  - name: Create Model Class
+    actions:
+      - Use UUIDv7 for primary key
+      - Add created_at and updated_at timestamps
+      - Define all fields with appropriate types
+      - Add JSONField for flexible nested data if needed
+      - Implement __str__() method
+      - Add Meta class with ordering and indexes
+
+  - name: Add Validation
+    actions:
+      - Implement clean() method for custom validation
+      - Validate JSONField structure
+      - Check for required fields
+      - Validate relationships (UUIDs exist)
+      - Add helpful error messages
+
+  - name: Create Migration
+    actions:
+      - Run makemigrations for the app
+      - Review generated migration file
+      - Check migration dependencies
+      - Test migration with sqlmigrate
+      - Apply migration with migrate
+
+  - name: Register in Admin
+    actions:
+      - Add to admin.py
+      - Configure list_display
+      - Add search_fields and list_filter
+      - Customize fieldsets if needed
+      - Add readonly_fields for timestamps
+
+  - name: Create Fixtures
+    actions:
+      - Create sample data (10-15 records)
+      - Use valid UUIDv7 IDs
+      - Respect dependencies (load order)
+      - Save to app/fixtures/sample_{model}.json
+      - Test loading fixtures
+
+  - name: Write Tests
+    actions:
+      - Create test_models.py in app/tests/
+      - Test object creation
+      - Test __str__() method
+      - Test validation logic
+      - Test custom methods
+      - Test edge cases
+      - Achieve >80% coverage
+
+  - name: Update Documentation
+    actions:
+      - Add model to technical specs
+      - Document JSONField structure
+      - Update README if needed
+      - Add to CHANGELOG.md
+      - Update ENH document if applicable
+
+checklist:
+  - UUIDv7 primary key
+  - created_at/updated_at timestamps
+  - __str__() method implemented
+  - Validation in clean() method
+  - Migration created and applied
+  - Admin interface configured
+  - Fixtures created and tested
+  - Tests written (>80% coverage)
+  - Documentation updated
