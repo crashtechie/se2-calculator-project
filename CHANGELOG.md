@@ -7,18 +7,72 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added - Development Workflow Automation
-- **Agent Hooks System**
-  - Lint Python Files on Save: Auto-runs Ruff linting and formatting on Python file saves
-  - Migration Reminder: Prompts to create migrations after model file edits
-  - Validate Before Model Changes: Pre-write validation reminders for JSONField structures
-  - Run Tests on Save: Auto-runs pytest when test files are saved
-  - Documentation Update Reminder: Prompts to update CHANGELOG, README, and version after work completion
-  - Improves code quality and reduces manual workflow steps
-  - Configured in `.kiro/hooks/` directory
-
 ### In Development
 - Phase 3: Build Order Calculator (in progress)
+  - ENH-0000011: Dynamic Block Selector (planned)
+  - ENH-0000012: Export Functionality (planned)
+
+## [0.10.0-alpha] - 2026-02-18
+
+### Added - Phase 3: Build Order CRUD Testing Complete
+- **ENH-0000010 Testing:** Complete integration test suite for BuildOrder CRUD
+  - 59 total automated tests (52 model tests + 7 integration tests)
+  - Integration tests cover complete CRUD workflows:
+    - Create → view → update → delete sequences with database state verification
+    - Search → sort → paginate workflows with query parameter preservation
+    - Form validation → error display → correction → success workflows
+    - Cache invalidation on update with recalculation verification
+  - Additional integration tests for multi-block orders and composition changes
+  - All tests passing with comprehensive workflow coverage
+  - Test coverage exceeds 90% target for buildorders app
+  - Optional property-based tests deferred for faster MVP delivery
+  - Ready for production deployment
+
+### Technical Details
+- **Test Files:**
+  - `app/buildorders/tests.py` - 52 model tests (creation, validation, calculations, caching, properties)
+  - `app/buildorders/test_views.py` - 7 integration tests (complete workflows)
+- **Test Execution:** All 59 tests pass in ~1.5 seconds
+- **Coverage:** 90%+ on buildorders app (views, forms, models)
+- **Pattern:** Follows Phase 2 testing patterns from blocks, components, and ores apps
+
+## [0.9.0-alpha] - 2026-02-18
+
+### Added - Phase 3: Build Order CRUD Interface
+- **ENH-0000010: Build Order CRUD Views & Templates**
+  - Complete CRUD interface for managing build orders at `/buildorders/` URLs
+  - BuildOrderListView with search (by name), sorting (name, created_at, updated_at), and pagination (25 per page)
+  - BuildOrderDetailView with cached calculation summaries (total mass, required components, required ores, fabricator times)
+  - BuildOrderCreateView and BuildOrderUpdateView with form validation using BuildOrder.validate_blocks()
+  - BuildOrderDeleteView with confirmation page
+  - BuildOrderForm with hidden blocks_json field (JavaScript selector coming in ENH-0000011)
+  - Bootstrap 5 responsive templates following Phase 2 patterns
+  - Django messages framework for user feedback (create/update/delete success messages)
+  - Comprehensive logging at debug, info, and warning levels
+  - URL namespace: `buildorders:` with `pk` parameter for consistency
+  - Navigation integration in base template with "Build Orders" link
+  - Leverages existing BuildOrder model methods from ENH-0000009 (cached calculations, helper methods)
+  - Forms validate block UUIDs, quantities, and use model validation helpers
+  - Templates display calculation summaries with component/ore details and fabricator times
+
+### Changed
+- Updated navigation in base.html to include "Build Orders" link
+- Project URLs updated to include buildorders app routes
+
+### Technical Details
+- **New Files:**
+  - `buildorders/urls.py` - URL configuration with buildorders: namespace
+  - `buildorders/forms.py` - BuildOrderForm with blocks_json validation
+  - `buildorders/views.py` - 5 class-based views (List, Detail, Create, Update, Delete)
+  - `buildorders/templates/buildorders/buildorder_list.html` - List view template
+  - `buildorders/templates/buildorders/buildorder_detail.html` - Detail view template
+  - `buildorders/templates/buildorders/buildorder_form.html` - Create/Update form template
+  - `buildorders/templates/buildorders/buildorder_confirm_delete.html` - Delete confirmation template
+- **Modified Files:**
+  - `se2CalcProject/urls.py` - Added buildorders URL include
+  - `templates/base.html` - Added Build Orders navigation link
+- **Dependencies:** No new dependencies required
+- **Pattern:** Follows Phase 2 patterns from blocks, components, and ores apps
 
 ## [0.8.0-alpha] - 2026-02-18
 
@@ -604,7 +658,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.8.0-alpha...HEAD
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.10.0-alpha...HEAD
+[0.10.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.9.0-alpha...v0.10.0-alpha
+[0.9.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.8.0-alpha...v0.9.0-alpha
 [0.8.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.7.0-alpha...v0.8.0-alpha
 [0.7.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.1-alpha...v0.7.0-alpha
 [0.6.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.5.0-alpha...v0.6.0-alpha

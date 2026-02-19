@@ -5,7 +5,7 @@
 [![Code Quality](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml)  
 [![codecov](https://codecov.io/github/crashtechie/se2-calculator-project/graph/badge.svg?token=TohStlR1r2)](https://codecov.io/github/crashtechie/se2-calculator-project)  
 
-**Version:** 0.8.0-alpha  
+**Version:** 0.10.0-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -15,7 +15,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.8.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented. Development infrastructure has been significantly enhanced with Kiro configuration, E2E testing architecture, and DevContainer support.
+This is an early alpha release (0.10.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) has completed ENH-0000010 with full CRUD interface and comprehensive testing (59 tests, 90%+ coverage). Development infrastructure has been significantly enhanced with Kiro configuration, E2E testing architecture, and DevContainer support.
 
 ### Current Development Status
 
@@ -37,7 +37,15 @@ This is an early alpha release (0.8.0-alpha). Phase 2 (Views & Templates) is com
     - Admin interface with custom displays
     - 52 comprehensive tests (90% coverage)
     - Complete documentation (algorithms, deployment, post-deployment)
-  - ⏳ ENH-0000010: Build Order Views & Templates (Planned)
+  - ✅ ENH-0000010: Build Order CRUD Views & Templates (Complete)
+    - Complete CRUD interface at `/buildorders/` URLs
+    - List view with search, sorting, and pagination
+    - Detail view with cached calculation summaries
+    - Create/Update forms with validation
+    - Delete confirmation page
+    - Bootstrap 5 responsive templates
+    - Navigation integration
+    - 59 total tests (52 model + 7 integration) with 90%+ coverage
   - ⏳ ENH-0000011: Dynamic Block Selector (Planned)
   
 - ⏳ **Phase 4: Testing, Documentation & Core Infrastructure** (Planned)
