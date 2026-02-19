@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Development Workflow Automation
+- **Agent Hooks System**
+  - Lint Python Files on Save: Auto-runs Ruff linting and formatting on Python file saves
+  - Migration Reminder: Prompts to create migrations after model file edits
+  - Validate Before Model Changes: Pre-write validation reminders for JSONField structures
+  - Run Tests on Save: Auto-runs pytest when test files are saved
+  - Documentation Update Reminder: Prompts to update CHANGELOG, README, and version after work completion
+  - Improves code quality and reduces manual workflow steps
+  - Configured in `.kiro/hooks/` directory
+
 ### In Development
 - Phase 3: Build Order Calculator (in progress)
 

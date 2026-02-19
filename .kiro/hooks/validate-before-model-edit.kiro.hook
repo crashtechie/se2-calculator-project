@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Validate Before Model Changes",
+  "description": "Reminds you to validate JSONField structures and foreign key references before editing models",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      "write"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before modifying model files, ensure: 1) JSONField structures (components, materials) maintain correct format (dict mapping IDs to quantities), 2) Foreign key references are valid (Component IDs in blocks, Ore IDs in components), 3) Validation methods are updated if field structure changes. Proceed with the write operation."
+  }
+}

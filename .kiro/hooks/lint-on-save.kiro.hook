@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Lint Python Files on Save",
+  "description": "Automatically runs ruff linting and formatting when Python files are saved",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/*.py"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "uv run ruff check --fix app/ && uv run ruff format app/"
+  }
+}

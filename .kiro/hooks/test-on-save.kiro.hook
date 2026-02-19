@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Run Tests on Save",
+  "description": "Automatically runs pytest for the affected app when test files are saved",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/test_*.py",
+      "app/**/tests.py"
+    ]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "uv run pytest --no-cov -v",
+    "timeout": 120
+  }
+}
