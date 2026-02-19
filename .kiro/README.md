@@ -1,185 +1,231 @@
-# Kiro Configuration Summary
+# Kiro Configuration
 
-This document provides an overview of the Kiro CLI configuration for the SE2 Calculator Project.
+This directory contains Kiro agent steering files and skills for the Space Engineers 2 Calculator project.
 
 ## Directory Structure
 
 ```
 .kiro/
-├── settings/              # Workspace-specific settings (overrides global)
-│   └── cli.json
-├── agents/                # Project-specific agents
-├── steering/              # Project-specific guidance documents
-│   ├── 00-project-overview.md
-│   ├── 01-django-standards.md
-│   ├── 02-enhancement-workflow.md
-│   ├── 03-testing-guidelines.md
-│   ├── 04-docker-deployment.md
-│   ├── 05-code-style.md
-│   ├── 06-resource-chain.md
-│   ├── 07-security-secrets.md
-│   ├── 08-cicd-github-actions.md
-│   └── 09-database-management.md
-├── prompts/               # Reusable prompt templates
-│   ├── create-enhancement.md
-│   ├── write-tests.md
-│   ├── review-code.md
-│   └── troubleshoot-docker.md
-├── tasks/                 # Workflow task definitions
-│   ├── new-model.yaml
-│   ├── new-view.yaml
-│   ├── run-tests.yaml
-│   └── deploy-docker.yaml
-├── tools/                 # Project-specific utilities
-│   ├── validate-fixtures.py
-│   ├── check-coverage.sh
-│   └── sync-env.sh
-├── mcp.json              # MCP server configuration (gitignored)
-├── context.json          # Context filtering rules
-├── aliases.json          # Command shortcuts
-└── MCP_SETUP.md          # MCP setup documentation
+├── steering/          # Context and guidelines automatically included
+│   ├── python-django-best-practices.md
+│   ├── code-review-checklist.md
+│   ├── testing-strategy.md
+│   ├── git-workflow.md
+│   ├── performance-optimization.md
+│   └── security-best-practices.md
+├── skills/            # Specialized knowledge activated on demand
+│   ├── test-driven-development.md
+│   ├── debugging-techniques.md
+│   └── refactoring-patterns.md
+└── README.md          # This file
 ```
 
-## Workspace Settings
+## Steering Files
 
-Project-specific settings in `.kiro/settings/cli.json` override global settings:
+Steering files provide context and guidelines that influence Kiro's behavior. They can be:
+- **Always included** (default) - Loaded for every interaction
+- **Conditionally included** - Loaded when specific files are accessed
+- **Manually included** - Loaded when you reference them with `#`
 
-- **chat.enableTangentMode**: true - Enable tangent mode for this project
-- **chat.enableThinking**: true - Enable thinking tool
-- **chat.enableCodeIntelligence**: true - Enable LSP code intelligence
-- **chat.enableContextUsageIndicator**: true - Show context usage
-- **chat.editMode**: true - Enable edit mode
-- **chat.enableTodoList**: true - Enable TODO list feature
-- **chat.enableCheckpoint**: true - Enable checkpoint feature
-- **chat.enableDelegate**: true - Enable delegate tool
+### Available Steering Files
 
-These settings apply only to this workspace and override any global defaults.
+#### python-django-best-practices.md
+- **Inclusion**: Auto (when Python files are accessed)
+- **Purpose**: Core Python and Django development standards
+- **Topics**: Code quality, testing, security, database, documentation
 
-## Steering Documents (10)
+#### code-review-checklist.md
+- **Inclusion**: Manual
+- **Purpose**: Comprehensive checklist for code reviews
+- **Topics**: Code quality, testing, security, performance, documentation
+- **Usage**: Reference with `#code-review-checklist` when reviewing code
 
-Comprehensive guidance covering:
-- Project architecture and standards
-- Django development patterns
-- Testing and code quality
-- Docker deployment
-- Security and secrets management
-- CI/CD workflows
-- Database management
+#### testing-strategy.md
+- **Inclusion**: Auto (when test files are accessed)
+- **Purpose**: Testing best practices and strategies
+- **Topics**: TDD, test organization, fixtures, mocking, coverage
 
-## Prompts (4)
+#### git-workflow.md
+- **Inclusion**: Auto
+- **Purpose**: Version control best practices
+- **Topics**: Branch strategy, commit guidelines, PR process, Git commands
 
-Reusable templates for common tasks:
-- **create-enhancement.md** - ENH request creation workflow
-- **write-tests.md** - Test writing guidelines and templates
-- **review-code.md** - Comprehensive code review checklist
-- **troubleshoot-docker.md** - Docker debugging procedures
+#### performance-optimization.md
+- **Inclusion**: Manual
+- **Purpose**: Performance tuning and optimization
+- **Topics**: Database optimization, caching, profiling, load testing
+- **Usage**: Reference with `#performance-optimization` when optimizing
 
-## Tasks (4)
+#### security-best-practices.md
+- **Inclusion**: Auto
+- **Purpose**: Security guidelines and best practices
+- **Topics**: Input validation, authentication, CSRF, XSS, secrets management
 
-Structured workflows for:
-- **new-model.yaml** - Creating Django models
-- **new-view.yaml** - Implementing CRUD views
-- **run-tests.yaml** - Test execution workflow
-- **deploy-docker.yaml** - Docker deployment checklist
+## Skills
 
-## Tools (3)
+Skills are specialized knowledge modules that can be activated when needed. They provide deep expertise in specific areas.
 
-Utility scripts:
-- **validate-fixtures.py** - Validate fixture UUIDs and structure
-- **check-coverage.sh** - Enforce coverage thresholds
-- **sync-env.sh** - Sync .env and .env.example
+### Available Skills
 
-## MCP Servers (5)
+#### test-driven-development.md
+- **Purpose**: TDD methodology and workflow
+- **Topics**: Red-Green-Refactor cycle, TDD for bug fixes, best practices
+- **When to use**: Writing new features, fixing bugs, refactoring
 
-Configured servers:
-1. **filesystem** ✅ - Enhanced file operations
-2. **postgres** ⚙️ - Database queries (needs DB_PASSWORD)
-3. **git** ✅ - Git operations and history
-4. **github** ⚙️ - GitHub API (needs token)
-5. **brave-search** ⚙️ - Web search (needs API key)
+#### debugging-techniques.md
+- **Purpose**: Systematic debugging approaches
+- **Topics**: Django debugging, Python debugger, profiling, troubleshooting
+- **When to use**: Investigating bugs, performance issues, test failures
 
-See `MCP_SETUP.md` for configuration details.
+#### refactoring-patterns.md
+- **Purpose**: Code refactoring patterns and techniques
+- **Topics**: Code smells, refactoring patterns, Django-specific refactoring
+- **When to use**: Improving code quality, reducing technical debt
 
-## Command Aliases (20+)
+#### database-query-optimization.md
+- **Purpose**: Database query optimization and performance tuning
+- **Topics**: N+1 queries, select_related, prefetch_related, indexes, bulk operations
+- **When to use**: Optimizing slow queries, improving application performance
 
-Quick shortcuts for common commands:
-- `test` - Run full test suite with coverage
-- `migrate` - Apply database migrations
-- `docker-up` - Build and start Docker stack
-- `lint` - Check code quality
-- `format` - Format code
-- And many more...
+#### api-design-integration.md
+- **Purpose**: RESTful API design and external API integration
+- **Topics**: DRF patterns, serializers, viewsets, authentication, versioning
+- **When to use**: Building APIs, integrating with external services
 
-## Context Filtering
+#### django-forms-validation.md
+- **Purpose**: Django forms and complex validation logic
+- **Topics**: ModelForms, formsets, custom validation, dynamic forms, file uploads
+- **When to use**: Creating forms, implementing validation, handling file uploads
 
-Configured to exclude:
-- Cache directories (__pycache__, .pytest_cache, etc.)
-- Virtual environments (.venv)
-- Build artifacts (staticfiles, dist, build)
-- Large files (>100KB)
+#### error-handling-logging.md
+- **Purpose**: Error handling strategies and application logging
+- **Topics**: Exception handling, custom exceptions, logging configuration, monitoring
+- **When to use**: Implementing error handling, debugging production issues
 
-Auto-includes important files:
-- Python source files (app/**/*.py)
-- Tests (tests/**/*.py)
-- Documentation (docs/**/*.md)
-- Configuration files
+#### data-migration-transformation.md
+- **Purpose**: Data migrations and bulk data operations
+- **Topics**: Django data migrations, bulk operations, import/export, data cleanup
+- **When to use**: Migrating data, importing from external sources, data transformations
 
-## Next Steps
+#### frontend-integration-patterns.md
+- **Purpose**: Frontend JavaScript integration with Django
+- **Topics**: AJAX, HTMX, Alpine.js, progressive enhancement, real-time updates
+- **When to use**: Building interactive UIs, implementing AJAX functionality
 
-### Immediate
-1. ✅ Fix .gitignore (completed)
-2. ⏳ Initialize LSP: Run `/code init` in Kiro CLI
-3. ⏳ Configure MCP credentials in `mcp.json`
+## How to Use
 
-### Optional
-4. Review and customize steering documents
-5. Add project-specific prompts
-6. Create additional task workflows
-7. Develop custom tools as needed
-
-## Usage Tips
-
-### Using Prompts
-Reference prompts in your requests:
-- "Follow the create-enhancement prompt to make ENH-0000017"
-- "Use the write-tests prompt for the BuildOrder model"
-
-### Using Tasks
-Reference tasks for structured workflows:
-- "Follow the new-model task to create a Category model"
-- "Execute the deploy-docker task"
-
-### Using Tools
-Run tools directly:
-```bash
-python .kiro/tools/validate-fixtures.py
-bash .kiro/tools/check-coverage.sh 85
-bash .kiro/tools/sync-env.sh
+### Automatic Inclusion
+Most steering files are automatically included based on context:
+```python
+# When you open a Python file, python-django-best-practices.md is loaded
+# When you open a test file, testing-strategy.md is also loaded
 ```
 
-### Using Aliases
-Use aliases in commands:
-- "Run the test alias"
-- "Execute docker-up"
+### Manual Inclusion
+Reference steering files or skills explicitly:
+```
+# In chat
+Can you review this code using #code-review-checklist?
+
+# For performance work
+Help me optimize this query using #performance-optimization
+```
+
+### Activating Skills
+Skills can be activated by mentioning them or when Kiro detects relevant work:
+```
+# Explicit activation
+Let's use TDD to implement this feature
+
+# Kiro will automatically suggest skills when appropriate
+```
+
+## Customization
+
+### Adding New Steering Files
+1. Create a new `.md` file in `.kiro/steering/`
+2. Add front-matter to control inclusion:
+```markdown
+---
+inclusion: auto
+fileMatchPattern: '**/*.py'
+---
+
+# Your Steering Content
+```
+
+### Adding New Skills
+1. Create a new `.md` file in `.kiro/skills/`
+2. Document when to activate and what it covers
+3. Provide practical examples and guidelines
+
+### Inclusion Options
+- `inclusion: auto` - Always included
+- `inclusion: fileMatch` + `fileMatchPattern: '**/*.py'` - Conditional
+- `inclusion: manual` - Only when explicitly referenced
+
+## Best Practices
+
+### For Steering Files
+- Keep them focused on specific domains
+- Use clear, actionable guidelines
+- Include examples and code snippets
+- Update as project evolves
+
+### For Skills
+- Provide step-by-step workflows
+- Include practical examples
+- Document when to use
+- Keep them comprehensive but focused
+
+## Project-Specific Configuration
+
+This configuration is tailored for:
+- **Framework**: Django 6.0.1
+- **Language**: Python 3.13+
+- **Testing**: pytest-django
+- **Database**: PostgreSQL (production), SQLite (development)
+- **Deployment**: Docker Compose
 
 ## Maintenance
 
 ### Regular Updates
-- Review steering documents quarterly
-- Update prompts as patterns evolve
-- Add new tasks for recurring workflows
-- Enhance tools based on needs
+- Review steering files quarterly
+- Update for new Django versions
+- Add new patterns as discovered
+- Remove outdated practices
 
 ### Version Control
-- Commit steering docs, prompts, tasks, tools
-- Never commit mcp.json with credentials
-- Keep MCP_SETUP.md updated
-- Document changes in CHANGELOG.md
+- All steering files and skills are version controlled
+- Changes should be reviewed like code
+- Document significant changes in commit messages
+
+## Resources
+
+### Django Documentation
+- [Django Security](https://docs.djangoproject.com/en/stable/topics/security/)
+- [Django Testing](https://docs.djangoproject.com/en/stable/topics/testing/)
+- [Django Best Practices](https://docs.djangoproject.com/en/stable/misc/design-philosophies/)
+
+### Python Resources
+- [PEP 8 Style Guide](https://pep8.org/)
+- [Python Testing](https://docs.python.org/3/library/unittest.html)
+- [Python Debugging](https://docs.python.org/3/library/pdb.html)
+
+### Project Documentation
+- [Project README](../README.md)
+- [Contributing Guidelines](../CONTRIBUTING.md)
+- [Enhancement Requests](../docs/enhancementRequests/)
 
 ## Support
 
-For questions or issues with Kiro configuration:
-1. Review relevant steering document
-2. Check MCP_SETUP.md for MCP issues
-3. Consult prompt/task templates
-4. Update configuration as needed
+For questions or suggestions about Kiro configuration:
+1. Review existing steering files and skills
+2. Check project documentation
+3. Open an issue on GitHub
+4. Discuss with the team
+
+---
+
+**Last Updated**: February 2026
+**Maintained By**: Project Team
