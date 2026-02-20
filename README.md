@@ -5,7 +5,7 @@
 [![Code Quality](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml/badge.svg)](https://github.com/crashtechie/se2-calculator-project/actions/workflows/lint.yml)  
 [![codecov](https://codecov.io/github/crashtechie/se2-calculator-project/graph/badge.svg?token=TohStlR1r2)](https://codecov.io/github/crashtechie/se2-calculator-project)  
 
-**Version:** 0.7.0-alpha  
+**Version:** 0.10.0-alpha  
 **License:** MIT  
 **Framework:** Django 6.0.1  
 **Python:** 3.13+  
@@ -15,7 +15,7 @@ A comprehensive web-based calculator and resource management tool built with Dja
 
 ## ⚠️ Alpha Release Notice
 
-This is an early alpha release (0.6.1-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) is in progress with the core BuildOrder model implemented. Docker infrastructure has been stabilized with all known issues resolved.
+This is an early alpha release (0.10.0-alpha). Phase 2 (Views & Templates) is complete with full CRUD functionality. Phase 3 (Build Order Calculator) has completed ENH-0000010 with full CRUD interface and comprehensive testing (59 tests, 90%+ coverage). Development infrastructure has been significantly enhanced with Kiro configuration, E2E testing architecture, and DevContainer support.
 
 ### Current Development Status
 
@@ -37,19 +37,29 @@ This is an early alpha release (0.6.1-alpha). Phase 2 (Views & Templates) is com
     - Admin interface with custom displays
     - 52 comprehensive tests (90% coverage)
     - Complete documentation (algorithms, deployment, post-deployment)
-  - ⏳ ENH-0000010: Build Order Views & Templates (Planned)
+  - ✅ ENH-0000010: Build Order CRUD Views & Templates (Complete)
+    - Complete CRUD interface at `/buildorders/` URLs
+    - List view with search, sorting, and pagination
+    - Detail view with cached calculation summaries
+    - Create/Update forms with validation
+    - Delete confirmation page
+    - Bootstrap 5 responsive templates
+    - Navigation integration
+    - 59 total tests (52 model + 7 integration) with 90%+ coverage
   - ⏳ ENH-0000011: Dynamic Block Selector (Planned)
   
 - ⏳ **Phase 4: Testing, Documentation & Core Infrastructure** (Planned)
-  - Core app with validation mixins and utilities (deferred from ENH-0000008)
-  - API endpoints for AJAX functionality
-  - Structured logging configuration
-  - Custom error pages (404/500)
-  - Additional security settings
-  - Comprehensive test suite (>80% coverage)
-  - OpenAPI/Swagger specifications
-  - Architecture diagrams and data flow documentation
-  - Advanced performance tuning guides
+  - ✅ ENH-0000012: E2E Testing Infrastructure (Documented - Ready for Implementation)
+  - ✅ ENH-0000016: CI/CD Pipeline for Automated Testing (Complete)
+  - ⏳ Core app with validation mixins and utilities (deferred from ENH-0000008)
+  - ⏳ API endpoints for AJAX functionality
+  - ⏳ Structured logging configuration
+  - ⏳ Custom error pages (404/500)
+  - ⏳ Additional security settings
+  - ⏳ Comprehensive test suite (>80% coverage)
+  - ⏳ OpenAPI/Swagger specifications
+  - ⏳ Architecture diagrams and data flow documentation
+  - ⏳ Advanced performance tuning guides
 
 ### Planned Features
 

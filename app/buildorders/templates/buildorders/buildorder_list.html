@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Build Orders - SE2 Calculator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="bi bi-list-check"></i> Build Orders
+            </h1>
+            <a href="{% url 'buildorders:create' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Create Build Order
+            </a>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="search" 
+                               name="q" 
+                               value="{{ search_query }}"
+                               placeholder="Search by name...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="sort" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort" name="sort">
+                            <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+                            <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>Created Date</option>
+                            <option value="updated_at" {% if current_sort == 'updated_at' %}selected{% endif %}>Updated Date</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="order" class="form-label">Order</label>
+                        <select class="form-select" id="order" name="order">
+                            <option value="asc" {% if current_order == 'asc' %}selected{% endif %}>Ascending</option>
+                            <option value="desc" {% if current_order == 'desc' %}selected{% endif %}>Descending</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                        <a href="{% url 'buildorders:list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Build Orders List -->
+        {% if buildorder_list %}
+            <div class="row">
+                {% for order in buildorder_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-clipboard-check"></i> {{ order.name }}
+                            </h5>
+                            {% if order.description %}
+                            <p class="card-text text-muted small">
+                                {{ order.description|truncatewords:20 }}
+                            </p>
+                            {% endif %}
+                            <ul class="list-unstyled small">
+                                <li><strong>Blocks:</strong> {{ order.blocks|length }}</li>
+                                <li><strong>Total Mass:</strong> {{ order.calculate_total_mass|floatformat:2 }} kg</li>
+                                <li><strong>Created:</strong> {{ order.created_at|date:"M d, Y" }}</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'buildorders:detail' order.order_id %}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                            <a href="{% url 'buildorders:update' order.order_id %}" 
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <a href="{% url 'buildorders:delete' order.order_id %}" 
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Build order pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if query_string %}&{{ query_string }}{% endif %}">
+                                <i class="bi bi-chevron-double-left"></i> First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                <i class="bi bi-chevron-left"></i> Previous
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                Next <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}">
+                                Last <i class="bi bi-chevron-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <!-- Empty State -->
+            <div class="alert alert-info text-center">
+                <i class="bi bi-info-circle fs-1"></i>
+                <h4 class="mt-3">No Build Orders Found</h4>
+                <p>
+                    {% if search_query %}
+                        No build orders match your search criteria.
+                        <a href="{% url 'buildorders:list' %}">Clear search</a>
+                    {% else %}
+                        Get started by creating your first build order!
+                    {% endif %}
+                </p>
+                <a href="{% url 'buildorders:create' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create First Build Order
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

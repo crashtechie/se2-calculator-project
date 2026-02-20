@@ -204,5 +204,13 @@ backup/
 # Placeholder to ensure directory is tracked
 !scripts/tests/testResults/.placeholder
 
-#Kiro
-.kiro/
+# Kiro - exclude sensitive configs but keep steering docs and setup guides
+.kiro/mcp.json
+.kiro/settings/
+!.kiro/steering/
+!.kiro/prompts/
+!.kiro/tasks/
+!.kiro/tools/
+!.kiro/MCP_SETUP.md
+!.kiro/context.json
+!.kiro/aliases.json

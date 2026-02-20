@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Migration Reminder",
+  "description": "Reminds you to create migrations after editing Django model files",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "app/**/models.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A model file was just modified. Check if migrations need to be created by running: uv run python app/manage.py makemigrations. If migrations are needed, create them and then run: uv run python app/manage.py migrate"
+  }
+}

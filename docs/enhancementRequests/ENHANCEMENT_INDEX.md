@@ -39,7 +39,6 @@ All enhancements use the format `ENH-XXXXXXX` where XXXXXXX is a 7-digit zero-pa
 | ENH-0000009 | BuildOrder Model & Core Logic | Completed | `phase3_buildorder/ENH0000009/` |
 | ENH-0000010 | Build Order Views & Templates | Planned | `phase3_buildorder/ENH0000010/` |
 | ENH-0000011 | Dynamic Block Selector | Planned | `phase3_buildorder/ENH0000011/` |
-| ENH-0000012 | Build Order List View | Planned | `phase3_buildorder/ENH0000012/` |
 | ENH-0000013 | Build Order Detail View | Planned | `phase3_buildorder/ENH0000013/` |
 | ENH-0000014 | Build Order Create/Update | Planned | `phase3_buildorder/ENH0000014/` |
 | ENH-0000015 | Build Order Delete | Planned | `phase3_buildorder/ENH0000015/` |
@@ -50,6 +49,7 @@ All enhancements use the format `ENH-XXXXXXX` where XXXXXXX is a 7-digit zero-pa
 
 | ID | Title | Status | Location |
 |----|-------|--------|----------|
+| ENH-0000012 | E2E Testing Infrastructure | Planned | `phase4_testing/ENH0000012/` |
 | ENH-0000016 | CI/CD Pipeline for Automated Testing | Planned | `phase4_testing/ENH0000016/` |
 
 ---
@@ -78,7 +78,8 @@ Phase 3 has 7 enhancements (ENH-0000009 through ENH-0000015):
 - ENH-0000010 through ENH-0000015: Views and UI components (Planned)
 
 ### Phase 4 Enhancements
-Phase 4 starts with ENH-0000016:
+Phase 4 starts with ENH-0000012 (note: ENH-0000012 was reassigned from Phase 3 to Phase 4):
+- ENH-0000012: E2E Testing Infrastructure (Planned - High Priority)
 - ENH-0000016: CI/CD Pipeline (Planned - High Priority)
 - Additional Phase 4 enhancements will use ENH-0000017 and higher
 
@@ -93,8 +94,8 @@ Phase 4 starts with ENH-0000016:
 ## Quick Reference
 
 **Completed Enhancements:** 9 (ENH-0000001 through ENH-0000009)  
-**Planned Enhancements:** 7 (ENH-0000010 through ENH-0000016)  
-**Total Enhancements:** 16
+**Planned Enhancements:** 8 (ENH-0000010 through ENH-0000016, plus ENH-0000012)  
+**Total Enhancements:** 17
 
 ---
 

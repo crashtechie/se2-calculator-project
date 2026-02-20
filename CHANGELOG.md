@@ -9,6 +9,151 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### In Development
 - Phase 3: Build Order Calculator (in progress)
+  - ENH-0000011: Dynamic Block Selector (planned)
+  - ENH-0000012: Export Functionality (planned)
+
+## [0.10.0-alpha] - 2026-02-18
+
+### Added - Phase 3: Build Order CRUD Testing Complete
+- **ENH-0000010 Testing:** Complete integration test suite for BuildOrder CRUD
+  - 59 total automated tests (52 model tests + 7 integration tests)
+  - Integration tests cover complete CRUD workflows:
+    - Create → view → update → delete sequences with database state verification
+    - Search → sort → paginate workflows with query parameter preservation
+    - Form validation → error display → correction → success workflows
+    - Cache invalidation on update with recalculation verification
+  - Additional integration tests for multi-block orders and composition changes
+  - All tests passing with comprehensive workflow coverage
+  - Test coverage exceeds 90% target for buildorders app
+  - Optional property-based tests deferred for faster MVP delivery
+  - Ready for production deployment
+
+### Technical Details
+- **Test Files:**
+  - `app/buildorders/tests.py` - 52 model tests (creation, validation, calculations, caching, properties)
+  - `app/buildorders/test_views.py` - 7 integration tests (complete workflows)
+- **Test Execution:** All 59 tests pass in ~1.5 seconds
+- **Coverage:** 90%+ on buildorders app (views, forms, models)
+- **Pattern:** Follows Phase 2 testing patterns from blocks, components, and ores apps
+
+## [0.9.0-alpha] - 2026-02-18
+
+### Added - Phase 3: Build Order CRUD Interface
+- **ENH-0000010: Build Order CRUD Views & Templates**
+  - Complete CRUD interface for managing build orders at `/buildorders/` URLs
+  - BuildOrderListView with search (by name), sorting (name, created_at, updated_at), and pagination (25 per page)
+  - BuildOrderDetailView with cached calculation summaries (total mass, required components, required ores, fabricator times)
+  - BuildOrderCreateView and BuildOrderUpdateView with form validation using BuildOrder.validate_blocks()
+  - BuildOrderDeleteView with confirmation page
+  - BuildOrderForm with hidden blocks_json field (JavaScript selector coming in ENH-0000011)
+  - Bootstrap 5 responsive templates following Phase 2 patterns
+  - Django messages framework for user feedback (create/update/delete success messages)
+  - Comprehensive logging at debug, info, and warning levels
+  - URL namespace: `buildorders:` with `pk` parameter for consistency
+  - Navigation integration in base template with "Build Orders" link
+  - Leverages existing BuildOrder model methods from ENH-0000009 (cached calculations, helper methods)
+  - Forms validate block UUIDs, quantities, and use model validation helpers
+  - Templates display calculation summaries with component/ore details and fabricator times
+
+### Changed
+- Updated navigation in base.html to include "Build Orders" link
+- Project URLs updated to include buildorders app routes
+
+### Technical Details
+- **New Files:**
+  - `buildorders/urls.py` - URL configuration with buildorders: namespace
+  - `buildorders/forms.py` - BuildOrderForm with blocks_json validation
+  - `buildorders/views.py` - 5 class-based views (List, Detail, Create, Update, Delete)
+  - `buildorders/templates/buildorders/buildorder_list.html` - List view template
+  - `buildorders/templates/buildorders/buildorder_detail.html` - Detail view template
+  - `buildorders/templates/buildorders/buildorder_form.html` - Create/Update form template
+  - `buildorders/templates/buildorders/buildorder_confirm_delete.html` - Delete confirmation template
+- **Modified Files:**
+  - `se2CalcProject/urls.py` - Added buildorders URL include
+  - `templates/base.html` - Added Build Orders navigation link
+- **Dependencies:** No new dependencies required
+- **Pattern:** Follows Phase 2 patterns from blocks, components, and ores apps
+
+## [0.8.0-alpha] - 2026-02-18
+
+### Added - Development Infrastructure & E2E Testing
+- **Kiro Configuration System**
+  - Comprehensive steering files for Python/Django best practices
+  - Auto-included context for code quality, testing, security, and git workflow
+  - Manual-activation steering for performance optimization and code review
+  - Skills system for specialized knowledge (TDD, debugging, refactoring, etc.)
+  - Project-specific configuration tailored for Django 6.0.1 and Python 3.13+
+  - Documentation in `.kiro/README.md` with usage examples
+- **ENH-0000012: E2E Testing Infrastructure (Planned)**
+  - Comprehensive enhancement request for end-to-end testing
+  - Dual framework strategy: Selenium WebDriver + Playwright
+  - Page Object Model architecture for maintainability
+  - Cross-browser testing support (Chrome, Firefox, Edge, WebKit)
+  - Test isolation with database rollback and cleanup
+  - Parallel execution support for faster test runs
+  - CI/CD integration ready
+  - Complete documentation: architecture, design, and user guide
+- **DevContainer Configuration**
+  - VS Code devcontainer setup for consistent development environment
+  - Docker-based development with PostgreSQL and Python 3.13
+  - Pre-configured extensions and settings
+  - Automatic dependency installation
+  - Port forwarding for Django development server
+  - Documentation in `.devcontainer/README.md`
+
+### Documentation
+- **E2E Testing Architecture** (`docs/design/e2e_testing_architecture.md`)
+  - Detailed architecture for Selenium and Playwright integration
+  - Page Object Model patterns and examples
+  - Test data management strategies
+  - Configuration and environment setup
+  - CI/CD integration guidelines
+- **E2E Testing User Guide** (`docs/wiki/qualityAssurance/automatedTests/e2e-testing-guide.md`)
+  - Comprehensive guide for writing and running E2E tests
+  - Examples for both Selenium and Playwright
+  - Best practices and troubleshooting
+  - Docker and CI/CD usage instructions
+- **Kiro Steering and MCP Recommendations** (`docs/design/recommended_kiro_steering_mcp.md`)
+  - Guidelines for Kiro configuration
+  - MCP server recommendations
+  - Best practices for AI-assisted development
+- **Enhancement Index Updated**
+  - ENH-0000012 added to Phase 4 section
+  - Updated enhancement count and status tracking
+
+### Fixed
+- **ISSUE-014: Kiro File Write Access** (Documented)
+  - Identified fsWrite tool bug with `.kiro/` directory
+  - Root cause: Path normalization issue in Kiro IDE
+  - Workaround: Use bash commands for `.kiro/` file operations
+  - Comprehensive diagnostic results documented
+  - Issue remains open, awaiting Kiro IDE fix
+
+### Changed
+- `.gitignore` updated to exclude Playwright test artifacts
+- `pyproject.toml` updated with Playwright and Selenium dependencies
+- Project structure enhanced with `.kiro/` configuration directory
+- Development workflow improved with devcontainer support
+
+### Technical Details
+- **New Dependencies:**
+  - `playwright>=1.58.0` (already present, now documented)
+  - `selenium>=4.40.0` (already present, now documented)
+- **Configuration Files:**
+  - 6 steering files in `.kiro/steering/`
+  - 9 skills in `.kiro/skills/` (planned)
+  - DevContainer configuration with docker-compose
+- **Documentation:**
+  - 3 new comprehensive guides (500+ lines each)
+  - Enhanced enhancement request system
+  - Improved development environment documentation
+
+### Benefits
+- **Improved Code Quality:** Automated steering and best practices
+- **Faster Onboarding:** DevContainer provides instant development environment
+- **Better Testing:** E2E infrastructure ready for implementation
+- **AI-Assisted Development:** Kiro configuration optimizes AI assistance
+- **Consistent Standards:** Steering files ensure team alignment
 
 ## [0.7.0-alpha] - 2026-02-02
 
@@ -513,8 +658,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial project structure and repository setup
 
-[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.1-alpha...HEAD
-[0.6.1-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.0-alpha...v0.6.1-alpha
+[Unreleased]: https://github.com/crashtechie/se2-calculator-project/compare/v0.10.0-alpha...HEAD
+[0.10.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.9.0-alpha...v0.10.0-alpha
+[0.9.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.8.0-alpha...v0.9.0-alpha
+[0.8.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.7.0-alpha...v0.8.0-alpha
+[0.7.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.6.1-alpha...v0.7.0-alpha
 [0.6.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.5.0-alpha...v0.6.0-alpha
 [0.5.0-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.2-alpha...v0.5.0-alpha
 [0.4.2-alpha]: https://github.com/crashtechie/se2-calculator-project/compare/v0.4.1-alpha...v0.4.2-alpha

@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Documentation Update Reminder",
+  "description": "Reminds you to update CHANGELOG.md, README.md, and pyproject.toml version when completing major work",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Consider if documentation needs updating: 1) CHANGELOG.md - Add entry for new features, bug fixes, or breaking changes, 2) README.md - Update version badge, features list, or development status if applicable, 3) pyproject.toml - Bump version number if this is a release-worthy change. Review what was just completed and update these files if needed."
+  }
+}

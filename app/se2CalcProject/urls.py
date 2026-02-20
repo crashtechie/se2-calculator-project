@@ -16,4 +16,7 @@ urlpatterns = [
     path("ores/", include("ores.urls", namespace="ores")),
     path("components/", include("components.urls", namespace="components")),
     path("blocks/", include("blocks.urls", namespace="blocks")),  # ENH-0000007
+    path(
+        "buildorders/", include("buildorders.urls", namespace="buildorders")
+    ),  # ENH-0000010
 ]
