@@ -51,7 +51,7 @@
     }
   },
 
-  "postCreateCommand": "uv pip install --system -e . && python app/manage.py migrate",
+  "postCreateCommand": "uv venv && uv pip install -e . && .venv/bin/python app/manage.py migrate",
   
   "remoteUser": "vscode",
   
