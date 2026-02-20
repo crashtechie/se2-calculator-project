@@ -23,6 +23,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from blocks.models import Block
 from .forms import BuildOrderForm
 from .models import BuildOrder
 
@@ -69,10 +70,11 @@ class BuildOrderListView(ListView):
         else:
             queryset = queryset.order_by(sort_by)
 
-        logger.debug(
-            f"BuildOrderListView query: user={self.request.user}, search='{search_query}', "
-            f"sort={sort_by}, order={order}, count={queryset.count()}"
-        )
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(
+                f"BuildOrderListView query: user={self.request.user}, search='{search_query}', "
+                f"sort={sort_by}, order={order}, count={queryset.count()}"
+            )
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -87,6 +89,22 @@ class BuildOrderListView(ListView):
         if "page" in query_params:
             query_params.pop("page")
         context["query_string"] = query_params.urlencode()
+
+        # Precompute total masses for the current page to avoid N+1 queries in template
+        orders = context["buildorder_list"]
+        all_block_ids = set()
+        for order in orders:
+            all_block_ids.update(order.blocks.keys())
+        blocks_by_id = {
+            str(b.block_id): b
+            for b in Block.objects.filter(block_id__in=all_block_ids)
+        }
+        for order in orders:
+            order.total_mass_cached = sum(
+                blocks_by_id[bid].mass * qty
+                for bid, qty in order.blocks.items()
+                if bid in blocks_by_id
+            )
 
         logger.debug(
             f"BuildOrderListView: user={self.request.user}, page={context.get('page_obj').number if context.get('is_paginated') else 1}"
@@ -123,9 +141,6 @@ class BuildOrderDetailView(DetailView):
         logger.info(
             f"BuildOrderDetailView: user={self.request.user}, order_id={self.object.order_id}, "
             f"name='{self.object.name}'"
-        )
-        logger.debug(
-            f"BuildOrderDetailView: Cache hit for order_id={self.object.order_id}"
         )
         return context
 

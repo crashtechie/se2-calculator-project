@@ -118,9 +118,11 @@ class BuildOrderForm(forms.ModelForm):
         # Process blocks from JSON payload
         blocks_json = cleaned_data.get("blocks_json", "").strip()
 
+        # Allow empty blocks until ENH-0000011 provides the block selector UI
         if not blocks_json or blocks_json == "{}":
-            logger.warning("BuildOrderForm.clean: No blocks provided")
-            raise ValidationError({"blocks_json": "At least one block is required."})
+            logger.debug("BuildOrderForm.clean: No blocks provided; saving empty blocks")
+            cleaned_data["blocks"] = {}
+            return cleaned_data
 
         try:
             blocks_data = json.loads(blocks_json)
@@ -137,8 +139,9 @@ class BuildOrderForm(forms.ModelForm):
                 {"blocks_json": "Blocks must be a dictionary of {block_id: quantity}."}
             )
 
-        # Convert and validate each block
+        # First pass: validate UUID formats and quantities
         validated_blocks = {}
+        block_uuids = []
 
         for block_id_str, quantity in blocks_data.items():
             # Validate UUID format
@@ -167,8 +170,20 @@ class BuildOrderForm(forms.ModelForm):
                     }
                 )
 
-            # Verify block exists in database
-            if not Block.objects.filter(block_id=block_uuid).exists():
+            block_uuids.append(block_uuid)
+            validated_blocks[str(block_uuid)] = qty
+
+        # Bulk fetch all referenced blocks in one query to avoid N+1
+        existing_block_ids = set(
+            str(bid)
+            for bid in Block.objects.filter(block_id__in=block_uuids).values_list(
+                "block_id", flat=True
+            )
+        )
+
+        # Verify all blocks exist using the pre-fetched set
+        for block_id_str in validated_blocks:
+            if block_id_str not in existing_block_ids:
                 logger.warning(
                     f"BuildOrderForm.clean: Block {block_id_str} does not exist in database"
                 )
@@ -176,28 +191,8 @@ class BuildOrderForm(forms.ModelForm):
                     {"blocks_json": f"Block {block_id_str} does not exist in database."}
                 )
 
-            validated_blocks[str(block_uuid)] = qty
-
         # Store validated blocks for save
         cleaned_data["blocks"] = validated_blocks
-
-        # Use BuildOrder validation helper (create temporary instance)
-        temp_order = BuildOrder(
-            name=cleaned_data.get("name", "temp"),
-            blocks=validated_blocks,
-        )
-
-        validation_errors = temp_order.validate_blocks()
-
-        if validation_errors:
-            logger.warning(
-                f"BuildOrderForm.clean: Block validation failed: {validation_errors}"
-            )
-            raise ValidationError(
-                {
-                    "blocks_json": f"Block validation failed: {', '.join(validation_errors)}"
-                }
-            )
 
         logger.debug(
             f"BuildOrderForm.clean: Validated {len(validated_blocks)} blocks successfully"

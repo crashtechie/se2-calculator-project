@@ -72,7 +72,7 @@
                             {% endif %}
                             <ul class="list-unstyled small">
                                 <li><strong>Blocks:</strong> {{ order.blocks|length }}</li>
-                                <li><strong>Total Mass:</strong> {{ order.calculate_total_mass|floatformat:2 }} kg</li>
+                                <li><strong>Total Mass:</strong> {{ order.total_mass_cached|floatformat:2 }} kg</li>
                                 <li><strong>Created:</strong> {{ order.created_at|date:"M d, Y" }}</li>
                             </ul>
                         </div>
