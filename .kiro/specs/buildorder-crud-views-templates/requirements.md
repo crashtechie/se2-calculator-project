@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document specifies the requirements for implementing complete CRUD (Create, Read, Update, Delete) views and templates for Build Orders in the EVE Online manufacturing calculator. The feature builds upon the existing BuildOrder model (ENH-0000009) to provide a user-facing web interface for managing build orders with calculation summary displays.
+This document specifies the requirements for implementing complete CRUD (Create, Read, Update, Delete) views and templates for Build Orders in the Space Engineers 2 Calculator project. The feature builds upon the existing BuildOrder model (ENH-0000009) to provide a user-facing web interface for managing build orders with calculation summary displays.
 
 The system will provide a responsive Bootstrap 5 interface at `/buildorders/` URLs, allowing users to list, view, create, update, and delete build orders. The interface will display calculation summaries including total mass, required components, required ores, and fabrication times using cached calculations from the BuildOrder model.
 

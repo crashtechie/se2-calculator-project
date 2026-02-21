@@ -71,7 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Modified Files:**
   - `se2CalcProject/urls.py` - Added buildorders URL include
   - `templates/base.html` - Added Build Orders navigation link
-- **Dependencies:** No new dependencies required
+- **Dependencies:** Added `playwright>=1.58.0` and `selenium>=4.40.0` as project dependencies (required for E2E testing infrastructure from ENH-0000012)
 - **Pattern:** Follows Phase 2 patterns from blocks, components, and ores apps
 
 ## [0.8.0-alpha] - 2026-02-18
